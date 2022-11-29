@@ -12,6 +12,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public function challenge()
+    {
+        return $this->belongsTo(Challenge::class);
+    }
+    public function ranking()
+    {
+        return $this->belongsToMany(Ranking::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
