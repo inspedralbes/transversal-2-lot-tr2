@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id-game')->index();
             $table->integer('id-challenger')->index();
             $table->integer('id-challenged')->index();
-            
+
             $table->boolean('seen');
             $table->integer('winner');
             $table->timestamp('creationDate');
