@@ -10,6 +10,19 @@
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
+    <style>
+        .boto {
+            background-color: white;
+        }
+
+        .correct {
+            background-color: rgb(187 247 208)
+        }
+
+        .false {
+            background-color: rgb(254 202 202)
+        }
+    </style>
 </head>
 
 <body>

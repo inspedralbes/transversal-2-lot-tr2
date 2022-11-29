@@ -6,7 +6,6 @@ const lobby = Vue.component('quiz-lobby', {
             checked: false,
             questions: {
                 answers: [],
-                correct: ""
             }
         }
     },
@@ -15,14 +14,17 @@ const lobby = Vue.component('quiz-lobby', {
             fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data)
                     this.questions = data;
-                    for (let index = 0; index < data.length; index++) {
-                        data[index].incorrectAnswers.push(data[index].correctAnswer)
-                        this.questions[index].answers = data[index].incorrectAnswers;
+
+                    for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].answers = [];
+                        this.questions[index].answers.push({ "text": data[index].correctAnswer, "estat": true });
+                        this.questions[index].answers.push({ "text": data[index].incorrectAnswers[0], "estat": false });
+                        this.questions[index].answers.push({ "text": data[index].incorrectAnswers[1], "estat": false });
+                        this.questions[index].answers.push({ "text": data[index].incorrectAnswers[2], "estat": false });
                         this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
-                        this.questions[index].correct = data[index].correctAnswer;
                     }
+                    console.log(this.questions);
                 });
         },
         startGame: function () {
@@ -81,7 +83,7 @@ const quiz = Vue.component('quiz', {
                     <div v-for="(dades,index) in quiz">
                             <h2>{{index+1}}. {{dades.question}}</h2>
                             <div v-for="respuesta in dades.answers">
-                                <b-button type="radio" style="width:100%" variant="outline-primary" @click="saveAnswer(respuesta); checkAnswer(respuesta, index);">{{respuesta}}</b-button>
+                                <b-button type="radio" style="width:100%" :class="{'correct': respuesta['estat'], 'false': !respuesta['estat']}" variant="outline-primary" @click="saveAnswer(respuesta['text']); checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
                             </div>
                         <br><br>
                     </div>
@@ -92,7 +94,7 @@ const quiz = Vue.component('quiz', {
             console.log(this.selectedAnswers);
         },
         checkAnswer: function (respuesta, index) {
-            if (respuesta == this.quiz[index].correct) {
+            if (respuesta == this.quiz[index].correctAnswer) {
                 console.log("CORRECTA");
             } else {
                 console.log("MAL");
