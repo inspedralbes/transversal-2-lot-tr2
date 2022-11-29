@@ -5,7 +5,6 @@ const lobby = Vue.component('quiz-lobby', {
             category: "",
             checked: false,
             questions: {
-                answers: [],
             }
         }
     },
@@ -17,6 +16,7 @@ const lobby = Vue.component('quiz-lobby', {
                     this.questions = data;
 
                     for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].done=false;
                         this.questions[index].answers = [];
                         this.questions[index].answers.push({ "text": data[index].correctAnswer, "estat": true });
                         this.questions[index].answers.push({ "text": data[index].incorrectAnswers[0], "estat": false });
@@ -75,27 +75,47 @@ const quiz = Vue.component('quiz', {
     props: ['quiz'],
     data: function () {
         return {
-            selectedAnswers: []
+            selectedAnswers: [],
+            finished: false,
+            score: 0
         }
     },
     template: `<div>
-                <h1>Quiz</h1><br>
-                    <div v-for="(dades,index) in quiz">
-                            <h2>{{index+1}}. {{dades.question}}</h2>
-                            <div v-for="respuesta in dades.answers">
-                                <b-button type="radio" style="width:100%" :class="{'correct': respuesta['estat'], 'false': !respuesta['estat']}" variant="outline-primary" @click="saveAnswer(respuesta['text']); checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
-                            </div>
-                        <br><br>
+                    <div v-show="!this.finished">
+                    <h1>Quiz</h1><br>
+                        <div v-for="(dades,index) in quiz">
+                                <h2>{{index+1}}. {{dades.question}}</h2>
+                                <div v-for="respuesta in dades.answers">
+                                    <b-button pill style="width:100%" class="option" :class="{'false': !respuesta['estat'] && dades.done, 'correct': respuesta['estat'] && dades.done}" variant="outline-primary" @click="saveAnswer(respuesta['text'], index); checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
+                                </div>
+                            <br><br>
+                        </div>
+                    </div>
+                    <div v-show="this.finished">
+                        <h3>YOU HAVE FINISHED THE QUIZ</h3>
+                        <p>You have got {{score}} out of {{quiz.length}}</p>
                     </div>
                 </div>`,
+                
     methods: {
-        saveAnswer: function (respuesta) {
-            this.selectedAnswers.push(respuesta);
+        saveAnswer: function (respuesta, index) {
+            if(!this.quiz[index].done){
+                this.selectedAnswers[index]=respuesta;
+                this.quiz[index].done=!this.quiz[index].done;
+                console.log(this.quiz[index].done);
+            }
+            console.log(this.quiz[index]);
             console.log(this.selectedAnswers);
+            if(this.selectedAnswers.length==this.quiz.length){
+                this.finished=true;
+            }
+            console.log(this.finished);
         },
         checkAnswer: function (respuesta, index) {
             if (respuesta == this.quiz[index].correctAnswer) {
                 console.log("CORRECTA");
+                this.score++;
+                console.log(this.score);
             } else {
                 console.log("MAL");
             }
