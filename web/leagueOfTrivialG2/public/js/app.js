@@ -130,9 +130,6 @@ const quiz = Vue.component('quiz', {
 const routes = [{
     path: '/',
     component: lobby
-}, {
-    path: '/play',
-    component: quiz
 }]
 
 const router = new VueRouter({
