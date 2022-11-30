@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->json('quiz');
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
+            $table->enum('category', ['arts_and_literature', 'film_and_tv', 'food_and_drink', 'general_knowledge', 'geography', 'history', 'music', 'science', 'society_and_culture', 'sport_and_leisure']);
             $table->enum('type', ['normal', 'daily', 'demo']);
-            $table->timestamp('creationDate');
+            $table->timestamps();
         });
     }
 
