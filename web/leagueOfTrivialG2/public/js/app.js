@@ -16,7 +16,7 @@ const lobby = Vue.component('quiz-lobby', {
                     this.questions = data;
 
                     for (let index = 0; index < this.questions.length; index++) {
-                        this.questions[index].done=false;
+                        this.questions[index].done = false;
                         this.questions[index].answers = [];
                         this.questions[index].answers.push({ "text": data[index].correctAnswer, "estat": true });
                         this.questions[index].answers.push({ "text": data[index].incorrectAnswers[0], "estat": false });
@@ -86,7 +86,7 @@ const quiz = Vue.component('quiz', {
                         <div v-for="(dades,index) in quiz">
                                 <h2>{{index+1}}. {{dades.question}}</h2>
                                 <div v-for="respuesta in dades.answers">
-                                    <b-button pill style="width:100%" class="option" :class="{'false': !respuesta['estat'] && dades.done, 'correct': respuesta['estat'] && dades.done}" variant="outline-primary" @click="saveAnswer(respuesta['text'], index); checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
+                                    <b-button pill style="width:100%" class="option" :class="{'false': !respuesta['estat'] & dades.done, 'correct': respuesta['estat'] & dades.done}" variant="outline-primary" @click="saveAnswer(respuesta['text'], index); checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
                                 </div>
                             <br><br>
                         </div>
@@ -96,18 +96,20 @@ const quiz = Vue.component('quiz', {
                         <p>You have got {{score}} out of {{quiz.length}}</p>
                     </div>
                 </div>`,
-                
+
     methods: {
         saveAnswer: function (respuesta, index) {
-            if(!this.quiz[index].done){
-                this.selectedAnswers[index]=respuesta;
-                this.quiz[index].done=!this.quiz[index].done;
-                console.log(this.quiz[index].done);
+            this.quiz[index].done = false
+            if (!this.quiz[index].done) {
+                this.selectedAnswers[index] = respuesta;
+                this.quiz[index].done = true
+                console.log("CLIC2: " + this.quiz[index].done);
+                this.$forceUpdate();
             }
             console.log(this.quiz[index]);
             console.log(this.selectedAnswers);
-            if(this.selectedAnswers.length==this.quiz.length){
-                this.finished=true;
+            if (this.selectedAnswers.length == this.quiz.length) {
+                this.finished = true;
             }
             console.log(this.finished);
         },
