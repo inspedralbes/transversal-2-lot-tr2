@@ -5,13 +5,13 @@ const lobby = Vue.component('quiz-lobby', {
             category: "",
             checked: false,
             questions: {
-            }
+            },
         }
     },
     methods: {
         getQuiz: function () {
             //Ruta a la API TRIVIA `https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`
-            fetch("../api/dailyQuiz.json")
+            fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
                 .then((response) => response.json())
                 .then((data) => {
                     this.questions = data;
@@ -30,6 +30,17 @@ const lobby = Vue.component('quiz-lobby', {
         },
         startGame: function () {
             this.checked = true;
+            datos = {
+                difficulty: this.difficulty,
+                category: this.category,
+                quiz: this.questions
+            }
+
+            fetch("https://localhost:8000/store-data", {
+                method: 'POST',
+                body: JSON.stringify(datos),
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            })
         }
 
     },
