@@ -86,7 +86,7 @@ const quiz = Vue.component('quiz', {
                         <div v-for="(dades,index) in quiz">
                                 <h2>{{index+1}}. {{dades.question}}</h2>
                                 <div v-for="respuesta in dades.answers">
-                                    <b-button pill style="width:100%" class="option" :class="{'false': !respuesta['estat'] & dades.done, 'correct': respuesta['estat'] & dades.done}" variant="outline-primary" @click="saveAnswer(respuesta['text'], index); checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
+                                    <b-button pill type="radio" style="width:100%" class="option" :class="{'false': !respuesta['estat'] & dades.done, 'correct': respuesta['estat'] & dades.done}" variant="outline-primary" @click="checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
                                 </div>
                             <br><br>
                         </div>
@@ -98,13 +98,20 @@ const quiz = Vue.component('quiz', {
                 </div>`,
 
     methods: {
-        saveAnswer: function (respuesta, index) {
+        checkAnswer: function (respuesta, index) {
             this.quiz[index].done = false
             if (!this.quiz[index].done) {
                 this.selectedAnswers[index] = respuesta;
                 this.quiz[index].done = true
                 console.log("CLIC2: " + this.quiz[index].done);
-                this.$forceUpdate();
+                if (respuesta == this.quiz[index].correctAnswer) {
+                    console.log("CORRECTA");
+                    this.score++;
+                    console.log(this.score);
+                } else {
+                    this.$forceUpdate();
+                    console.log("MAL");
+                }
             }
             console.log(this.quiz[index]);
             console.log(this.selectedAnswers);
@@ -113,15 +120,9 @@ const quiz = Vue.component('quiz', {
             }
             console.log(this.finished);
         },
-        checkAnswer: function (respuesta, index) {
-            if (respuesta == this.quiz[index].correctAnswer) {
-                console.log("CORRECTA");
-                this.score++;
-                console.log(this.score);
-            } else {
-                console.log("MAL");
-            }
-        }
+        // checkAnswer: function (respuesta, index) {
+
+        // }
     }
 });
 
