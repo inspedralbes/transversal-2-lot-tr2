@@ -14,12 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('games', function (Blueprint $table) {
-            $table->integer('id')->index();
+            $table->id();
             $table->json('quiz');
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
             $table->enum('type', ['normal', 'daily', 'demo']);
             $table->timestamp('creationDate');
-            $table->primary('id');
         });
     }
 

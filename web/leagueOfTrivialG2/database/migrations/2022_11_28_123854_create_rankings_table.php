@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rankings', function (Blueprint $table) {
-            $table->integer('id-game')->index();
-            $table->integer('id-user')->index();
-            
+            $table->bigInteger('id-game')->unsigned();
+            $table->bigInteger('id-user')->unsigned();
+
             $table->integer('puntuacio');
             $table->timestamp('creationDate');
             $table->primary(['id-game', 'id-user']);

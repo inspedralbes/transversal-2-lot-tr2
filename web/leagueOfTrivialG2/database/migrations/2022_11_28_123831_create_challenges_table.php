@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('challenges', function (Blueprint $table) {
-            $table->integer('id-game')->index();
-            $table->integer('id-challenger')->index();
-            $table->integer('id-challenged')->index();
+            $table->bigInteger('id-game')->unsigned();
+            $table->bigInteger('id-challenger')->unsigned();
+            $table->bigInteger('id-challenged')->unsigned();
 
             $table->boolean('seen');
             $table->integer('winner');
