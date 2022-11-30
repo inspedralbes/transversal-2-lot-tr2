@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('quiz.game');
 });
 
-Route::get('/store-data', [GamesController::class, 'store']);
+Route::post('/store-data', [GamesController::class, 'store']);

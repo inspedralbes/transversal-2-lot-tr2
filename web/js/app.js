@@ -36,10 +36,13 @@ const lobby = Vue.component('quiz-lobby', {
                 quiz: this.questions
             }
 
-            fetch("https://localhost:8000/store-data", {
+            fetch("../leagueOfTrivialG2/store-data", {
                 method: 'POST',
                 body: JSON.stringify(datos),
-                headers: { "Content-type": "application/json; charset=UTF-8" }
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    "X-CSRF-TOKEN": token
+                }
             })
         }
 
