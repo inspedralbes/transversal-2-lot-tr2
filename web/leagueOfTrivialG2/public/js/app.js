@@ -10,7 +10,8 @@ const lobby = Vue.component('quiz-lobby', {
     },
     methods: {
         getQuiz: function () {
-            fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
+            //Ruta a la API TRIVIA `https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`
+            fetch("../api/dailyQuiz.json")
                 .then((response) => response.json())
                 .then((data) => {
                     this.questions = data;
@@ -86,7 +87,7 @@ const quiz = Vue.component('quiz', {
                         <div v-for="(dades,index) in quiz">
                                 <h2>{{index+1}}. {{dades.question}}</h2>
                                 <div v-for="respuesta in dades.answers">
-                                    <b-button pill type="radio" style="width:100%" class="option" :class="{'false': !respuesta['estat'] & dades.done, 'correct': respuesta['estat'] & dades.done}" variant="outline-primary" @click="checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
+                                    <b-button pill type="radio" style="width:100%" class="option" :disabled='dades.done' :class="{'false': !respuesta['estat'] & dades.done, 'correct': respuesta['estat'] & dades.done}" variant="outline-primary" @click="checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
                                 </div>
                             <br><br>
                         </div>

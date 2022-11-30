@@ -11,16 +11,16 @@
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
     <style>
-        .option{
+        .option {
             background-color: white;
         }
 
-        .correct {
-            background-color: rgb(187 247 208);
+        .correct:disabled {
+            background-color: rgb(187 247 208) !important;
         }
 
-        .false {
-            background-color: rgb(254 202 202);
+        .false:disabled {
+            background-color: rgb(254 202 202) !important;
         }
     </style>
 </head>
