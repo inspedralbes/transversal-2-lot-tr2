@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GamesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +18,3 @@ Route::get('/', function () {
     return view('quiz.game');
 });
 
-Route::post('/store-data', [GamesController::class, 'store']);

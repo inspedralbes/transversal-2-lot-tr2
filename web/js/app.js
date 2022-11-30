@@ -4,6 +4,7 @@ const lobby = Vue.component('quiz-lobby', {
             difficulty: "",
             category: "",
             checked: false,
+            playVisible:false,
             questions: {
             },
         }
@@ -35,20 +36,30 @@ const lobby = Vue.component('quiz-lobby', {
                 category: this.category,
                 quiz: this.questions
             }
-
-            fetch("../leagueOfTrivialG2/store-data", {
+            // fetch("../leagueOfTrivialG2/store-data")
+            // .then((response) => response.json())
+            // .then((data) => {
+            //     console.log(data);
+            // });
+            fetch("../leagueOfTrivialG2/api/store-data", {
                 method: 'POST',
                 body: JSON.stringify(datos),
                 headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    "X-CSRF-TOKEN": token
+                    "Content-type": "application/json; charset=UTF-8"
                 }
             })
+        },
+        change:function(){
+            this.playVisible=true;
         }
 
     },
     template: `<div>
-                <div v-show="!checked">
+                <div v-show="!playVisible">
+                    <button @click="change();">Play</button>
+                </div>
+
+                <div v-show="playVisible && !checked">
                     <div>Checked names: {{ difficulty }}</div>
 
                     <input type="radio" id="easy" value="easy" v-model="difficulty">
@@ -76,7 +87,7 @@ const lobby = Vue.component('quiz-lobby', {
                             <option value="sport_and_leisure">Sport & Leisure</option>
                         </select>
                     </div>
-                    <button @click="getQuiz();startGame();">PLAY</button>
+                    <button @click="getQuiz();startGame();">Take Quiz!</button>
                 </div>
                 <div v-show="checked">
                     <quiz :quiz="questions"></quiz>
@@ -140,8 +151,31 @@ const quiz = Vue.component('quiz', {
     }
 });
 
+const card=Vue.component('card',{
+    data: function () {
+        return {
+            
+        }
+    },
+    template:`<div>
+                    <b-card
+                        title="Card Title"
+                        img-src="https://picsum.photos/600/300/?image=25"
+                        img-alt="Image"
+                        img-top
+                        tag="article"
+                        style="max-width: 20rem;"
+                        class="mb-2">
+                        <b-card-text>
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        </b-card-text>
+                        <b-button href="#" variant="primary">Go somewhere</b-button>
+                    </b-card>
+                </div>`
+})
+
 const routes = [{
-    path: '/',
+    path: '/game',
     component: lobby
 }]
 
