@@ -27,27 +27,26 @@ const lobby = Vue.component('quiz-lobby', {
                         this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
                     }
                     console.log(this.questions);
+                    this.startGame();
                 });
+                
         },
         startGame: function () {
             this.checked = true;
-            datos = {
-                difficulty: this.difficulty,
-                category: this.category,
-                quiz: this.questions
-            }
-            // fetch("../leagueOfTrivialG2/store-data")
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     console.log(data);
-            // });
-            fetch("../leagueOfTrivialG2/api/store-data", {
-                method: 'POST',
-                body: JSON.stringify(datos),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
+            /****INSERT EN BD LLAMANDO A LA API DE LARAVEL*****/
+            // const datos = {
+            //     difficulty: this.difficulty,
+            //     category: this.category,
+            //     quiz: this.questions
+            // }
+            // console.log(datos);
+            // fetch("../leagueOfTrivialG2/public/api/store-data", {
+            //     method: 'POST',
+            //     body: JSON.stringify(datos),
+            //     headers: {
+            //         "Content-type": "application/json; charset=UTF-8"
+            //     }
+            // })
         },
         change:function(){
             this.playVisible=true;
@@ -87,7 +86,7 @@ const lobby = Vue.component('quiz-lobby', {
                             <option value="sport_and_leisure">Sport & Leisure</option>
                         </select>
                     </div>
-                    <button @click="getQuiz();startGame();">Take Quiz!</button>
+                    <button @click="getQuiz();">Take Quiz!</button>
                 </div>
                 <div v-show="checked">
                     <quiz :quiz="questions"></quiz>

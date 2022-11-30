@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class GamesController extends Controller
 {
@@ -16,22 +15,15 @@ class GamesController extends Controller
         //     'category' => 'required'
         // ]);
         $game = new Game();
-        // $game->type = $request->type;
-        foreach (json_decode($request) as $data) {
-            $game->difficulty = $data['difficulty'];
-            $game->category = $data['category'];
-            $game->type = "normal";
-            $game->quiz = $data['quiz'];
-            print $data;
-        }
-        // $game->difficulty = $request->difficulty;
-        // $game->category = $request->category;
-        // $game->type = "normal";
-        // $game->difficulty = "easy";
-        // $game->category = "music";
-        // $api_url = 'https://the-trivia-api.com/api/questions?limit=5';
-        // $game->quiz = $request->quiz;
-
+        $game->type = "normal";
+        $game->difficulty = $request->difficulty;
+        $game->category = $request->category;
+        $game->quiz= json_encode($request->quiz);
         $game->save();
+    }
+    public function index(){
+        $games= Game::all();
+
+        return response()->json($games);
     }
 }
