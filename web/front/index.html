@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Of Trivia</title>
+    <!-- Ion ico -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <!-- Load required Bootstrap and BootstrapVue CSS -->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"
+        crossorigin="anonymous"></script>
+
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <!-- Load the following for BootstrapVueIcons support -->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+
+    <!-- Load the following for vue-routes -->
+    <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
+    <style>
+        .option {
+            background-color: white;
+        }
+
+        .correct:disabled {
+            background-color: rgb(187 247 208) !important;
+        }
+
+        .false:disabled {
+            background-color: rgb(254 202 202) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <div class="header">
+                <b-navbar type="dark" variant="dark">
+                    <b-navbar-brand href="#" class="nav-brand">
+                        <router-link to="#" style="text-decoration: none; color: white;">
+                            <h3 style="display: inline;">League Of Trivia</h3>
+                        </router-link>
+                    </b-navbar-brand>
+                </b-navbar>
+            </div>
+        </div>
+        <div>
+            <router-view></router-view>
+        </div>
+    </div>
+    <script src="https://unpkg.com/@vue/composition-api"></script>
+    <script src="https://unpkg.com/vue-demi"></script>
+    <script src="https://unpkg.com/pinia"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
