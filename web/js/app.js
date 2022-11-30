@@ -101,17 +101,15 @@ const quiz = Vue.component('quiz', {
         return {
             selectedAnswers: [],
             finished: false,
-            score: 0
+            score: 0,
+            currentQuestion: 0
         }
     },
     template: `<div>
                     <div v-show="!this.finished">
                     <h1>Quiz</h1><br>
-                        <div v-for="(dades,index) in quiz">
-                                <h2>{{index+1}}. {{dades.question}}</h2>
-                                <div v-for="respuesta in dades.answers">
-                                    <b-button pill type="radio" style="width:100%" class="option" :disabled='dades.done' :class="{'false': !respuesta['estat'] & dades.done, 'correct': respuesta['estat'] & dades.done}" variant="outline-primary" @click="checkAnswer(respuesta['text'], index);">{{respuesta['text']}}</b-button>
-                                </div>
+                        <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
+                            <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
                             <br><br>
                         </div>
                     </div>
@@ -122,28 +120,25 @@ const quiz = Vue.component('quiz', {
                 </div>`,
 
     methods: {
-        checkAnswer: function (respuesta, index) {
-            this.quiz[index].done = false
-            if (!this.quiz[index].done) {
-                this.selectedAnswers[index] = respuesta;
-                this.quiz[index].done = true
-                console.log("CLIC2: " + this.quiz[index].done);
-                if (respuesta == this.quiz[index].correctAnswer) {
-                    console.log("CORRECTA");
-                    this.score++;
-                    console.log(this.score);
-                } else {
-                    this.$forceUpdate();
-                    console.log("MAL");
-                }
+        saveAnswer: function (respuesta, index) {
+            this.selectedAnswers[index] = respuesta;
+            if (respuesta == this.quiz[index].correctAnswer) {
+                console.log("CORRECTA");
+                this.score++;
+                console.log(this.score);
+            } else {
+                console.log("MAL");
             }
-            console.log(this.quiz[index]);
+
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
                 this.finished = true;
             }
             console.log(this.finished);
         },
+        changeCard(){
+            this.currentQuestion++;
+        }
         // checkAnswer: function (respuesta, index) {
 
         // }
@@ -151,6 +146,7 @@ const quiz = Vue.component('quiz', {
 });
 
 const card=Vue.component('card',{
+    props:['question','number'],
     data: function () {
         return {
             
@@ -158,19 +154,27 @@ const card=Vue.component('card',{
     },
     template:`<div>
                     <b-card
-                        title="Card Title"
-                        img-src="https://picsum.photos/600/300/?image=25"
-                        img-alt="Image"
-                        img-top
-                        tag="article"
-                        style="max-width: 20rem;"
+                        :title="question.question"
+                        style="max-width: 50rem;"
                         class="mb-2">
                         <b-card-text>
-                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                            <div v-for="respuesta in question.answers">
+                                <b-button pill type="radio" style="width:100%" class="option" :disabled='question.done' :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done}" variant="outline-primary" @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</b-button>
+                            </div>                        
                         </b-card-text>
-                        <b-button href="#" variant="primary">Go somewhere</b-button>
+                        <b-button href="#" variant="primary" @click="$emit('changeQuestion')">NEXT</b-button>
                     </b-card>
-                </div>`
+                </div>`,
+    methods:{
+        checkAnswer: function (respuesta, index) {
+            this.question.done = false
+            if (!this.question.done) {
+                this.question.done = true;
+                this.$forceUpdate();
+                this.$emit('gameStatus',respuesta,index);
+            }
+        },         
+    }
 })
 
 const routes = [{
