@@ -9,16 +9,21 @@ class ChallengesController extends Controller
 {
     public function store(Request $request)
     {
-
-        $request->validate([
-            'seen' => 'required',
-            'winner' => 'required',
-        ]);
+        // $request->validate([
+        //     'seen' => 'required',
+        //     'winner' => 'required',
+        // ]);
         $challenge = new Challenge();
-        //Como se llaman los campos en BD
-        // $challenge->seen = $request->name;
-        // $challenge->winner = $request->email;
+        $challenge->seen = false;
+        $challenge->winner = $request->winner;
 
         $challenge->save();
+    }
+    public function index()
+    {
+        $challenges = Challenge::all();
+        $challenges = json_encode($challenges);
+
+        return response()->json($challenges);
     }
 }

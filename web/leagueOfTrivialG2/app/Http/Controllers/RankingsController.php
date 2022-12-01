@@ -9,13 +9,18 @@ class RankingsController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'puntuacio' => 'required',
-        ]);
+        // $request->validate([
+        //     'puntuacio' => 'required',
+        // ]);
         $ranking = new Ranking();
-        //Como se llaman los campos en BD
-        $ranking->type = $request->type;
-        //El timestamp no hace falta porque lo inserta solo
+        $ranking->puntuacio = $request->score;
         $ranking->save();
+    }
+    public function index()
+    {
+        $rankings = Ranking::all();
+        $rankings = json_encode($rankings);
+
+        return response()->json($rankings);
     }
 }

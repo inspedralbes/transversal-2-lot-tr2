@@ -27,4 +27,11 @@ class UsersController extends Controller
 
         $user->save();
     }
+    public function index()
+    {
+        $users = User::all();
+        $users = json_encode($users);
+
+        return response()->json($users);
+    }
 }
