@@ -120,7 +120,7 @@ const quiz = Vue.component('quiz', {
                     <div v-show="this.finished">
                         <h3>YOU HAVE FINISHED THE QUIZ</h3>
                         <p>You have got {{score}} out of {{quiz.length}}</p>
-                        <button  @click="$emit('reset')">PLAY AGAIN!</button>
+                        <button  @click="reset">PLAY AGAIN!</button>
                     </div>
                 </div>`,
 
@@ -141,12 +141,17 @@ const quiz = Vue.component('quiz', {
             }
             console.log(this.finished);
         },
-        changeCard() {
+        changeCard: function () {
             this.currentQuestion++;
-        }
-        // checkAnswer: function (respuesta, index) {
+        },
+        reset: function () {
+            this.finished = false;
+            this.score = 0;
+            this.currentQuestion = 0;
+            this.selectedAnswers = [];
+            this.$emit('reset');
 
-        // }
+        }
     }
 });
 
