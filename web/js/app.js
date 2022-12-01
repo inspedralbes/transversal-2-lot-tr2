@@ -4,7 +4,7 @@ const lobby = Vue.component('quiz-lobby', {
             difficulty: "",
             category: "",
             checked: false,
-            playVisible:false,
+            playVisible: false,
             questions: {
             },
         }
@@ -29,7 +29,7 @@ const lobby = Vue.component('quiz-lobby', {
                     console.log(this.questions);
                     this.startGame();
                 });
-                
+
         },
         startGame: function () {
             this.checked = true;
@@ -48,8 +48,12 @@ const lobby = Vue.component('quiz-lobby', {
             //     }
             // })
         },
-        change:function(){
-            this.playVisible=true;
+        change: function () {
+            this.playVisible = true;
+        },
+        resetGame: function () {
+            this.playVisible = false;
+            this.checked = false;
         }
 
     },
@@ -89,7 +93,7 @@ const lobby = Vue.component('quiz-lobby', {
                     <button @click="getQuiz();">Take Quiz!</button>
                 </div>
                 <div v-show="checked">
-                    <quiz :quiz="questions"></quiz>
+                    <quiz :quiz="questions" @reset="resetGame"></quiz>
                 </div>
                 
               </div>`,
@@ -116,6 +120,7 @@ const quiz = Vue.component('quiz', {
                     <div v-show="this.finished">
                         <h3>YOU HAVE FINISHED THE QUIZ</h3>
                         <p>You have got {{score}} out of {{quiz.length}}</p>
+                        <button  @click="$emit('reset')">PLAY AGAIN!</button>
                     </div>
                 </div>`,
 
@@ -136,7 +141,7 @@ const quiz = Vue.component('quiz', {
             }
             console.log(this.finished);
         },
-        changeCard(){
+        changeCard() {
             this.currentQuestion++;
         }
         // checkAnswer: function (respuesta, index) {
@@ -145,14 +150,14 @@ const quiz = Vue.component('quiz', {
     }
 });
 
-const card=Vue.component('card',{
-    props:['question','number'],
+const card = Vue.component('card', {
+    props: ['question', 'number'],
     data: function () {
         return {
-            
+
         }
     },
-    template:`<div>
+    template: `<div>
                     <b-card
                         :title="question.question"
                         style="max-width: 50rem;"
@@ -165,15 +170,15 @@ const card=Vue.component('card',{
                         <b-button href="#" variant="primary" @click="$emit('changeQuestion')">NEXT</b-button>
                     </b-card>
                 </div>`,
-    methods:{
+    methods: {
         checkAnswer: function (respuesta, index) {
             this.question.done = false
             if (!this.question.done) {
                 this.question.done = true;
                 this.$forceUpdate();
-                this.$emit('gameStatus',respuesta,index);
+                this.$emit('gameStatus', respuesta, index);
             }
-        },         
+        },
     }
 })
 
