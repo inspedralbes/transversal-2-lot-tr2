@@ -1,0 +1,82 @@
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#num_pregunta {
+    background-color: white;
+    border-radius: 66%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 17px;
+    width: 60px;
+    height: 32px;
+    font-size: smaller;
+    text-align: center;
+    font-weight: bolder;
+    color: rgb(41, 168, 141);
+}
+
+.pregunta {
+    padding: 11%;
+    padding-top: 2%;
+    padding-bottom: 28px;
+    height: 104px;
+    display: flex;
+    background-color: rgb(247, 247, 154);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 2%;
+    margin-top: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;;
+}
+
+#icona_pregunta {
+    background-color: white;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 153px;
+    width: 60px;
+    height: 32px;
+    font-size: larger;
+    text-align: center;
+    font-weight: bolder;
+    color: rgb(41, 168, 141);
+}
+
+#gamecard-juego {
+    display: grid;
+    grid-template-rows: 32% 64%;
+    text-align: center;
+    border: 1px solid gray;
+    margin: auto;
+    padding: 15px;
+    padding-bottom: 0%;
+    height: 621px;
+    max-width: 500px;
+    max-height: 800px;
+}
+
+#gamecard-respuestas {
+    display: grid;
+    gap: 13px;
+    max-height: 50px;
+    place-items: center;
+}
+
+.respuesta {
+    background-color: rgb(253, 255, 253);
+    border: 2px solid rgba(58, 235, 197, 0.438);
+    color: rgb(41, 168, 141);
+    box-shadow: rgb(0 0 0 / 21%) 12px 12px 14px -6px;
+    padding: 7% 10%;
+    width: 70%;
+    border-radius: 27px;
+}
