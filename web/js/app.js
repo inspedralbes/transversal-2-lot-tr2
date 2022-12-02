@@ -1,3 +1,42 @@
+
+Vue.component('barra-nav', {
+    template: `<div class="inicio">
+                    <b-nav pills>
+                        <b-nav-item style="flex: 1">
+                            <router-link to="/login" style="text-decoration: none;">
+                                <h4>Login</h4>
+                            </router-link>                        
+                        </b-nav-item>
+                        <b-nav-item>
+                            <router-link to="/ranking" style="text-decoration: none;">
+                                <h4>Global Ranking</h4>
+                            </router-link>                        
+                        </b-nav-item>
+                    </b-nav>
+                </div>`,
+});
+const home = Vue.component('portada', {
+    data: function () {
+        return {}
+    },
+    template: `<div>
+                <barra-nav></barra-nav>
+                    <div class="inici">
+                        <h1>LEAGUE OF TRIVIAL</h1>
+                        <button>
+                            <router-link to="/game" style="text-decoration: none;">
+                                Random Quiz
+                            </router-link>
+                        </button>
+                        <br>
+                        <button>
+                            <router-link to="/daily" style="text-decoration: none;">
+                                Daily Quiz
+                            </router-link>
+                        </button>
+                    </div>
+                </div>`
+});
 const lobby = Vue.component('quiz-lobby', {
     data: function () {
         return {
@@ -52,21 +91,16 @@ const lobby = Vue.component('quiz-lobby', {
                 }
             })
         },
-        change: function () {
-            this.playVisible = true;
-        },
         resetGame: function () {
-            this.playVisible = false;
             this.checked = false;
         }
 
     },
     template: `<div>
-                <div v-show="!playVisible">
-                    <button @click="change();">Play</button>
-                </div>
+                <barra-nav></barra-nav>
+                
 
-                <div v-show="playVisible && !checked">
+                <div v-show="!checked">
                     <div>Checked names: {{ gameType.difficulty }}</div>
 
                     <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
@@ -229,6 +263,7 @@ const login = Vue.component("login", {
                             </b-button>  
                         </div>
                         <div v-show="!processing" class="boton">
+                            Don't have an account yet?<a href="/register">Join the league now!</a> <br>
                             <b-button @click="login" variant="primary">Login</b-button>              
                         </div>
                     </div>
@@ -289,6 +324,9 @@ const routes = [{
 }, {
     path: '/login',
     component: login
+}, {
+    path: '/',
+    component: home
 }]
 
 const router = new VueRouter({
