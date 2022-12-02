@@ -37,19 +37,20 @@ const lobby = Vue.component('quiz-lobby', {
         startGame: function () {
             this.checked = true;
             /****INSERT EN BD LLAMANDO A LA API DE LARAVEL*****/
-            // const datos = {
-            //     difficulty: this.gameType.difficulty,
-            //     category: this.gameType.category,
-            //     quiz: this.questions
-            // }
-            // console.log(datos);
+            const datos = {
+                difficulty: this.gameType.difficulty,
+                category: this.gameType.category,
+                quiz: this.questions
+            }
+            console.log(datos);
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
-            //     method: 'POST',
-            //     body: JSON.stringify(datos),
-            //     headers: {
-            //         "Content-type": "application/json; charset=UTF-8"
-            //     }
-            // })
+            fetch("http://localhost/transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-data", {
+                method: 'POST',
+                body: JSON.stringify(datos),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
         },
         change: function () {
             this.playVisible = true;
@@ -161,6 +162,16 @@ const quiz = Vue.component('quiz', {
 
         },
         reset: function () {
+            const params = {
+                score: this.score
+            }
+            fetch("http://localhost/transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-score", {
+                method: 'POST',
+                body: JSON.stringify(params),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
             this.finished = false;
             this.score = 0;
             this.currentQuestion = 0;

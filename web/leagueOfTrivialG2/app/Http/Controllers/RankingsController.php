@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use App\Models\Ranking;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RankingsController extends Controller
 {
@@ -12,7 +15,11 @@ class RankingsController extends Controller
         // $request->validate([
         //     'puntuacio' => 'required',
         // ]);
+        $user = DB::table('users')->where('id', 2)->value('id');
+        $game =  DB::table('games')->latest('id')->value('id');
         $ranking = new Ranking();
+        $ranking->idGame = $game;
+        $ranking->idUser = $user;
         $ranking->puntuacio = $request->score;
         $ranking->save();
     }

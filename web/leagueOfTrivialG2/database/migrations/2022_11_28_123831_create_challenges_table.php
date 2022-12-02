@@ -14,17 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('challenges', function (Blueprint $table) {
-            $table->bigInteger('id-game')->unsigned();
-            $table->bigInteger('id-challenger')->unsigned();
-            $table->bigInteger('id-challenged')->unsigned();
+            $table->bigInteger('idGame')->unsigned();
+            $table->bigInteger('idChallenger')->unsigned();
+            $table->bigInteger('idChallenged')->unsigned();
 
             $table->boolean('seen');
             $table->integer('winner');
             $table->timestamp('creationDate');
-            $table->primary(['id-game', 'id-challenger', 'id-challenged']);
-            $table->foreign('id-game')->references('id')->on('games')->onDelete('cascade');
-            $table->foreign('id-challenger')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('id-challenged')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['idGame', 'idChallenger', 'idChallenged']);
+            $table->foreign('idGame')->references('id')->on('games')->onDelete('cascade');
+            $table->foreign('idChallenger')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('idChallenged')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
