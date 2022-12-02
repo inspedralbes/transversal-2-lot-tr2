@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Challenge;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -26,6 +27,13 @@ class UsersController extends Controller
         $user->userName = $request->userName;
 
         $user->save();
+    }
+    public function getUserInfo($username)
+    {
+        $user = User::find($username);
+        $user = json_encode($user);
+
+        return response()->json($user);
     }
     public function index()
     {

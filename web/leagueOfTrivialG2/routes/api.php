@@ -34,3 +34,6 @@ Route::get('/get-users', [UsersController::class, 'index']);
 Route::get('/get-games', [GamesController::class, 'index']);
 Route::get('/get-rankings', [RankingsController::class, 'index']);
 Route::get('/get-challenges', [ChallengesController::class, 'index']);
+
+//LOGIN
+Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);
