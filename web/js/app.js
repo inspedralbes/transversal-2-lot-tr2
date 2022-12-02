@@ -3,12 +3,12 @@ Vue.component('barra-nav', {
     template: `<div class="inicio">
                     <b-nav pills>
                         <b-nav-item style="flex: 1">
-                            <router-link to="/login" style="text-decoration: none;">
+                            <router-link to="/login" style="text-decoration: none; color:white">
                                 <h4>Login</h4>
                             </router-link>                        
                         </b-nav-item>
                         <b-nav-item>
-                            <router-link to="/ranking" style="text-decoration: none;">
+                            <router-link to="/ranking" style="text-decoration: none;color:white">
                                 <h4>Global Ranking</h4>
                             </router-link>                        
                         </b-nav-item>
