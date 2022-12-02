@@ -30,7 +30,10 @@ class UsersController extends Controller
     }
     public function getUserInfo($username)
     {
-        $user = User::find($username);
+        $user = User::where('userName', $username)->get();
+
+        // error_log($user);
+
         $user = json_encode($user);
 
         return response()->json($user);
