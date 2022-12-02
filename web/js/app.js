@@ -1,8 +1,11 @@
 const lobby = Vue.component('quiz-lobby', {
     data: function () {
         return {
-            difficulty: "",
-            category: "",
+            gameType: {
+                difficulty: "",
+                category: ""
+            },
+
             checked: false,
             playVisible: false,
             questions: {
@@ -12,7 +15,7 @@ const lobby = Vue.component('quiz-lobby', {
     methods: {
         getQuiz: function () {
             //Ruta a la API TRIVIA `https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`
-            fetch(`https://the-trivia-api.com/api/questions?categories=${this.category}&limit=10&difficulty=${this.difficulty}`)
+            fetch(`https://the-trivia-api.com/api/questions?categories=${this.gameType.category}&limit=10&difficulty=${this.gameType.difficulty}`)
                 .then((response) => response.json())
                 .then((data) => {
                     this.questions = data;
@@ -35,8 +38,8 @@ const lobby = Vue.component('quiz-lobby', {
             this.checked = true;
             /****INSERT EN BD LLAMANDO A LA API DE LARAVEL*****/
             // const datos = {
-            //     difficulty: this.difficulty,
-            //     category: this.category,
+            //     difficulty: this.gameType.difficulty,
+            //     category: this.gameType.category,
             //     quiz: this.questions
             // }
             // console.log(datos);
@@ -63,20 +66,20 @@ const lobby = Vue.component('quiz-lobby', {
                 </div>
 
                 <div v-show="playVisible && !checked">
-                    <div>Checked names: {{ difficulty }}</div>
+                    <div>Checked names: {{ gameType.difficulty }}</div>
 
-                    <input type="radio" id="easy" value="easy" v-model="difficulty">
+                    <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
                     <label for="easy">Easy</label>
                     
-                    <input type="radio" id="medium" value="medium" v-model="difficulty">
+                    <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
                     <label for="medium">Medium</label>
                     
-                    <input type="radio" id="difficult" value="hard" v-model="difficulty">
-                    <label for="difficult">Diffcult</label>
+                    <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
+                    <label for="difficult">Hard</label>
 
                     <div>
-                        Selected: {{ category }}
-                        <select v-model="category">
+                        Selected: {{ gameType.category }}
+                        <select v-model="gameType.category">
                             <option disabled value="">Please select one...</option>
                             <option value="arts_and_literature">Arts & Literature</option>
                             <option value="film_and_tv">Film & TV</option>
@@ -93,14 +96,14 @@ const lobby = Vue.component('quiz-lobby', {
                     <button @click="getQuiz();">Take Quiz!</button>
                 </div>
                 <div v-show="checked">
-                    <quiz :quiz="questions" @reset="resetGame"></quiz>
+                    <quiz :quiz="questions" :gameConfig="gameType" @reset="resetGame"></quiz>
                 </div>
                 
               </div>`,
 });
 
 const quiz = Vue.component('quiz', {
-    props: ['quiz'],
+    props: ['quiz', 'gameConfig'],
     data: function () {
         return {
             selectedAnswers: [],
@@ -119,7 +122,7 @@ const quiz = Vue.component('quiz', {
                     </div>
                     <div v-show="this.finished">
                         <h3>YOU HAVE FINISHED THE QUIZ</h3>
-                        <p>You have got {{score}} out of {{quiz.length}}</p>
+                        <p>You have gained {{score}} legendary points!!</p>
                         <button  @click="reset">PLAY AGAIN!</button>
                     </div>
                 </div>`,
@@ -129,20 +132,33 @@ const quiz = Vue.component('quiz', {
             this.selectedAnswers[index] = respuesta;
             if (respuesta == this.quiz[index].correctAnswer) {
                 console.log("CORRECTA");
-                this.score++;
-                console.log(this.score);
+                switch (this.gameConfig.difficulty) {
+                    case "easy": this.score += 100;
+                        console.log("easy score: " + this.score)
+                        break;
+                    case "medium": this.score += 200;
+                        console.log("medium score: " + this.score)
+
+                        break;
+                    case "hard": this.score += 300;
+                        console.log("hard score: " + this.score)
+
+                        break;
+                }
             } else {
                 console.log("MAL");
             }
 
+
+        },
+        changeCard: function () {
+            this.currentQuestion++;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
                 this.finished = true;
             }
             console.log(this.finished);
-        },
-        changeCard: function () {
-            this.currentQuestion++;
+
         },
         reset: function () {
             this.finished = false;
