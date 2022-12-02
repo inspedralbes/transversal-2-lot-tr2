@@ -214,19 +214,123 @@ const card = Vue.component('card', {
     }
 })
 
+const login = Vue.component("login", {
+    // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
+    props: [],
+    template: `<div>
+                    <div style="width:15%; margin:auto;">
+                        <h1 class="app__titol">Login</h1>
+                        <b-form-input id="input-2" v-model="form.username" placeholder="Write your username..." required></b-form-input><br>
+                        <b-form-input id="input-2" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
+                        <div v-show="processing" class="boton">
+                            <b-button variant="primary" disabled>
+                                <b-spinner small type="grow"></b-spinner>
+                                Loading . . .
+                            </b-button>  
+                        </div>
+                        <div v-show="!processing" class="boton">
+                            <b-button @click="login" variant="primary">Login</b-button>              
+                        </div>
+                    </div>
+                    <div v-show="isLogged">
+                        <div class="card container-profile">
+                            <div class="card-body text-center">
+                                <h5 class="my-3">Welcome!</h5>
+                                <p class="text-muted mb-4">{{userName}}</p>
+                            </div>
+                        </div>              
+                    </div> 
+               </div>`,
+    data: function () {
+        return {
+            //Creamos objeto para tener la informacion del usuario junta.
+            processing: false,
+            form: {
+                username: '',
+                password: ''
+            },
+            perfil: {}
+        }
+    },
+    methods: {
+        login: function () {
+            this.processing = true;
+            fetch(`http://localhost/transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/login-get/${this.form.username}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.processing = false;
+                    this.perfil = data;
+                    console.log("DATA" + data)
+                    this.perfil = JSON.parse(this.perfil);
+                    console.log("PERFIL: " + this.perfil);
+                    // console.log("THIS PERFIL:" + this.perfil[0].email)
+                    store = userStore();
+                    store.setEstado(this.perfil);
+                    store.logged = true;
+                });
+        }
+    },
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        },
+        userName() {
+            return userStore().loginInfo.name;
+        }
+    }
+
+});
+
+// -----------------Vue Routes-----------------
 const routes = [{
     path: '/game',
     component: lobby
+}, {
+    path: '/login',
+    component: login
 }]
 
 const router = new VueRouter({
     routes // short for `routes: routes`
 })
 
+
+// -----------------Vue Pinia-----------------
+Vue.use(Pinia.PiniaVuePlugin);
+const pinia = Pinia.createPinia();
+
+const userStore = Pinia.defineStore('usuario', {
+    state() {
+        return {
+            logged: false,
+            loginInfo: {
+                success: true,
+                name: 'Nombre del almacen',
+                image: '',
+                idUser: ''
+            }
+        }
+    },
+    actions: {
+        setEstado(i) {
+            this.loginInfo = i
+        }
+    }
+})
+
+// -----------------Vue App-----------------
 var app = new Vue({
     el: '#app',
     router,
+    pinia,
     data: {
-        message: 'Hello Vue!'
+
+    },
+    computed: {
+        ...Pinia.mapState(userStore, ['loginInfo', 'logged'])
+    },
+    methods: {
+        ...Pinia.mapActions(userStore, ['setEstado'])
     }
 })
