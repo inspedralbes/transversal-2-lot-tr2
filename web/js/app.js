@@ -137,6 +137,30 @@ const lobby = Vue.component('quiz-lobby', {
               </div>`,
 });
 
+Vue.component('timer', {
+    data() {
+        return {
+            countDown: 150
+        }
+    },
+    template: `<div>
+                {{this.countDown}}
+                </div>`,
+    methods: {
+        countDownTimer() {
+            if (this.countDown > 0) {
+                setTimeout(() => {
+                    this.countDown -= 1
+                    this.countDownTimer()
+                }, 1000)
+            }
+        }
+    },
+    created() {
+        this.countDownTimer()
+    }
+});
+
 const quiz = Vue.component('quiz', {
     props: ['quiz', 'gameConfig'],
     data: function () {
@@ -148,8 +172,9 @@ const quiz = Vue.component('quiz', {
         }
     },
     template: `<div>
-                    <div v-show="!this.finished">
-                    <h1>Quiz</h1><br>
+                    <div v-show="!this.finished" style="text-align:center">
+                    <p>Your score: {{score}}</p><timer class="timer"></timer>
+                    <br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
                             <br><br>
@@ -223,18 +248,20 @@ const card = Vue.component('card', {
 
         }
     },
-    template: `<div>
-                    <b-card
-                        :title="question.question"
-                        style="max-width: 50rem;"
-                        class="mb-2">
-                        <b-card-text>
-                            <div v-for="respuesta in question.answers">
-                                <b-button pill type="radio" style="width:100%" class="option" :disabled='question.done' :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done}" variant="outline-primary" @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</b-button>
-                            </div>                        
-                        </b-card-text>
-                        <b-button href="#" variant="primary" @click="$emit('changeQuestion')">NEXT</b-button>
-                    </b-card>
+    template: `<div id="gamecard-juego">
+                    <div class="pregunta">
+                        <div id="num_pregunta">{{number+1}} / 10</div>
+                        <div>{{question.question}}</div>
+                        <div id="icona_pregunta">?</div>
+                    </div>
+                    <div id="gamecard-respuestas">
+                        <div v-for="respuesta in question.answers">
+                            <button type="radio" class="respuesta" :disabled='question.done' :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done}" @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</button>
+                        </div>
+                    </div>
+                    <div v-show="question.done">
+                    <b-button href="#" variant="primary" @click="$emit('changeQuestion')">NEXT</b-button>
+                    </div>
                 </div>`,
     methods: {
         checkAnswer: function (respuesta, index) {

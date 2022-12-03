@@ -28,18 +28,115 @@
     <!-- Load the following for vue-routes -->
     <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
     <style>
-        .option {
+        * {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        .timer {
+            height: 50px;
+            width: 50px;
+            margin: auto;
+            background-color: rgb(252, 197, 197);
+            border-radius: 50%;
+            padding-top: 10px;
+            text-align: center;
+        }
+        #num_pregunta {
             background-color: white;
+            border-radius: 66%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 17px;
+            width: 60px;
+            height: 32px;
+            font-size: smaller;
+            text-align: center;
+            font-weight: bolder;
+            color: rgb(41, 168, 141);
+        }
+
+        .pregunta {
+            padding: 11%;
+            padding-top: 2%;
+            padding-bottom: 28px;
+            height: 150px;
+            display: flex;
+            background-color: rgb(247, 247, 154);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 2%;
+            margin-top: 1%;
+            display: flex;
+            align-items: center;
+            justify-content: center;;
+        }
+
+        #icona_pregunta {
+            background-color: white;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 153px;
+            width: 60px;
+            height: 32px;
+            font-size: larger;
+            text-align: center;
+            font-weight: bolder;
+            color: rgb(41, 168, 141);
+        }
+
+        #gamecard-juego {
+            display: grid;
+            grid-template-rows: 35% 65%;
+            text-align: center;
+            border: 1px solid gray;
+            margin: auto;
+            padding: 15px;
+            padding-bottom: 0%;
+            height: 621px;
+            max-width: 500px;
+            max-height: 800px;
+        }
+
+        #gamecard-respuestas {
+            display: grid;
+            gap: 15px;
+            max-height: 50px;
+            place-items: center;
+        }
+
+        .respuesta {
+            background-color: rgb(253, 255, 253);
+            border: 2px solid rgba(58, 235, 197, 0.438);
+            color: rgb(41, 168, 141);
+            box-shadow: rgb(0 0 0 / 21%) 12px 12px 14px -6px;
+            padding: 15px;
+            width: 450px;
+            border-radius: 27px;
+        }
+        .respuesta:hover{
+            background-color: rgb(41, 168, 141);
+            color: rgb(253, 255, 253);
         }
 
         .correct:disabled {
             background-color: rgb(187 247 208) !important;
         }
+        .correct:disabled:hover{
+            color: rgb(41, 168, 141);
+        }
 
         .false:disabled {
             background-color: rgb(254 202 202) !important;
         }
-
+        .false:disabled:hover{
+            color: rgb(41, 168, 141);
+        }
+        
         .inici {
             text-align: center;
         }
