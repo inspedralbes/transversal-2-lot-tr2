@@ -1,19 +1,49 @@
 
 Vue.component('barra-nav', {
-    template: `<div class="inicio">
-                    <b-nav pills>
-                        <b-nav-item style="flex: 1">
-                            <router-link to="/login" style="text-decoration: none; color:white">
-                                <h4>Login</h4>
-                            </router-link>                        
-                        </b-nav-item>
-                        <b-nav-item>
-                            <router-link to="/ranking" style="text-decoration: none;color:white">
-                                <h4>Global Ranking</h4>
-                            </router-link>                        
-                        </b-nav-item>
-                    </b-nav>
+    template: `<div class="header">
+                        <div class="header_div1">
+                            <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                                <template #button-content>
+                                &#x1f50d;<span class="sr-only">logo</span>
+                                </template>
+                                <b-dropdown-item>
+                                    <router-link to="/" style="text-decoration: none;">
+                                        Home
+                                    </router-link>     
+                                </b-dropdown-item>
+                                <b-dropdown-item>
+                                    <router-link to="/ranking" style="text-decoration: none;">
+                                        Global Ranking
+                                    </router-link>
+                                </b-dropdown-item>
+                                <b-dropdown-item href="#">Something else here...</b-dropdown-item>
+                            </b-dropdown>
+                                               
+                        </div>
+                        <div class="header_div2">
+                                                    
+                        </div>
+                        <div v-show="!isLogged" class="header_div3" v-b-modal.login>
+                            Login
+                            <login></login>                
+                        </div>
+                        <div v-show="isLogged" class="header_div3">
+                            <router-link to="/profile" style="text-decoration: none;color:white">
+                                <span style="font-size:20px;">{{userName}}&nbsp;</span>
+                                <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
+                            </router-link> 
+                        </div>
+                        
+                        
                 </div>`,
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        },
+        userName() {
+            return userStore().loginInfo.userName;
+        }
+    }
 });
 const home = Vue.component('portada', {
     data: function () {
@@ -21,20 +51,22 @@ const home = Vue.component('portada', {
     },
     template: `<div>
                 <barra-nav></barra-nav>
-                    <div class="inici">
-                        <h1>LEAGUE OF TRIVIAL</h1>
-                        <button>
-                            <router-link to="/game" style="text-decoration: none;">
-                                Random Quiz
-                            </router-link>
-                        </button>
-                        <br>
-                        <button>
-                            <router-link to="/daily" style="text-decoration: none;">
-                                Daily Quiz
-                            </router-link>
-                        </button>
-                    </div>
+                <div class="titulo textoCentrado">
+                    <h1>LEAGUE OF TRIVIAL</h1>
+                </div>
+                <div class="centerItems">
+                    <button class="linkButton">
+                        <router-link to="/game" style="text-decoration: none;">
+                            Random Quiz
+                        </router-link>
+                    </button>
+                    <br>
+                    <button class="linkButton">
+                        <router-link to="/daily" style="text-decoration: none;">
+                            Daily Quiz
+                        </router-link>
+                    </button>
+                </div>
                 </div>`
 });
 const lobby = Vue.component('quiz-lobby', {
@@ -181,9 +213,22 @@ const quiz = Vue.component('quiz', {
                         </div>
                     </div>
                     <div v-show="this.finished">
-                        <h3>YOU HAVE FINISHED THE QUIZ</h3>
-                        <p>You have gained {{score}} legendary points!!</p>
-                        <button  @click="reset">PLAY AGAIN!</button>
+                        <div class="textoCentrado">
+                            <h2 class="textoFinQuiz">Your score was:<br>7/10 in 50 seconds<br><br><br>+ {{score}} points</h2>
+                        </div>
+                        <div class="centerItems" id="divXP">
+                            <div class="gridDeNiveles">
+                                <div class="nivelActual">Platinum</div>
+                                <div class="nivelSiguiente">Master</div>
+                            </div>
+                                <div id="barra">
+                                    <div class="progreso"></div>
+                                    400 / 750
+                                </div>
+                            </div>
+                        <div class="centerItems">
+                            <div class="linkButton">Your Profile</div>
+                        </div>
                     </div>
                 </div>`,
 
@@ -258,9 +303,9 @@ const card = Vue.component('card', {
                         <div v-for="respuesta in question.answers">
                             <button type="radio" class="respuesta" :disabled='question.done' :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done}" @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</button>
                         </div>
-                    </div>
-                    <div v-show="question.done">
-                    <b-button href="#" variant="primary" @click="$emit('changeQuestion')">NEXT</b-button>
+                        <div v-show="question.done">
+                            <button class="next" @click="$emit('changeQuestion')">NEXT</button>
+                        </div>
                     </div>
                 </div>`,
     methods: {
@@ -279,29 +324,37 @@ const login = Vue.component("login", {
     // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
     props: [],
     template: `<div>
-                    <div style="width:15%; margin:auto;">
-                        <h1 class="app__titol">Login</h1>
-                        <b-form-input id="input-2" v-model="form.username" placeholder="Write your username..." required></b-form-input><br>
-                        <b-form-input id="input-2" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
-                        <div v-show="processing" class="boton">
-                            <b-button variant="primary" disabled>
-                                <b-spinner small type="grow"></b-spinner>
-                                Loading . . .
-                            </b-button>  
-                        </div>
-                        <div v-show="!processing" class="boton">
+                    <b-modal id="login" title="We are happy that you are back!">
+                        <div v-show="!isLogged">
+                            <h3 class="app__titol">Login</h3>
+                            <b-form-input id="input-2" v-model="form.username" placeholder="Write your username..." required></b-form-input><br>
+                            <b-form-input id="input-2" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
                             Don't have an account yet?<a href="/register">Join the league now!</a> <br>
-                            <b-button @click="login" variant="primary">Login</b-button>              
                         </div>
-                    </div>
-                    <div v-show="isLogged">
-                        <div class="card container-profile">
-                            <div class="card-body text-center">
-                                <h5 class="my-3">Welcome!</h5>
-                                <p class="text-muted mb-4">{{userName}}</p>
-                            </div>
-                        </div>              
-                    </div> 
+                            <template #modal-footer>
+                                <div v-show="!isLogged">
+                                    <div v-show="!processing" class="boton">
+                                        
+                                        <button v-b-modal.modal-close_visit class="btn btn-primary" @click="login">Login</button>      
+                                    </div>
+                                    <div v-show="processing" class="boton">
+                                        <button v-b-modal.modal-close_visit class="btn btn-primary" disabled>
+                                            <b-spinner small type="grow"></b-spinner>
+                                            Loading . . .
+                                        </button>  
+                                    </div>
+                                </div>
+                            </template>
+                        <div v-show="isLogged">
+                            <div class="card container-profile">
+                                <div class="card-body text-center">
+                                    <h5 class="my-3">Welcome!</h5>
+                                    <p class="text-muted mb-4">{{userName}}</p>
+                                </div>
+                            </div>              
+                        </div> 
+                    </b-modal>
+                    
                </div>`,
     data: function () {
         return {
