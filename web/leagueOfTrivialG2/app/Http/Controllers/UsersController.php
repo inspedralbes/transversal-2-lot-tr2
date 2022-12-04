@@ -13,10 +13,10 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required' | 'min:3',
-            'username' => 'required' | 'min:3',
-            'email' => 'required|min:10|email|unique',
+        $user = $request->validate([
+            'name' => 'required | min:3',
+            'username' => 'required | min:3',
+            'email' => 'required|min:10|email|unique:users',
             'password' => 'required',
         ]);
         $user = new User();
@@ -24,7 +24,7 @@ class UsersController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->userName = $request->userName;
+        $user->userName = $request->username;
 
         $user->save();
     }

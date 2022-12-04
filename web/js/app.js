@@ -411,8 +411,6 @@ const register=Vue.component("register",{
                 password: ''
             },
             show: true
-
-            
         }
     },
     template:`<div>
@@ -464,7 +462,6 @@ const register=Vue.component("register",{
                             >
                             </b-form-input>
                     </b-form-group>
-
                         <b-button @click="send" variant="primary">Register</b-button>
                         <b-button @click="onReset" type="reset" variant="danger">Reset</b-button>
                     </b-form>
@@ -474,8 +471,15 @@ const register=Vue.component("register",{
                 </div>`,
     methods:{
         send:function(event){
-            event.preventDefault()
-            alert(JSON.stringify(this.form))
+            // event.preventDefault()
+            // alert(JSON.stringify(this.form))
+            fetch("../leagueOfTrivialG2/public/api/store-user", {
+                method: 'POST',
+                body: JSON.stringify(this.form),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
         },
         onReset:function(event) {
             event.preventDefault()
