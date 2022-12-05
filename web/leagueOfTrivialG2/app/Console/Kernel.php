@@ -18,10 +18,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            $response = json_encode(Http::get(`https://the-trivia-api.com/api/questions?limit=10`));
+            $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
 
             DB::table('games')->where('type', 'daily')->update(['quiz' => $response]);
-        })->dailyAt('10:03');
+        })->everyMinute();
     }
 
     /**
