@@ -12,20 +12,21 @@ class RankingsController extends Controller
 {
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'puntuacio' => 'required',
-        // ]);
-        $user = DB::table('users')->where('id', 2)->value('id');
         $game =  DB::table('games')->latest('id')->value('id');
         $ranking = new Ranking();
         $ranking->idGame = $game;
-        $ranking->idUser = $user;
+        $ranking->idUser = $request->idUser;
         $ranking->puntuacio = $request->score;
         $ranking->save();
     }
     public function index()
     {
-        $rankings = Ranking::all();
+        $rankings = Ranking::orderBy('puntuacio', 'desc')->get();
+        $userEmail = DB::select('SELECT users.email FROM `rankings` JOIN `users` WHERE users.id=rankings.idUser');
+
+        for ($i = 0; $i < sizeof($rankings); $i++) {
+            $rankings[$i]->userEmail = $userEmail[$i]->email;
+        }
         $rankings = json_encode($rankings);
 
         return response()->json($rankings);

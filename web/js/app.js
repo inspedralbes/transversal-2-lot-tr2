@@ -1,4 +1,6 @@
 
+var tmp = null;
+
 Vue.component('barra-nav', {
     template: `<div class="header">
                         <div class="header_div1">
@@ -42,6 +44,50 @@ Vue.component('barra-nav', {
             return userStore().loginInfo.userName;
         }
     }
+});
+const ranking = Vue.component('ranking', {
+    data: function () {
+        return {
+            ranking: []
+        }
+    },
+    mounted() {
+        fetch(`../leagueOfTrivialG2/public/api/get-rankings`)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data)
+                this.ranking = JSON.parse(data);
+                for (let index = 0; index < this.ranking.length; index++) {
+                    tmp = new Date(this.ranking[index].created_at);
+                    this.ranking[index].date = tmp.toLocaleDateString();
+                    this.ranking[index].hour = tmp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+                console.log(this.ranking);
+            });
+    },
+    template: `<div id="ranking-marco">
+                <div id="ranking-diffSelect">
+                    <div class="diff1">Global</div>
+                    <div class="diff2">Lv 1</div>
+                    <div class="diff3">Lv 2</div>
+                    <div class="diff4">Lv 3</div>
+                </div>
+                <div id="ranking-fondo">
+                    <table id="ranking-table">
+                        <tr class="ranking-cell ranking-titulo">
+                            <th class="colNum">#</th>
+                            <th class="colName">USER</th>
+                            <th class="colScore">SCORE</th>
+                        </tr>
+                            <tr class="ranking-cell" v-for="(score,index) in ranking">
+                                <td>{{index+1}}</td>
+                                <td>{{score.userEmail}}</td>
+                                <td>{{score.puntuacio}}</td>
+                            </tr>
+                    </table>
+                </div>
+                <div id="ranking-pagina">1 / 23</div>
+            </div>`
 });
 const home = Vue.component('portada', {
     data: function () {
@@ -221,6 +267,7 @@ const quiz = Vue.component('quiz', {
                                     400 / 750
                                 </div>
                             </div>
+                            <button @click="reset">TORNA A L'INICI</button>
                         <div class="centerItems">
                             <div class="linkButton">Your Profile</div>
                         </div>
@@ -258,8 +305,10 @@ const quiz = Vue.component('quiz', {
         },
         reset: function () {
             const params = {
-                score: this.score
+                score: this.score,
+                idUser: userStore().loginInfo.id
             }
+
             fetch("../leagueOfTrivialG2/public/api/store-score", {
                 method: 'POST',
                 body: JSON.stringify(params),
@@ -272,6 +321,11 @@ const quiz = Vue.component('quiz', {
             this.currentQuestion = 0;
             this.selectedAnswers = [];
             this.$emit('reset');
+        }
+    },
+    computed: {
+        getUser() {
+            return userStore().loginInfo.id;
         }
     }
 });
@@ -316,9 +370,8 @@ const profile = Vue.component("profile", {
         }
     },
     template: `<div>
-                    Name:{{user.name}}
-                    Email:{{user.email}}
-                    Username:{{user.}}
+                    Name:{{this.user.name}}
+                    Email:{{this.user.email}}
     
     </div>`,
     mounted() {
@@ -337,7 +390,7 @@ const login = Vue.component("login", {
                     <b-modal id="login" title="We are happy that you are back!">
                         <div v-show="!isLogged">
                             <h3 class="app__titol">Login</h3>
-                            <b-form-input id="input-2" v-model="form.username" placeholder="Write your username..." required></b-form-input><br>
+                            <b-form-input id="input-2" v-model="form.email" placeholder="Write your email..." required></b-form-input><br>
                             <b-form-input id="input-3" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
                             Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
                             <h6 style="display: inline;">Join the league now!</h6>
@@ -372,7 +425,7 @@ const login = Vue.component("login", {
             //Creamos objeto para tener la informacion del usuario junta.
             processing: false,
             form: {
-                username: '',
+                email: '',
                 password: ''
             },
             perfil: {}
@@ -381,20 +434,41 @@ const login = Vue.component("login", {
     methods: {
         login: function () {
             this.processing = true;
-            fetch(`../leagueOfTrivialG2/public/api/login-get/${this.form.username}`)
-                .then(response => response.json())
+            // fetch(`../leagueOfTrivialG2/public/api/login-get/${this.form.username}`)
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log(data)
+            //     this.processing = false;
+            //     this.perfil = data;
+            //     // console.log("DATA" + data)
+            //     this.perfil = JSON.parse(this.perfil);
+            //     // console.log("PERFIL: " + this.perfil);
+            //     // console.log("THIS PERFIL:" + this.perfil[0].email)
+            //     store = userStore();
+            //     store.setEstado(this.perfil);
+            //     store.logged = true;
+            // });
+
+            fetch("../leagueOfTrivialG2/public/api/login", {
+                method: 'POST',
+                body: JSON.stringify(this.form),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response => response.json())
                 .then(data => {
                     console.log(data)
                     this.processing = false;
                     this.perfil = data;
                     // console.log("DATA" + data)
-                    this.perfil = JSON.parse(this.perfil);
+                    // this.perfil = JSON.parse(this.perfil);
                     // console.log("PERFIL: " + this.perfil);
                     // console.log("THIS PERFIL:" + this.perfil[0].email)
                     store = userStore();
                     store.setEstado(this.perfil);
                     store.logged = true;
                 });
+
         },
         logOut: function () {
             store.logged = false;
@@ -422,8 +496,8 @@ const register = Vue.component("register", {
                 name: '',
                 username: '',
                 email: '',
-                password: '',
-                password_confirmation: ''
+                password: ''
+                // password_confirmation: ''
             },
             show: true
         }
@@ -477,20 +551,6 @@ const register = Vue.component("register", {
                             >
                             </b-form-input>
                     </b-form-group>
-                    <b-form-group
-                        id="input-group-5"
-                        label="Repeat Password:"
-                        label-for="input-5"
-                        description="Repeat your password">
-                            <b-form-input
-                                id="input-5"
-                                v-model="form.password_confirmation"
-                                type="password"
-                                placeholder="Rewrite your password..."
-                                required
-                            >
-                            </b-form-input>
-                    </b-form-group>
                         <b-button @click="send" type="button" variant="primary">Register</b-button>
                         <b-button @click="onReset" type="reset" variant="danger">Reset</b-button>
                     </b-form>
@@ -540,11 +600,13 @@ const routes = [{
     component: register
 }, {
     path: '/',
-    name: 'lobby',
     component: home
 }, {
     path: '/profile',
     component: profile
+}, {
+    path: '/ranking',
+    component: ranking
 }]
 
 const router = new VueRouter({
