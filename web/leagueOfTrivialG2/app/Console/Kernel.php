@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Models\Game;
+use App\Models\Test;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +20,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
-
-            DB::table('games')->where('type', 'daily')->update(['quiz' => $response]);
+            // $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
+            $test = Test::find(1);
+            $cont = $test->cont;
+            DB::table('tests')->where('id', 1)->update(['cont' => $cont + 1]);
         })->everyMinute();
     }
 
