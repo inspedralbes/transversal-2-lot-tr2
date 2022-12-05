@@ -1,5 +1,10 @@
+@font-face {
+    font-family: MikadoBoldDemo;
+    src: url(MikadoBold_DEMO.otf);
+  }
+
 body {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family:  Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .header {
