@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
             $test = Test::find(1);
             $cont = $test->cont;
             DB::table('tests')->where('id', 1)->update(['cont' => $cont + 1]);
-        })->everyMinute();
+        })->dailyAt('13:05');
     }
 
     /**
