@@ -32,9 +32,7 @@ Vue.component('barra-nav', {
                                 <span style="font-size:20px;">{{userName}}&nbsp;</span>
                                 <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
                             </router-link> 
-                        </div>
-                        
-                        
+                        </div> 
                 </div>`,
     computed: {
         isLogged() {
@@ -115,7 +113,7 @@ const lobby = Vue.component('quiz-lobby', {
             }
             console.log(datos);
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
-            fetch("http://localhost/transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-data", {
+            fetch("../leagueOfTrivialG2/public/api/store-data", {
                 method: 'POST',
                 body: JSON.stringify(datos),
                 headers: {
@@ -130,8 +128,6 @@ const lobby = Vue.component('quiz-lobby', {
     },
     template: `<div>
                 <barra-nav></barra-nav>
-                
-
                 <div v-show="!checked">
                     <div>Checked names: {{ gameType.difficulty }}</div>
 
@@ -165,7 +161,6 @@ const lobby = Vue.component('quiz-lobby', {
                 <div v-show="checked">
                     <quiz :quiz="questions" :gameConfig="gameType" @reset="resetGame"></quiz>
                 </div>
-                
               </div>`,
 });
 
@@ -205,7 +200,7 @@ const quiz = Vue.component('quiz', {
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
-                    <p>Your score: {{score}}</p><timer class="timer"></timer>
+                    <p>Your score: {{this.score}}</p><timer class="timer"></timer>
                     <br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
@@ -231,7 +226,6 @@ const quiz = Vue.component('quiz', {
                         </div>
                     </div>
                 </div>`,
-
     methods: {
         saveAnswer: function (respuesta, index) {
             this.selectedAnswers[index] = respuesta;
@@ -253,8 +247,6 @@ const quiz = Vue.component('quiz', {
             } else {
                 console.log("MAL");
             }
-
-
         },
         changeCard: function () {
             this.currentQuestion++;
@@ -263,13 +255,12 @@ const quiz = Vue.component('quiz', {
                 this.finished = true;
             }
             console.log(this.finished);
-
         },
         reset: function () {
             const params = {
                 score: this.score
             }
-            fetch("http://localhost/transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-score", {
+            fetch("../leagueOfTrivialG2/public/api/store-score", {
                 method: 'POST',
                 body: JSON.stringify(params),
                 headers: {
@@ -281,7 +272,6 @@ const quiz = Vue.component('quiz', {
             this.currentQuestion = 0;
             this.selectedAnswers = [];
             this.$emit('reset');
-
         }
     }
 });
@@ -328,7 +318,7 @@ const login = Vue.component("login", {
                         <div v-show="!isLogged">
                             <h3 class="app__titol">Login</h3>
                             <b-form-input id="input-2" v-model="form.username" placeholder="Write your username..." required></b-form-input><br>
-                            <b-form-input id="input-2" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
+                            <b-form-input id="input-3" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
                             Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
                             <h6 style="display: inline;">Join the league now!</h6>
                         </router-link> <br>
@@ -336,7 +326,6 @@ const login = Vue.component("login", {
                             <template #modal-footer>
                                 <div v-show="!isLogged">
                                     <div v-show="!processing" class="boton">
-                                        
                                         <button v-b-modal.modal-close_visit class="btn btn-primary" @click="login">Login</button>      
                                     </div>
                                     <div v-show="processing" class="boton">
@@ -352,11 +341,11 @@ const login = Vue.component("login", {
                                 <div class="card-body text-center">
                                     <h5 class="my-3">Welcome!</h5>
                                     <p class="text-muted mb-4">{{userName}}</p>
+                                    <b-button @click="logOut" variant="primary">Logout</b-button>
                                 </div>
                             </div>              
                         </div> 
                     </b-modal>
-                    
                </div>`,
     data: function () {
         return {
@@ -372,20 +361,25 @@ const login = Vue.component("login", {
     methods: {
         login: function () {
             this.processing = true;
-            fetch(`http://localhost/transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/login-get/${this.form.username}`)
+            fetch(`../leagueOfTrivialG2/public/api/login-get/${this.form.username}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
                     this.processing = false;
                     this.perfil = data;
-                    console.log("DATA" + data)
+                    // console.log("DATA" + data)
                     this.perfil = JSON.parse(this.perfil);
-                    console.log("PERFIL: " + this.perfil);
+                    // console.log("PERFIL: " + this.perfil);
                     // console.log("THIS PERFIL:" + this.perfil[0].email)
                     store = userStore();
                     store.setEstado(this.perfil);
                     store.logged = true;
                 });
+        },
+        logOut: function () {
+            store.logged = false;
+            this.form.username = '',
+                this.form.password = ''
         }
     },
     computed: {
@@ -399,21 +393,21 @@ const login = Vue.component("login", {
 
 });
 
-const register=Vue.component("register",{
+const register = Vue.component("register", {
     data: function () {
         return {
             //Creamos objeto para tener la informacion del usuario junta.
             processing: false,
             form: {
-                name:'',
+                name: '',
                 username: '',
-                email:'',
+                email: '',
                 password: ''
             },
             show: true
         }
     },
-    template:`<div>
+    template: `<div>
                     <b-form v-if="show">
                         <b-form-group
                             id="input-group-1"
@@ -462,15 +456,15 @@ const register=Vue.component("register",{
                             >
                             </b-form-input>
                     </b-form-group>
-                        <b-button @click="send" variant="primary">Register</b-button>
+                        <b-button @click="send" type="button" variant="primary">Register</b-button>
                         <b-button @click="onReset" type="reset" variant="danger">Reset</b-button>
                     </b-form>
                     <b-card class="mt-3" header="Form Data Result">
                         <pre class="m-0">{{ form }}</pre>
                     </b-card>
                 </div>`,
-    methods:{
-        send:function(event){
+    methods: {
+        send: function (event) {
             // event.preventDefault()
             // alert(JSON.stringify(this.form))
             fetch("../leagueOfTrivialG2/public/api/store-user", {
@@ -479,9 +473,9 @@ const register=Vue.component("register",{
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 }
-            })
+            }).then(this.$router.push({ path: '/' }))
         },
-        onReset:function(event) {
+        onReset: function (event) {
             event.preventDefault()
             // Reset our form values
             this.form.email = ''
@@ -493,8 +487,8 @@ const register=Vue.component("register",{
             this.$nextTick(() => {
                 this.show = true
             })
-           
-        }      
+
+        }
     }
 })
 
@@ -505,12 +499,13 @@ const routes = [{
 }, {
     path: '/login',
     component: login
-}, 
+},
 {
     path: '/register',
     component: register
-},{
+}, {
     path: '/',
+    name: 'lobby',
     component: home
 }]
 
