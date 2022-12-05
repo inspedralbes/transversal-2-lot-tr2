@@ -309,7 +309,27 @@ const card = Vue.component('card', {
         },
     }
 })
-
+const profile = Vue.component("profile", {
+    data: function () {
+        return {
+            user: ''
+        }
+    },
+    template: `<div>
+                    Name:{{user.name}}
+                    Email:{{user.email}}
+                    Username:{{user.}}
+    
+    </div>`,
+    mounted() {
+        fetch(`../leagueOfTrivialG2/public/api/user`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.user = data;
+            });
+    }
+})
 const login = Vue.component("login", {
     // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
     props: [],
@@ -402,7 +422,8 @@ const register = Vue.component("register", {
                 name: '',
                 username: '',
                 email: '',
-                password: ''
+                password: '',
+                password_confirmation: ''
             },
             show: true
         }
@@ -446,12 +467,26 @@ const register = Vue.component("register", {
                         id="input-group-4"
                         label="Password:"
                         label-for="input-4"
-                        description="We'll never share your email with anyone else.">
+                        description="Never share your password with anyone else.">
                             <b-form-input
                                 id="input-4"
                                 v-model="form.password"
                                 type="password"
                                 placeholder="Write a password..."
+                                required
+                            >
+                            </b-form-input>
+                    </b-form-group>
+                    <b-form-group
+                        id="input-group-5"
+                        label="Repeat Password:"
+                        label-for="input-5"
+                        description="Repeat your password">
+                            <b-form-input
+                                id="input-5"
+                                v-model="form.password_confirmation"
+                                type="password"
+                                placeholder="Rewrite your password..."
                                 required
                             >
                             </b-form-input>
@@ -507,6 +542,9 @@ const routes = [{
     path: '/',
     name: 'lobby',
     component: home
+}, {
+    path: '/profile',
+    component: profile
 }]
 
 const router = new VueRouter({
