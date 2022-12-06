@@ -96,21 +96,38 @@ const home = Vue.component('portada', {
                 <div class="titulo textoCentrado">
                     <h1>LEAGUE OF TRIVIAL</h1>
                 </div>
-                <div class="centerItems">
-                    <button class="linkButton">
-                        <router-link to="/game" style="text-decoration: none;">
-                            Random Quiz
-                        </router-link>
-                    </button>
-                    <br>
-                    <button class="linkButton">
-                        <router-link to="/game/1" style="text-decoration: none;">
-                            Daily Quiz
-                        </router-link>
-                        
-                    </button>
+                <div v-show="isLogged">
+                    <div class="centerItems">
+                        <button class="linkButton">
+                            <router-link to="/game" style="text-decoration: none;">
+                                Random Quiz
+                            </router-link>
+                        </button>
+                        <br>
+                        <button class="linkButton">
+                            <router-link to="/game/1" style="text-decoration: none;">
+                                Daily Quiz
+                            </router-link>
+                            
+                        </button>
+                    </div>
                 </div>
-                </div>`
+                <div v-show="!isLogged">
+                    <div class="centerItems">
+                        <button class="linkButton">
+                            <router-link to="/demo" style="text-decoration: none;">
+                                Play Demo
+                            </router-link>
+                        </button>
+                    </div>
+                </div>
+            </div>`,
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        }
+    }
+            
 });
 const lobby = Vue.component('quiz-lobby', {
     props:{
@@ -173,10 +190,10 @@ const lobby = Vue.component('quiz-lobby', {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
-        },
-        resetGame: function () {
-            this.checked = false;
         }
+        // resetGame: function () {
+        //     this.checked = false;
+        // }
 
     },
     template: `<div>
@@ -217,7 +234,7 @@ const lobby = Vue.component('quiz-lobby', {
                     <button @click="dailyQuiz">PLAY DAILY</button>
                 </div>
                 <div v-show="checked">
-                    <quiz :quiz="questions" :gameConfig="gameType" @reset="resetGame"></quiz>
+                    <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                 </div>
               </div>`,
 });
@@ -279,7 +296,7 @@ const quiz = Vue.component('quiz', {
                                     400 / 750
                                 </div>
                             </div>
-                            <button @click="reset">TORNA A L'INICI</button>
+                            <button @click="reset">HOME</button>
                         <div class="centerItems">
                             <div class="linkButton">Your Profile</div>
                         </div>
@@ -320,7 +337,7 @@ const quiz = Vue.component('quiz', {
                 score: this.score,
                 idUser: userStore().loginInfo.id
             }
-
+            console.log(params);
             fetch("../leagueOfTrivialG2/public/api/store-score", {
                 method: 'POST',
                 body: JSON.stringify(params),
@@ -332,7 +349,8 @@ const quiz = Vue.component('quiz', {
             this.score = 0;
             this.currentQuestion = 0;
             this.selectedAnswers = [];
-            this.$emit('reset');
+            // this.$emit('reset');
+            this.$router.push({ path: '/' })
         }
     },
     computed: {
