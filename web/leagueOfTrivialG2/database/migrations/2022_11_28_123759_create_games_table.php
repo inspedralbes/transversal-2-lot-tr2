@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -16,9 +17,10 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->json('quiz');
-            $table->enum('difficulty', ['easy', 'medium', 'hard']);
-            $table->enum('category', ['arts_and_literature', 'film_and_tv', 'food_and_drink', 'general_knowledge', 'geography', 'history', 'music', 'science', 'society_and_culture', 'sport_and_leisure']);
+            $table->enum('difficulty', ['easy', 'medium', 'hard'])->nullable();
+            $table->enum('category', ['arts_and_literature', 'film_and_tv', 'food_and_drink', 'general_knowledge', 'geography', 'history', 'music', 'science', 'society_and_culture', 'sport_and_leisure'])->nullable();
             $table->enum('type', ['normal', 'daily', 'demo']);
+            $table->date('date')->default(DB::raw('NOW()'));
             $table->timestamps();
         });
     }

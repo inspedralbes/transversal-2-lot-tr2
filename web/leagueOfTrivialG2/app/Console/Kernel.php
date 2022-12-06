@@ -20,11 +20,21 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            // $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
-            $test = Test::find(1);
-            $cont = $test->cont;
-            DB::table('tests')->where('id', 1)->update(['cont' => $cont + 1]);
-        })->dailyAt('13:05');
+            $id_game = DB::table('games')->where('type', 'daily')->value('id');
+            // $id_game=$game->id;
+
+            DB::table('rankings')->where('idGame', $id_game)->delete();
+            // DB::table('games')->where('type', 'daily')->delete();
+
+            $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
+            DB::table('games')->where('type', 'daily')->update(['quiz' => $response]);
+
+            // $test = Test::find(1);
+            // $cont = $test->cont;
+            // DB::table('tests')->where('id', 1)->update(['cont' => $cont + 1]);
+            // $data=array("difficulty"=>null,"quiz"=>$response,"category"=>null,"type"=>'daily');
+            // DB::table('games')->insert($data);
+        })->everyMinute();
     }
 
     /**

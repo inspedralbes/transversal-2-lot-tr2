@@ -1,6 +1,4 @@
-
 var tmp = null;
-
 Vue.component('barra-nav', {
     template: `<div class="header">
                         <div class="header_div1">
@@ -106,21 +104,27 @@ const home = Vue.component('portada', {
                     </button>
                     <br>
                     <button class="linkButton">
-                        <router-link to="/daily" style="text-decoration: none;">
+                        <router-link to="/game/1" style="text-decoration: none;">
                             Daily Quiz
                         </router-link>
+                        
                     </button>
                 </div>
                 </div>`
 });
 const lobby = Vue.component('quiz-lobby', {
+    props:{
+        mode:{
+            type: String,
+            default:'0'
+        }
+    },
     data: function () {
         return {
             gameType: {
                 difficulty: "",
                 category: ""
             },
-
             checked: false,
             playVisible: false,
             questions: {
@@ -149,6 +153,9 @@ const lobby = Vue.component('quiz-lobby', {
                 });
 
         },
+        dailyQuiz:function(){
+
+        },
         startGame: function () {
             this.checked = true;
             /****INSERT EN BD LLAMANDO A LA API DE LARAVEL*****/
@@ -174,7 +181,8 @@ const lobby = Vue.component('quiz-lobby', {
     },
     template: `<div>
                 <barra-nav></barra-nav>
-                <div v-show="!checked">
+                MODO: {{mode}}
+                <div v-show="!checked && mode==0">
                     <div>Checked names: {{ gameType.difficulty }}</div>
 
                     <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
@@ -203,6 +211,10 @@ const lobby = Vue.component('quiz-lobby', {
                         </select>
                     </div>
                     <button @click="getQuiz();">Take Quiz!</button>
+                </div>
+                <div v-show="mode==1">
+                    <div>You are going to play toda's quiz, you can only do one attempt per day.</div>
+                    <button @click="dailyQuiz">PLAY DAILY</button>
                 </div>
                 <div v-show="checked">
                     <quiz :quiz="questions" :gameConfig="gameType" @reset="resetGame"></quiz>
@@ -591,7 +603,13 @@ const register = Vue.component("register", {
 const routes = [{
     path: '/game',
     component: lobby
-}, {
+}, 
+{
+    path: '/game/:mode',
+    component: lobby,
+    props:true
+}, 
+{
     path: '/login',
     component: login
 },
