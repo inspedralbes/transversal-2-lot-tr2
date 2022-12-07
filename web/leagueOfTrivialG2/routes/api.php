@@ -32,6 +32,7 @@ Route::post('/store-challenge', [ChallengesController::class, 'store']);
 //RUTES PER A MOSTRAR
 Route::get('/get-users', [UsersController::class, 'index']);
 Route::get('/get-games', [GamesController::class, 'index']);
+Route::get('/get-daily', [GamesController::class, 'getDaily']);
 Route::get('/get-rankings', [RankingsController::class, 'index']);
 Route::get('/get-challenges', [ChallengesController::class, 'index']);
 

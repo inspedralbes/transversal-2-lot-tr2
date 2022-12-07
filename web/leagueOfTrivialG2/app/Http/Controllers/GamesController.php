@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GamesController extends Controller
 {
@@ -27,5 +28,11 @@ class GamesController extends Controller
         $games = json_encode($games);
 
         return response()->json($games);
+    }
+    public function getDaily()
+    {
+        $game = DB::table('games')->where('type', 'daily')->value('quiz');
+
+        return response()->json($game);
     }
 }
