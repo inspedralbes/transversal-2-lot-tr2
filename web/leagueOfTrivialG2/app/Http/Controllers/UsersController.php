@@ -63,13 +63,14 @@ class UsersController extends Controller
             'password' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(["error" => "Credenciales incorrectas"]);
-            // return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response(["error" => "Campo/s vacío/s", "code" => Response::HTTP_BAD_REQUEST], Response::HTTP_BAD_REQUEST);
         } else if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
             $cookie = cookie('cookie_token', $token, 60 * 24);
             return response()->json(Auth::user(), 200);
+        } else {
+            return response(["error" => "Credenciales incorrectas", "code" => Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
         }
 
         // if (Auth::attempt($request->only('email', 'password'))) {

@@ -506,31 +506,40 @@ const login = Vue.component("login", {
     methods: {
         login: function () {
             // this.processing = true;
-
-            fetch("../leagueOfTrivialG2/public/api/login", {
-                method: 'POST',
-                body: JSON.stringify(this.form),
-                headers: {
-                    "Content-type": "application/json;charset=UTF-8"
-                }
-            }).then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    // this.processing = false;
-                    this.errors = data;
-                    if (this.errors['error']) {
-                        console.log(this.errors['error']);
-                    } else {
-                        this.perfil = data;
-                        store = userStore();
-                        store.setEstado(this.perfil);
-                        store.logged = true;
-                        this.perfil = {};
-                        this.form.email = '';
-                        this.form.password = '';
+            try {
+                fetch("../leagueOfTrivialG2/public/api/login", {
+                    method: 'POST',
+                    body: JSON.stringify(this.form),
+                    headers: {
+                        "Content-type": "application/json;charset=UTF-8"
                     }
+                }).then(response => {
+                    console.log(response);
+                    return response.json()
+                })
+                    .then(data => {
+                        console.log(data)
+                        // this.processing = false;
+                        this.errors = data;
+                        if (this.errors['code'] == 401) {
+                            console.log("NO AUTORITZAT");
+                        } else if (this.errors['code'] == 400) {
+                            console.log("CAMPS VUITS");
+                        } else {
+                            this.perfil = data;
+                            store = userStore();
+                            store.setEstado(this.perfil);
+                            store.logged = true;
+                            this.perfil = {};
+                            this.form.email = '';
+                            this.form.password = '';
+                        }
 
-                });
+                    }).catch(err => { console.log(err); });
+            } catch (error) {
+                console.log(error);
+            }
+
         },
     },
     computed: {
