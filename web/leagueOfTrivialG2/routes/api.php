@@ -38,6 +38,7 @@ Route::get('/get-challenges', [ChallengesController::class, 'index']);
 //LOGIN
 // Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);
 Route::post('/login', [UsersController::class, 'login']);
+Route::post('/logout', [UsersController::class, 'logout']);
 
 
 //REGISTER
