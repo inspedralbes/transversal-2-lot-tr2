@@ -2,32 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Challenge;
 use App\Models\User;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
 
     public function store(Request $request)
     {
-        $user = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required | min:3',
-            'username' => 'required | min:3',
+            'username' => 'required | min:3 | unique:users',
             'email' => 'required|min:10|email|unique:users',
             'password' => 'required',
         ]);
-        $user = new User();
-        //Como se llaman los campos en BD
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->userName = $request->username;
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+            // return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } else {
+            // if ($validator->fails()) {
+            //     return response()->json(['error' => 'Error']);
+            // } else {
+            $user = new User();
+            //Como se llaman los campos en BD
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->userName = $request->username;
 
-        $user->save();
+            $user->save();
+            return response($user, Response::HTTP_CREATED);
+            // return response()->json(['success' => 'User registered correctly']);
+            // }
+        }
     }
     public function getUserInfo($username)
     {
@@ -45,20 +58,36 @@ class UsersController extends Controller
     }
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required | email',
-            'password' => 'required',
+        $validator = Validator::make($request->all(), [
+            'email' => 'confirmed | email',
+            'password' => 'confirmed',
         ]);
-
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if ($validator->fails()) {
+            if ($request->email == '' || $request->password == '' || $request->email == '' && $request->password == '') {
+                return response()->json(["error" => "Campos vacíos"]);
+            }
+            return response()->json(["error" => "Credenciales incorrectas"], Response::HTTP_UNAUTHORIZED);
+            // return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } else if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+            $token = $user->createToken('token')->plainTextToken;
+            $cookie = cookie('cookie_token', $token, 60 * 24);
             return response()->json(Auth::user(), 200);
         }
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials are incorrect. Please try again.']
-        ]);
+
+        // if (Auth::attempt($request->only('email', 'password'))) {
+        //     $user = Auth::user();
+        //     $token = $user->createToken('token')->plainTextToken;
+        //     $cookie = cookie('cookie_token', $token, 60 * 24);
+        //     // return response(["token" => $token], Response::HTTP_OK)->withoutCookie($cookie);
+        //     return response()->json(Auth::user(), 200);
+        // } else {
+        //     return response(["error" => "Credenciales incorrectas"], Response::HTTP_UNAUTHORIZED);
+        // }
     }
     public function logout()
     {
+        $cookie = Cookie::forget('cookie_token');
         Auth::logout();
     }
 }
