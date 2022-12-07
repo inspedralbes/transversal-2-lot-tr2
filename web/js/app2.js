@@ -13,7 +13,8 @@ Vue.component('barra-nav', {
                                     </router-link>
                                 </b-dropdown-item>
                                 <b-dropdown-item href="#">Something else here...</b-dropdown-item>
-                            </b-dropdown>                  
+                            </b-dropdown>
+                                               
                         </div>
                         <div class="header_div2">
                                                     
@@ -190,9 +191,10 @@ const lobby = Vue.component('quiz-lobby', {
                     console.log(this.questions);
                     this.startGame();
                 });
-
         },
         dailyQuiz: function () {
+            // /get-daily-game
+
             fetch(` ../leagueOfTrivialG2/public/api/get-daily-game`)
                 .then((response) => response.json())
                 .then((data) => {
@@ -202,6 +204,7 @@ const lobby = Vue.component('quiz-lobby', {
                 });
         },
         startGame: function () {
+            /****INSERT EN BD LLAMANDO A LA API DE LARAVEL*****/
             if (this.mode == 0) {
                 this.checked = true;
 
@@ -232,7 +235,6 @@ const lobby = Vue.component('quiz-lobby', {
         // resetGame: function () {
         //     this.checked = false;
         // }
-
     },
     template: `<div>
                 <barra-nav></barra-nav>
@@ -461,7 +463,6 @@ const login = Vue.component("login", {
                     <b-modal id="login" title="We are happy that you are back!">
                         <div v-show="!isLogged">
                             <h3 class="app__titol">Login</h3>
-                            <span>{{this.errors['error']}}</span>
                             <b-form-input id="input-2" v-model="form.email" placeholder="Write your email..." required></b-form-input><br>
                             <b-form-input id="input-3" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
                             Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
@@ -499,37 +500,31 @@ const login = Vue.component("login", {
                 email: '',
                 password: ''
             },
-            perfil: {},
-            errors: []
+            perfil: {}
         }
     },
     methods: {
         login: function () {
-            // this.processing = true;
+            this.processing = true;
 
             fetch("../leagueOfTrivialG2/public/api/login", {
                 method: 'POST',
                 body: JSON.stringify(this.form),
                 headers: {
-                    "Content-type": "application/json;charset=UTF-8"
+                    "Content-type": "application/json; charset=UTF-8"
                 }
             }).then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    // this.processing = false;
-                    this.errors = data;
-                    if (this.errors['error']) {
-                        console.log(this.errors['error']);
-                    } else {
-                        this.perfil = data;
-                        store = userStore();
-                        store.setEstado(this.perfil);
-                        store.logged = true;
-                        this.perfil = {};
-                        this.form.email = '';
-                        this.form.password = '';
-                    }
+                    this.processing = false;
+                    this.perfil = data;
 
+                    store = userStore();
+                    store.setEstado(this.perfil);
+                    store.logged = true;
+                    this.perfil = {};
+                    this.form.email = '';
+                    this.form.password = '';
                 });
         },
     },
@@ -556,13 +551,11 @@ const register = Vue.component("register", {
                 password: ''
                 // password_confirmation: ''
             },
-            errors: [],
             show: true
         }
     },
     template: `<div>
                     <b-form v-if="show">
-                    <span>{{this.errors['errors']}}</span>
                         <b-form-group
                             id="input-group-1"
                             label="Email address:"
@@ -573,7 +566,8 @@ const register = Vue.component("register", {
                                     v-model="form.email"
                                     type="email"
                                     placeholder="Write an email..."
-                                    required>
+                                    required
+                                >
                                 </b-form-input>
                         </b-form-group>
 
@@ -582,7 +576,8 @@ const register = Vue.component("register", {
                             id="input-2"
                             v-model="form.name"
                             placeholder="Enter a name..."
-                            required></b-form-input>
+                            required
+                        ></b-form-input>
                         </b-form-group>
 
                         <b-form-group id="input-group-3" label="Your user name:" label-for="input-3">
@@ -590,7 +585,8 @@ const register = Vue.component("register", {
                             id="input-3"
                             v-model="form.username"
                             placeholder="Enter a usernamename..."
-                            required></b-form-input>
+                            required
+                        ></b-form-input>
                         </b-form-group>
 
                         <b-form-group
@@ -603,7 +599,8 @@ const register = Vue.component("register", {
                                 v-model="form.password"
                                 type="password"
                                 placeholder="Write a password..."
-                                required>
+                                required
+                            >
                             </b-form-input>
                     </b-form-group>
                         <b-button @click="send" type="button" variant="primary">Register</b-button>
@@ -623,15 +620,7 @@ const register = Vue.component("register", {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 }
-            }).then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    this.errors = data;
-                    if (this.errors['name']) {
-                        this.$router.push({ path: '/' });
-                    }
-                });
-
+            }).then(this.$router.push({ path: '/' }))
         },
         onReset: function (event) {
             event.preventDefault()
