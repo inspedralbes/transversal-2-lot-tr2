@@ -28,10 +28,19 @@ Vue.component('barra-nav', {
                             <login></login>                
                         </div>
                         <div v-show="isLogged" class="header_div3">
-                            <router-link to="/profile" style="text-decoration: none;color:white">
-                                <span style="font-size:20px;">{{userName}}&nbsp;</span>
-                                <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
-                            </router-link> 
+                            <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                                <template #button-content>
+                                    <span style="font-size:20px;">{{userName}}&nbsp;</span>
+                                    <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
+                                </template>
+                                <b-dropdown-item href="#">
+                                    <router-link to="/profile" style="text-decoration: none;color:white">Profile</router-link> 
+                                </b-dropdown-item>
+                                <b-dropdown-item href="#">
+                                    <b-button @click="logOut" variant="primary">Logout</b-button>
+                                </b-dropdown-item>
+                                <b-dropdown-item href="#">Rankings</b-dropdown-item>
+                            </b-dropdown>
                         </div> 
                 </div>`,
     computed: {
@@ -41,6 +50,19 @@ Vue.component('barra-nav', {
         userName() {
             return userStore().loginInfo.userName;
         }
+    },
+    methods: {
+        logOut: function () {
+            store.logged = false;
+            store.loginInfo = {};
+            fetch("../leagueOfTrivialG2/public/api/logout", {
+                method: 'POST',
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+
+        },
     }
 });
 const ranking = Vue.component('ranking', {
@@ -127,13 +149,13 @@ const home = Vue.component('portada', {
             return userStore().logged;
         }
     }
-            
+
 });
 const lobby = Vue.component('quiz-lobby', {
-    props:{
-        mode:{
+    props: {
+        mode: {
             type: String,
-            default:'0'
+            default: '0'
         }
     },
     data: function () {
@@ -170,7 +192,7 @@ const lobby = Vue.component('quiz-lobby', {
                 });
 
         },
-        dailyQuiz:function(){
+        dailyQuiz: function () {
 
         },
         startGame: function () {
@@ -444,7 +466,6 @@ const login = Vue.component("login", {
                                 <div class="card-body text-center">
                                     <h5 class="my-3">Welcome!</h5>
                                     <p class="text-muted mb-4">{{userName}}</p>
-                                    <b-button @click="logOut" variant="primary">Logout</b-button>
                                 </div>
                             </div>              
                         </div> 
@@ -464,20 +485,6 @@ const login = Vue.component("login", {
     methods: {
         login: function () {
             this.processing = true;
-            // fetch(`../leagueOfTrivialG2/public/api/login-get/${this.form.username}`)
-            // .then(response => response.json())
-            // .then(data => {
-            //     console.log(data)
-            //     this.processing = false;
-            //     this.perfil = data;
-            //     // console.log("DATA" + data)
-            //     this.perfil = JSON.parse(this.perfil);
-            //     // console.log("PERFIL: " + this.perfil);
-            //     // console.log("THIS PERFIL:" + this.perfil[0].email)
-            //     store = userStore();
-            //     store.setEstado(this.perfil);
-            //     store.logged = true;
-            // });
 
             fetch("../leagueOfTrivialG2/public/api/login", {
                 method: 'POST',
@@ -490,21 +497,15 @@ const login = Vue.component("login", {
                     console.log(data)
                     this.processing = false;
                     this.perfil = data;
-                    // console.log("DATA" + data)
-                    // this.perfil = JSON.parse(this.perfil);
-                    // console.log("PERFIL: " + this.perfil);
-                    // console.log("THIS PERFIL:" + this.perfil[0].email)
+
                     store = userStore();
                     store.setEstado(this.perfil);
                     store.logged = true;
+                    this.perfil = {};
+                    this.form.email = '';
+                    this.form.password = '';
                 });
-
         },
-        logOut: function () {
-            store.logged = false;
-            this.form.username = '',
-                this.form.password = ''
-        }
     },
     computed: {
         isLogged() {
@@ -621,12 +622,12 @@ const register = Vue.component("register", {
 const routes = [{
     path: '/game',
     component: lobby
-}, 
+},
 {
     path: '/game/:mode',
     component: lobby,
-    props:true
-}, 
+    props: true
+},
 {
     path: '/login',
     component: login
