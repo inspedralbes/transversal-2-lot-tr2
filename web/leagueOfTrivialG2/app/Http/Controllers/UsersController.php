@@ -59,14 +59,11 @@ class UsersController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'confirmed | email',
-            'password' => 'confirmed',
+            'email' => 'required | email',
+            'password' => 'required',
         ]);
         if ($validator->fails()) {
-            if ($request->email == '' || $request->password == '' || $request->email == '' && $request->password == '') {
-                return response()->json(["error" => "Campos vacíos"]);
-            }
-            return response()->json(["error" => "Credenciales incorrectas"], Response::HTTP_UNAUTHORIZED);
+            return response()->json(["error" => "Credenciales incorrectas"]);
             // return response()->json($validator->messages(), Response::HTTP_UNPROCESSABLE_ENTITY);
         } else if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
