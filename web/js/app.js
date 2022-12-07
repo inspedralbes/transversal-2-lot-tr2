@@ -4,21 +4,16 @@ Vue.component('barra-nav', {
                         <div class="header_div1">
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
                                 <template #button-content>
-                                &#x1f50d;<span class="sr-only">logo</span>
+                                    <span class="sr-only" style="color:white">League Of Trivial</span>
                                 </template>
+                                <b-dropdown-item @click="goHome">Home</b-dropdown-item>
                                 <b-dropdown-item>
-                                    <router-link to="/" style="text-decoration: none;">
-                                        Home
-                                    </router-link>     
-                                </b-dropdown-item>
-                                <b-dropdown-item>
-                                    <router-link to="/ranking" style="text-decoration: none;">
+                                    <router-link to="/ranking" style="text-decoration: none; color:black">
                                         Global Ranking
                                     </router-link>
                                 </b-dropdown-item>
                                 <b-dropdown-item href="#">Something else here...</b-dropdown-item>
-                            </b-dropdown>
-                                               
+                            </b-dropdown>                  
                         </div>
                         <div class="header_div2">
                                                     
@@ -28,18 +23,18 @@ Vue.component('barra-nav', {
                             <login></login>                
                         </div>
                         <div v-show="isLogged" class="header_div3">
-                            <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                            <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret style="background-color:white">
                                 <template #button-content>
                                     <span style="font-size:20px;">{{userName}}&nbsp;</span>
                                     <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
                                 </template>
                                 <b-dropdown-item href="#">
-                                    <router-link to="/profile" style="text-decoration: none;color:white">Profile</router-link> 
+                                    <router-link to="/profile" style="text-decoration: none; color:black;">Profile</router-link> 
                                 </b-dropdown-item>
-                                <b-dropdown-item href="#">
-                                    <b-button @click="logOut" variant="primary">Logout</b-button>
+                                <b-dropdown-item href="#" @click="logOut" style="text-decoration: none;">Logout</b-dropdown-item>
+                                <b-dropdown-item href="#" style="text-decoration: none;">
+                                    <router-link to="/ranking" style="text-decoration: none; color:black;">My Rankings</router-link> 
                                 </b-dropdown-item>
-                                <b-dropdown-item href="#">Rankings</b-dropdown-item>
                             </b-dropdown>
                         </div> 
                 </div>`,
@@ -63,6 +58,10 @@ Vue.component('barra-nav', {
             })
 
         },
+        goHome: function () {
+            this.$router.push({ path: '/' })
+
+        }
     }
 });
 const ranking = Vue.component('ranking', {
@@ -165,6 +164,7 @@ const lobby = Vue.component('quiz-lobby', {
                 category: ""
             },
             checked: false,
+            dailyChecked: false,
             playVisible: false,
             questions: {
             },
@@ -193,15 +193,31 @@ const lobby = Vue.component('quiz-lobby', {
 
         },
         dailyQuiz: function () {
-
+            fetch(` ../leagueOfTrivialG2/public/api/get-daily-game`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.questions = data;
+                    console.log(this.questions);
+                    this.startGame();
+                });
         },
         startGame: function () {
-            this.checked = true;
-            /****INSERT EN BD LLAMANDO A LA API DE LARAVEL*****/
-            const datos = {
-                difficulty: this.gameType.difficulty,
-                category: this.gameType.category,
-                quiz: this.questions
+            if (this.mode == 0) {
+                this.checked = true;
+
+                const datos = {
+                    difficulty: this.gameType.difficulty,
+                    category: this.gameType.category,
+                    quiz: this.questions
+                }
+            } else {
+                this.dailyChecked = true;
+
+                const datos = {
+                    difficulty: null,
+                    category: null,
+                    quiz: this.questions
+                }
             }
             console.log(datos);
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
@@ -254,6 +270,9 @@ const lobby = Vue.component('quiz-lobby', {
                 <div v-show="mode==1">
                     <div>You are going to play toda's quiz, you can only do one attempt per day.</div>
                     <button @click="dailyQuiz">PLAY DAILY</button>
+                    <div v-show="checked">
+                        <quiz :quiz="questions"></quiz>
+                    </div>
                 </div>
                 <div v-show="checked">
                     <quiz :quiz="questions" :gameConfig="gameType"></quiz>
