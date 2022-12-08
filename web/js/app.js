@@ -565,64 +565,86 @@ const register = Vue.component("register", {
                 password: ''
                 // password_confirmation: ''
             },
+            validEmail: false,
+            validName: false,
+            validUserName: false,
+            validPass: false,
             errors: [],
             show: true
         }
     },
     template: `<div>
-                    <b-form v-if="show">
+                <barra-nav></barra-nav>
+                <form v-if="show">
                     <span>{{this.errors['errors']}}</span>
-                        <b-form-group
-                            id="input-group-1"
-                            label="Email address:"
-                            label-for="input-1"
-                            description="We'll never share your email with anyone else.">
-                                <b-form-input
-                                    id="input-1"
-                                    v-model="form.email"
-                                    type="email"
-                                    placeholder="Write an email..."
-                                    required>
-                                </b-form-input>
-                        </b-form-group>
+                    <label>
+                        Email Address
+                        <input type="email" v-model="form.email" @keyup="validar">
+                        <div v-show="validEmail && form.email.length>0"><p style="color:green;">Correct email</p></div>
+                        <div v-show="!validEmail && form.email.length>0"><p style="color:red;">Invalid Email </p></div>
+                    </label><br>
+                    <label>
+                        Name
+                        <input type="text" v-model="form.name" @keyup="validarName">
+                        <div v-show="validName && form.name.length>0"><p style="color:green;">Correct name</p></div>
+                        <div v-show="!validName && form.name.length>0"><p style="color:red;">Incorrect name. Must contain at least 3 characters</p></div>
+                    </label><br>
 
-                        <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
-                        <b-form-input
-                            id="input-2"
-                            v-model="form.name"
-                            placeholder="Enter a name..."
-                            required></b-form-input>
-                        </b-form-group>
+                    <label>
+                        User Name
+                        <input type="text" v-model="form.username" @keyup="validarUserName">
+                        <div v-show="validUserName && form.username.length>0"><p style="color:green;">Correct user name</p></div>
+                        <div v-show="!validUserName && form.username.length>0"><p style="color:red;">Incorrect user name can only contain alphanumeric characters.</p></div>
+                    </label><br>
 
-                        <b-form-group id="input-group-3" label="Your user name:" label-for="input-3">
-                        <b-form-input
-                            id="input-3"
-                            v-model="form.username"
-                            placeholder="Enter a usernamename..."
-                            required></b-form-input>
-                        </b-form-group>
+                    <label>
+                        Password
+                        <input type="password" v-model="form.password" @keyup="validarPass">
+                        <div v-show="validPass && form.password.length>0"><p style="color:green;">Name correct</p></div>
+                        <div v-show="!validPass && form.password.length>0"><p style="color:red;">Password requires minimum eight characters, at least one letter and one number.</p></div>
+                    </label><br>
 
-                        <b-form-group
-                        id="input-group-4"
-                        label="Password:"
-                        label-for="input-4"
-                        description="Never share your password with anyone else.">
-                            <b-form-input
-                                id="input-4"
-                                v-model="form.password"
-                                type="password"
-                                placeholder="Write a password..."
-                                required>
-                            </b-form-input>
-                    </b-form-group>
-                        <b-button @click="send" type="button" variant="primary">Register</b-button>
-                        <b-button @click="onReset" type="reset" variant="danger">Reset</b-button>
-                    </b-form>
-                    <b-card class="mt-3" header="Form Data Result">
-                        <pre class="m-0">{{ form }}</pre>
-                    </b-card>
+                    <b-button @click="send" type="button" variant="primary">Register</b-button>
+                    </form>
                 </div>`,
+
     methods: {
+        validar: function () {
+            //https://regexr.com/3e48o
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.form.email)) {
+                this.validEmail = true;
+            } else if (this.form.email.length > 0) {
+                this.validEmail = false;
+            }
+
+        },
+        validarName: function () {
+            //Minimum 3 characters, max 20 characters and characters a-z/A-Z
+            if (/^[a-zA-Z]{3,20}$/.test(this.form.name)) {
+                this.validName = true;
+
+            } else if (this.form.name.length > 0) {
+                this.validName = false;
+            }
+        },
+        validarUserName: function () {
+            // username is 8-20 characters long --- no _ or . at the beginning ---  no __ or _. or ._ or .. inside --- allowed characters --- no _ or . at the end
+            if (/^[a-zA-Z0-9]{3,20}$/.test(this.form.username)) {
+                this.validUserName = true;
+
+            } else if (this.form.username.length > 0) {
+                this.validUserName = false;
+            }
+        },
+        validarPass: function () {
+            //Minimum eight characters, at least one letter and one number:
+            if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.form.password)) {
+                this.validPass = true;
+
+            } else if (this.form.password.length > 0) {
+                this.validPass = false;
+            }
+        },
         send: function (event) {
             // event.preventDefault()
             // alert(JSON.stringify(this.form))
@@ -640,21 +662,6 @@ const register = Vue.component("register", {
                         this.$router.push({ path: '/' });
                     }
                 });
-
-        },
-        onReset: function (event) {
-            event.preventDefault()
-            // Reset our form values
-            this.form.email = ''
-            this.form.name = ''
-            this.form.userName = null
-            this.form.password = null
-            // Trick to reset/clear native browser form validation state
-            this.show = false
-            this.$nextTick(() => {
-                this.show = true
-            })
-
         }
     }
 })
