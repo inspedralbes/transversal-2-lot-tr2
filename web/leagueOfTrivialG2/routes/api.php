@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/store-user', [UsersController::class, 'store']);
 Route::post('/store-data', [GamesController::class, 'store']);
 Route::post('/store-score', [RankingsController::class, 'store']);
+Route::post('/store-dailyScore', [RankingsController::class, 'storeDaily']);
+Route::post('/checkDaily', [RankingsController::class, 'checkDaily']);
 Route::post('/store-challenge', [ChallengesController::class, 'store']);
 
 

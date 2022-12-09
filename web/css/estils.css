@@ -342,9 +342,9 @@ td {
     padding: 11%;
     padding-top: 2%;
     padding-bottom: 28px;
-    height: 104px;
+    height: 155px;
     display: flex;
-    background-color: rgb(247, 247, 154);
+    background-color: rgb(150, 150, 58);
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -374,7 +374,7 @@ td {
 
 #gamecard-juego {
     display: grid;
-    grid-template-rows: 32% 64%;
+    grid-template-rows: 30% 70%;
     text-align: center;
     border: 1px solid gray;
     margin: auto;
@@ -398,6 +398,27 @@ td {
     color: rgb(41, 168, 141);
     box-shadow: rgb(0 0 0 / 21%) 12px 12px 14px -6px;
     padding: 7% 10%;
-    width: 70%;
+    width: 450px;
+    border-radius: 27px;
+}
+
+.correct {
+    background-color: rgb(35, 156, 77);
+    color: white;
+    border: 2px solid rgb(35, 156, 77);
+}
+
+.false {
+    background-color: rgb(204, 59, 59);
+    color: white;
+    border: 2px solid rgb(204, 59, 59);
+}
+
+.next{
+    background-color: rgb(253, 255, 253);
+    border: 2px solid rgba(58, 235, 197, 0.438);
+    color: rgb(41, 168, 141);
+    padding: 7% 10%;
+    width: 200px;
     border-radius: 27px;
 }

@@ -110,7 +110,9 @@ const ranking = Vue.component('ranking', {
 });
 const home = Vue.component('portada', {
     data: function () {
-        return {}
+        return {
+            dailyPlayed: false
+        }
     },
     template: `<div>
                 <barra-nav></barra-nav>
@@ -125,11 +127,14 @@ const home = Vue.component('portada', {
                             </router-link>
                         </button>
                         <br>
-                        <button class="linkButton">
+                        <button class="linkButton" v-show="!dailyPlayed">
                             <router-link to="/game/1" style="text-decoration: none;">
                                 Daily Quiz
                             </router-link>
                             
+                        </button>
+                        <button class="linkButton" @click="checkDaily" v-show="!dailyPlayed">
+                        HAS JUGADO HOOY?
                         </button>
                     </div>
                 </div>
@@ -143,9 +148,37 @@ const home = Vue.component('portada', {
                     </div>
                 </div>
             </div>`,
+        
     computed: {
         isLogged() {
             return userStore().logged;
+        }
+    },
+    methods:{
+        checkDaily(){
+            //CHECKS IF USER HAS PLAYED DAILY QUIZ TODAY
+            dades = {
+                idUser: userStore().loginInfo.id
+            }
+            
+            fetch("../leagueOfTrivialG2/public/api/checkDaily", {
+                method: 'POST',
+                body: JSON.stringify(dades),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response => response.json())
+            .then(data => {
+                console.log(data[0].timesPlayed);
+                if(data[0].timesPlayed==1){
+                    this.dailyPlayed=true;
+                    console.log("YA HAS JUGADO LA DIARIA");
+                }else{
+                    this.dailyPlayed=false;
+                    console.log("AUN NO HAS JUGADO LA DIARIA");
+                } 
+
+            })
         }
     }
 
@@ -161,7 +194,8 @@ const lobby = Vue.component('quiz-lobby', {
         return {
             gameType: {
                 difficulty: "",
-                category: ""
+                category: "",
+                type: "",
             },
             checked: false,
             dailyChecked: false,
@@ -193,41 +227,52 @@ const lobby = Vue.component('quiz-lobby', {
 
         },
         dailyQuiz: function () {
-            fetch(` ../leagueOfTrivialG2/public/api/get-daily-game`)
+            fetch(` ../leagueOfTrivialG2/public/api/get-daily`)
                 .then((response) => response.json())
                 .then((data) => {
-                    this.questions = data;
+                    this.questions = JSON.parse(data);
                     console.log(this.questions);
+                    for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].done = false;
+                        this.questions[index].answers = [];
+                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
+                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
+                    }
                     this.startGame();
                 });
         },
         startGame: function () {
+            const datos = {
+                difficulty: null,
+                category: null,
+                quiz: null
+            }
             if (this.mode == 0) {
-                this.checked = true;
-
-                const datos = {
-                    difficulty: this.gameType.difficulty,
-                    category: this.gameType.category,
-                    quiz: this.questions
-                }
+                datos.difficulty= this.gameType.difficulty;
+                datos.category= this.gameType.category;
+                datos.quiz= this.questions;
+                this.gameType.type="normal";
+                fetch("../leagueOfTrivialG2/public/api/store-data", {
+                    method: 'POST',
+                    body: JSON.stringify(datos),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                
             } else {
-                this.dailyChecked = true;
-
-                const datos = {
-                    difficulty: null,
-                    category: null,
-                    quiz: this.questions
-                }
+                datos.difficulty= null;
+                datos.category= null;
+                datos.quiz= this.questions;
+                this.gameType.type="daily";
             }
             console.log(datos);
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
-            fetch("../leagueOfTrivialG2/public/api/store-data", {
-                method: 'POST',
-                body: JSON.stringify(datos),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
+            
+            this.checked = true;
         }
         // resetGame: function () {
         //     this.checked = false;
@@ -237,45 +282,49 @@ const lobby = Vue.component('quiz-lobby', {
     template: `<div>
                 <barra-nav></barra-nav>
                 MODO: {{mode}}
-                <div v-show="!checked && mode==0">
-                    <div>Checked names: {{ gameType.difficulty }}</div>
+                <div v-show="mode==0">
+                    <div v-show="!checked">
+                        <div>Checked names: {{ gameType.difficulty }}</div>
 
-                    <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
-                    <label for="easy">Easy</label>
-                    
-                    <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
-                    <label for="medium">Medium</label>
-                    
-                    <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
-                    <label for="difficult">Hard</label>
+                        <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
+                        <label for="easy">Easy</label>
+                        
+                        <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
+                        <label for="medium">Medium</label>
+                        
+                        <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
+                        <label for="difficult">Hard</label>
 
-                    <div>
-                        Selected: {{ gameType.category }}
-                        <select v-model="gameType.category">
-                            <option disabled value="">Please select one...</option>
-                            <option value="arts_and_literature">Arts & Literature</option>
-                            <option value="film_and_tv">Film & TV</option>
-                            <option value="food_and_drink">Food & Drink</option>
-                            <option value="knowledge">General Knowledge</option>
-                            <option value="geography">Geography</option>
-                            <option value="history">History</option>
-                            <option value="music">Music</option>
-                            <option value="science">Science</option>
-                            <option value="society_and_culture">Society & Culture</option>
-                            <option value="sport_and_leisure">Sport & Leisure</option>
-                        </select>
+                        <div>
+                            Selected: {{ gameType.category }}
+                            <select v-model="gameType.category">
+                                <option disabled value="">Please select one...</option>
+                                <option value="arts_and_literature">Arts & Literature</option>
+                                <option value="film_and_tv">Film & TV</option>
+                                <option value="food_and_drink">Food & Drink</option>
+                                <option value="knowledge">General Knowledge</option>
+                                <option value="geography">Geography</option>
+                                <option value="history">History</option>
+                                <option value="music">Music</option>
+                                <option value="science">Science</option>
+                                <option value="society_and_culture">Society & Culture</option>
+                                <option value="sport_and_leisure">Sport & Leisure</option>
+                            </select>
+                        </div>
+                        <button @click="getQuiz();">Take Quiz!</button>
                     </div>
-                    <button @click="getQuiz();">Take Quiz!</button>
+                    <div v-show="checked">
+                        <quiz :quiz="questions" :gameConfig="gameType"></quiz>
+                    </div>
                 </div>
                 <div v-show="mode==1">
-                    <div>You are going to play toda's quiz, you can only do one attempt per day.</div>
-                    <button @click="dailyQuiz">PLAY DAILY</button>
-                    <div v-show="checked">
-                        <quiz :quiz="questions"></quiz>
+                    <div v-show="!checked">
+                        <div>You are going to play toda's quiz, you can only do one attempt per day.</div>
+                        <button @click="dailyQuiz">PLAY DAILY</button>
                     </div>
-                </div>
-                <div v-show="checked">
-                    <quiz :quiz="questions" :gameConfig="gameType"></quiz>
+                    <div v-show="checked">
+                        <quiz :quiz="questions" :gameConfig="gameType"></quiz>
+                    </div>
                 </div>
               </div>`,
 });
@@ -346,22 +395,26 @@ const quiz = Vue.component('quiz', {
     methods: {
         saveAnswer: function (respuesta, index) {
             this.selectedAnswers[index] = respuesta;
-            if (respuesta == this.quiz[index].correctAnswer) {
-                console.log("CORRECTA");
-                switch (this.gameConfig.difficulty) {
-                    case "easy": this.score += 100;
-                        console.log("easy score: " + this.score)
-                        break;
-                    case "medium": this.score += 200;
-                        console.log("medium score: " + this.score)
+            if (respuesta == this.quiz[index].correctAnswer){
+                if(this.gameConfig.type=="normal"){
+                    console.log("CORRECTA");
+                    switch (this.gameConfig.difficulty) {
+                        case "easy": this.score += 100;
+                            console.log("easy score: " + this.score)
+                            break;
+                        case "medium": this.score += 200;
+                            console.log("medium score: " + this.score)
 
-                        break;
-                    case "hard": this.score += 300;
-                        console.log("hard score: " + this.score)
+                            break;
+                        case "hard": this.score += 300;
+                            console.log("hard score: " + this.score)
 
-                        break;
+                            break;
+                    }
+                }else if(this.gameConfig.type=="daily") {
+                    this.score +=10;
                 }
-            } else {
+            }else{
                 console.log("MAL");
             }
         },
@@ -379,13 +432,25 @@ const quiz = Vue.component('quiz', {
                 idUser: userStore().loginInfo.id
             }
             console.log(params);
-            fetch("../leagueOfTrivialG2/public/api/store-score", {
-                method: 'POST',
-                body: JSON.stringify(params),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
+            if(this.gameConfig.type=="normal"){
+                fetch("../leagueOfTrivialG2/public/api/store-score", {
+                    method: 'POST',
+                    body: JSON.stringify(params),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+            }
+            if(this.gameConfig.type=="daily"){
+                fetch("../leagueOfTrivialG2/public/api/store-dailyScore", {
+                    method: 'POST',
+                    body: JSON.stringify(params),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+            }
+            
             this.finished = false;
             this.score = 0;
             this.currentQuestion = 0;
