@@ -21,13 +21,13 @@ class RankingsController extends Controller
     }
     public function index()
     {
-        $rankings = Ranking::orderBy('puntuacio', 'desc')->get();
-        $userEmail = DB::select('SELECT users.email FROM `rankings` JOIN `users` WHERE users.id=rankings.idUser');
+        // $rankings = Ranking::orderBy('puntuacio', 'desc')->get();
+        $rankings = DB::select('SELECT SUM(rankings.puntuacio) AS score, users.userName FROM rankings JOIN users ON users.id=rankings.idUser JOIN games ON games.id=rankings.idGame WHERE games.type="normal" GROUP BY users.userName ORDER BY rankings.puntuacio DESC;');
 
-        for ($i = 0; $i < sizeof($rankings); $i++) {
-            $rankings[$i]->userEmail = $userEmail[$i]->email;
-        }
-        $rankings = json_encode($rankings);
+        // for ($i = 0; $i < sizeof($rankings); $i++) {
+        //     $rankings[$i]->userEmail = $userEmail[$i]->email;
+        // }
+        // $rankings = json_encode($rankings);
 
         return response()->json($rankings);
     }

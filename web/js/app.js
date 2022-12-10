@@ -19,8 +19,10 @@ Vue.component('barra-nav', {
                                                     
                         </div>
                         <div v-show="!isLogged" class="header_div3" v-b-modal.login>
-                            Login
-                            <login></login>                
+                            <router-link to="/login" style="text-decoration: none; color:black">
+                                Login
+                            </router-link>
+                            <router-view></router-view>              
                         </div>
                         <div v-show="isLogged" class="header_div3">
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret style="background-color:white">
@@ -74,14 +76,14 @@ const ranking = Vue.component('ranking', {
         fetch(`../leagueOfTrivialG2/public/api/get-rankings`)
             .then(response => response.json())
             .then(data => {
-                // console.log(data)
-                this.ranking = JSON.parse(data);
-                for (let index = 0; index < this.ranking.length; index++) {
-                    tmp = new Date(this.ranking[index].created_at);
-                    this.ranking[index].date = tmp.toLocaleDateString();
-                    this.ranking[index].hour = tmp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                }
-                console.log(this.ranking);
+                console.log(data)
+                this.ranking = data;
+                // for (let index = 0; index < this.ranking.length; index++) {
+                //     tmp = new Date(this.ranking[index].created_at);
+                //     this.ranking[index].date = tmp.toLocaleDateString();
+                //     this.ranking[index].hour = tmp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                // }
+                // console.log(this.ranking);
             });
     },
     template: `<div id="ranking-marco">
@@ -100,8 +102,8 @@ const ranking = Vue.component('ranking', {
                         </tr>
                             <tr class="ranking-cell" v-for="(score,index) in ranking">
                                 <td>{{index+1}}</td>
-                                <td>{{score.userEmail}}</td>
-                                <td>{{score.puntuacio}}</td>
+                                <td>{{score.userName}}</td>
+                                <td>{{score.score}}</td>
                             </tr>
                     </table>
                 </div>
@@ -148,19 +150,19 @@ const home = Vue.component('portada', {
                     </div>
                 </div>
             </div>`,
-        
+
     computed: {
         isLogged() {
             return userStore().logged;
         }
     },
-    methods:{
-        checkDaily(){
+    methods: {
+        checkDaily() {
             //CHECKS IF USER HAS PLAYED DAILY QUIZ TODAY
             dades = {
                 idUser: userStore().loginInfo.id
             }
-            
+
             fetch("../leagueOfTrivialG2/public/api/checkDaily", {
                 method: 'POST',
                 body: JSON.stringify(dades),
@@ -168,17 +170,17 @@ const home = Vue.component('portada', {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             }).then(response => response.json())
-            .then(data => {
-                console.log(data[0].timesPlayed);
-                if(data[0].timesPlayed==1){
-                    this.dailyPlayed=true;
-                    console.log("YA HAS JUGADO LA DIARIA");
-                }else{
-                    this.dailyPlayed=false;
-                    console.log("AUN NO HAS JUGADO LA DIARIA");
-                } 
+                .then(data => {
+                    console.log(data[0].timesPlayed);
+                    if (data[0].timesPlayed == 1) {
+                        this.dailyPlayed = true;
+                        console.log("YA HAS JUGADO LA DIARIA");
+                    } else {
+                        this.dailyPlayed = false;
+                        console.log("AUN NO HAS JUGADO LA DIARIA");
+                    }
 
-            })
+                })
         }
     }
 
@@ -251,10 +253,10 @@ const lobby = Vue.component('quiz-lobby', {
                 quiz: null
             }
             if (this.mode == 0) {
-                datos.difficulty= this.gameType.difficulty;
-                datos.category= this.gameType.category;
-                datos.quiz= this.questions;
-                this.gameType.type="normal";
+                datos.difficulty = this.gameType.difficulty;
+                datos.category = this.gameType.category;
+                datos.quiz = this.questions;
+                this.gameType.type = "normal";
                 fetch("../leagueOfTrivialG2/public/api/store-data", {
                     method: 'POST',
                     body: JSON.stringify(datos),
@@ -262,16 +264,16 @@ const lobby = Vue.component('quiz-lobby', {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
-                
+
             } else {
-                datos.difficulty= null;
-                datos.category= null;
-                datos.quiz= this.questions;
-                this.gameType.type="daily";
+                datos.difficulty = null;
+                datos.category = null;
+                datos.quiz = this.questions;
+                this.gameType.type = "daily";
             }
             console.log(datos);
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
-            
+
             this.checked = true;
         }
         // resetGame: function () {
@@ -395,8 +397,8 @@ const quiz = Vue.component('quiz', {
     methods: {
         saveAnswer: function (respuesta, index) {
             this.selectedAnswers[index] = respuesta;
-            if (respuesta == this.quiz[index].correctAnswer){
-                if(this.gameConfig.type=="normal"){
+            if (respuesta == this.quiz[index].correctAnswer) {
+                if (this.gameConfig.type == "normal") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
                         case "easy": this.score += 100;
@@ -411,10 +413,10 @@ const quiz = Vue.component('quiz', {
 
                             break;
                     }
-                }else if(this.gameConfig.type=="daily") {
-                    this.score +=10;
+                } else if (this.gameConfig.type == "daily") {
+                    this.score += 10;
                 }
-            }else{
+            } else {
                 console.log("MAL");
             }
         },
@@ -432,7 +434,7 @@ const quiz = Vue.component('quiz', {
                 idUser: userStore().loginInfo.id
             }
             console.log(params);
-            if(this.gameConfig.type=="normal"){
+            if (this.gameConfig.type == "normal") {
                 fetch("../leagueOfTrivialG2/public/api/store-score", {
                     method: 'POST',
                     body: JSON.stringify(params),
@@ -441,7 +443,7 @@ const quiz = Vue.component('quiz', {
                     }
                 })
             }
-            if(this.gameConfig.type=="daily"){
+            if (this.gameConfig.type == "daily") {
                 fetch("../leagueOfTrivialG2/public/api/store-dailyScore", {
                     method: 'POST',
                     body: JSON.stringify(params),
@@ -450,7 +452,7 @@ const quiz = Vue.component('quiz', {
                     }
                 })
             }
-            
+
             this.finished = false;
             this.score = 0;
             this.currentQuestion = 0;
@@ -523,38 +525,50 @@ const login = Vue.component("login", {
     // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
     props: [],
     template: `<div>
-                    <b-modal id="login" title="We are happy that you are back!">
-                        <div v-show="!isLogged">
-                            <h3 class="app__titol">Login</h3>
-                            <span>{{this.errors['error']}}</span>
-                            <b-form-input id="input-2" v-model="form.email" placeholder="Write your email..." required></b-form-input><br>
-                            <b-form-input id="input-3" v-model="form.password" type="password" placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input><br>
-                            Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
-                            <h6 style="display: inline;">Join the league now!</h6>
-                        </router-link> <br>
-                        </div>
-                            <template #modal-footer>
-                                <div v-show="!isLogged">
-                                    <div v-show="!processing" class="boton">
-                                        <button v-b-modal.modal-close_visit class="btn btn-primary" @click="login">Login</button>      
-                                    </div>
-                                    <div v-show="processing" class="boton">
-                                        <button v-b-modal.modal-close_visit class="btn btn-primary" disabled>
-                                            <b-spinner small type="grow"></b-spinner>
-                                            Loading . . .
-                                        </button>  
-                                    </div>
-                                </div>
-                            </template>
-                        <div v-show="isLogged">
-                            <div class="card container-profile">
-                                <div class="card-body text-center">
-                                    <h5 class="my-3">Welcome!</h5>
-                                    <p class="text-muted mb-4">{{userName}}</p>
-                                </div>
-                            </div>              
-                        </div> 
-                    </b-modal>
+    <b-modal class="screen" id="login" title="We are happy that you are back!">
+
+    <div v-show="!isLogged">
+        <div class="login__title">Login</div>
+        <span>{{this.errors['error']}}</span>
+
+        <div class="login__field">
+            <i class="login__icon bi bi-person-fill"></i>
+            <b-form-input id="input-2" class="login__input" v-model="form.email"
+                placeholder="Write your email..." required>
+            </b-form-input>
+        </div>
+        <div class="login__field">
+            <i class="login__icon bi bi-lock-fill"></i>
+            <b-form-input id="input-3" class="login__input" v-model="form.password" type="password"
+                placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input>
+        </div>
+        <br>
+        Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
+            <h6 style="display: inline;">Join the league now!</h6>
+        </router-link> <br>
+    </div>
+    <template #modal-footer>
+        <div v-show="!isLogged">
+            <div v-show="!processing" class="boton">
+                <button v-b-modal.modal-close_visit class="button login__submit" @click="login">Login</button>
+            </div>
+            <div v-show="processing" class="boton">
+                <button v-b-modal.modal-close_visit class="button login__submit" disabled>
+                    <b-spinner small type="grow"></b-spinner>
+                    Loading . . .
+                </button>
+            </div>
+        </div>
+    </template>
+    <div v-show="isLogged">
+        <div class="card container-profile">
+            <div class="card-body text-center">
+                <h5 class="my-3">Welcome!</h5>
+                <p class="text-muted mb-4">{{userName}}</p>
+            </div>
+        </div>
+    </div>
+</b-modal>
                </div>`,
     data: function () {
         return {
@@ -570,7 +584,7 @@ const login = Vue.component("login", {
     },
     methods: {
         login: function () {
-            // this.processing = true;
+            this.processing = true;
             try {
                 fetch("../leagueOfTrivialG2/public/api/login", {
                     method: 'POST',
@@ -584,7 +598,7 @@ const login = Vue.component("login", {
                 })
                     .then(data => {
                         console.log(data)
-                        // this.processing = false;
+                        this.processing = false;
                         this.errors = data;
                         if (this.errors['code'] == 401) {
                             console.log("NO AUTORITZAT");
@@ -598,6 +612,8 @@ const login = Vue.component("login", {
                             this.perfil = {};
                             this.form.email = '';
                             this.form.password = '';
+                            this.$router.push({ path: '/' });
+
                         }
 
                     }).catch(err => { console.log(err); });
@@ -635,42 +651,83 @@ const register = Vue.component("register", {
             validUserName: false,
             validPass: false,
             errors: [],
-            show: true
+            visibility: false,
+            inputType: "password"
         }
     },
     template: `<div>
                 <barra-nav></barra-nav>
-                <form v-if="show">
-                    <span>{{this.errors['errors']}}</span>
-                    <label>
-                        Email Address
-                        <input type="email" v-model="form.email" @keyup="validar">
-                        <div v-show="validEmail && form.email.length>0"><p style="color:green;">Correct email</p></div>
-                        <div v-show="!validEmail && form.email.length>0"><p style="color:red;">Invalid Email </p></div>
-                    </label><br>
-                    <label>
-                        Name
-                        <input type="text" v-model="form.name" @keyup="validarName">
-                        <div v-show="validName && form.name.length>0"><p style="color:green;">Correct name</p></div>
-                        <div v-show="!validName && form.name.length>0"><p style="color:red;">Incorrect name. Must contain at least 3 characters</p></div>
-                    </label><br>
+                <div class="login-container">
+                    <div class="screen">
+                        <div class="screen__content">
+                            <form class="login">
+                                <div class="login__title">JOIN THE LEAGUE!</div>
+                                <!-- <span>{{this.errors['errors']}}</span> -->
+                                <div class="login__field">
+                                    <!-- <i class="login__icon bi bi-person-fill"></i> -->
+                                    <i class="login__icon bi bi-info-circle-fill"></i>
+                                    <input type="text" class="login__input" v-model="form.name" @keyup="validarName"
+                                        placeholder="Name">
+                                    <!-- <div v-if="validName && form.name.length>0" class="box">
+                                        <p style="color:green;">Correct name</p>
+                                    </div>
+                                    <div v-if="!validName && form.name.length>0" class="box">
+                                        <p style="color:red;">Incorrect name. Must contain at least 3 characters</p>
+                                    </div> -->
+                                </div>
+                                <div class="login__field">
+                                    <i class="login__icon bi bi-envelope-fill"></i>
+                                    <input type="email" class="login__input" v-model="form.email" @keyup="validar"
+                                        placeholder="Email">
+                                    <!-- <div v-show="validEmail && form.email.length>0">
+                                        <p style="color:green;">Correct email</p>
+                                    </div>
+                                    <div v-show="!validEmail && form.email.length>0">
+                                        <p style="color:red;">Invalid Email </p>
+                                    </div> -->
+                                </div>
+                                <div class="login__field">
+                                    <i class="login__icon bi bi-person-fill"></i>
+                                    <input type="text" class="login__input" v-model="form.username" @keyup="validarUserName"
+                                        placeholder="Username">
+                                    <!-- <div v-show="validUserName && form.username.length>0">
+                                        <p style="color:green;">Correct user name</p>
+                                    </div>
+                                    <div v-show="!validUserName && form.username.length>0">
+                                        <p style="color:red;">User name can only contain alphanumeric characters.</p>
+                                    </div> -->
+                                </div>
+                                <div class="login__field">
+                                    <i class="login__icon bi bi-lock-fill"></i>
+                                    <input :type="this.inputType" class="login__input" v-model="form.password" @keyup="validarPass"
+                                        placeholder="Password here">
+                                    <i class="login__icon--hide bi bi-eye" @click="hide"></i>
 
-                    <label>
-                        User Name
-                        <input type="text" v-model="form.username" @keyup="validarUserName">
-                        <div v-show="validUserName && form.username.length>0"><p style="color:green;">Correct user name</p></div>
-                        <div v-show="!validUserName && form.username.length>0"><p style="color:red;">Incorrect user name can only contain alphanumeric characters.</p></div>
-                    </label><br>
-
-                    <label>
-                        Password
-                        <input type="password" v-model="form.password" @keyup="validarPass">
-                        <div v-show="validPass && form.password.length>0"><p style="color:green;">Name correct</p></div>
-                        <div v-show="!validPass && form.password.length>0"><p style="color:red;">Password requires minimum eight characters, at least one letter and one number.</p></div>
-                    </label><br>
-
-                    <b-button @click="send" type="button" variant="primary">Register</b-button>
-                    </form>
+                                    <!-- <div v-show="validPass && form.password.length>0">
+                                        <p style="color:green;">Name correct</p>
+                                    </div>
+                                    <div v-show="!validPass && form.password.length>0">
+                                        <p style="color:red;">Password requires minimum eight characters, at least one letter and
+                                            one
+                                            number.</p>
+                                    </div> -->
+                                </div>
+                                <button class="button login__submit">
+                                    <div class="input_box button">
+                                        <input class="button__text" @click="send" type="button" value="SIGN UP"></input>
+                                        <i class="button__icon bi bi-chevron-right"></i>
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="screen__background">
+                            <span class="screen__background__shape screen__background__shape4"></span>
+                            <span class="screen__background__shape screen__background__shape3"></span>
+                            <span class="screen__background__shape screen__background__shape2"></span>
+                            <span class="screen__background__shape screen__background__shape1"></span>
+                        </div>
+                    </div>
+                  </div>
                 </div>`,
 
     methods: {
@@ -727,6 +784,16 @@ const register = Vue.component("register", {
                         this.$router.push({ path: '/' });
                     }
                 });
+        },
+        hide: function () {
+            console.log("click");
+            if (!this.visibility) {
+                this.inputType = "text";
+                this.visibility = true;
+            } else {
+                this.inputType = "password";
+                this.visibility = false;
+            }
         }
     }
 })
@@ -742,15 +809,18 @@ const routes = [{
     props: true
 },
 {
-    path: '/login',
-    component: login
-},
-{
     path: '/register',
     component: register
 }, {
     path: '/',
-    component: home
+    component: home,
+    children: [
+        {
+            path: '/login',
+            component: login,
+            name: 'modalLogin'
+        }
+    ]
 }, {
     path: '/profile',
     component: profile
@@ -786,6 +856,8 @@ const userStore = Pinia.defineStore('usuario', {
         }
     }
 })
+
+Vue.config.ignoredElements = [/^ion-/];
 
 // -----------------Vue App-----------------
 var app = new Vue({
