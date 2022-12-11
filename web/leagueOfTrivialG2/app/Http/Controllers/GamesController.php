@@ -35,4 +35,10 @@ class GamesController extends Controller
 
         return response()->json($game);
     }
+    public function getDemo()
+    {
+        $game = DB::table('games')->where('type', 'demo')->value('quiz');
+
+        return response()->json($game);
+    }
 }

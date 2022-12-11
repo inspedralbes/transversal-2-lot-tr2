@@ -143,7 +143,7 @@ const home = Vue.component('portada', {
                 <div v-show="!isLogged">
                     <div class="centerItems">
                         <button class="linkButton">
-                            <router-link to="/demo" style="text-decoration: none;">
+                            <router-link to="/game/2" style="text-decoration: none;">
                                 Play Demo
                             </router-link>
                         </button>
@@ -352,8 +352,10 @@ const lobby = Vue.component('quiz-lobby', {
                     </div>
                 </div>
                 <div v-show="mode==2">
-                    <p>You are going to play a demo.<p>
-                    <button @click="demoQuiz">PLAY DEMO</button>
+                    <div v-show="!checked">
+                        <p>You are going to play a demo.<p>
+                        <button @click="demoQuiz">PLAY DEMO</button>
+                    </div>
                     <div v-show="checked">
                         <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                     </div>
@@ -404,7 +406,7 @@ const quiz = Vue.component('quiz', {
                             <br><br>
                         </div>
                     </div>
-                    <div v-show="this.finished">
+                    <div v-show="this.finished && this.gameConfig.type=='normal' || this.finished && this.gameConfig.type=='daily'" >
                         <div class="textoCentrado">
                             <h2 class="textoFinQuiz">Your score was:<br>7/10 in 50 seconds<br><br><br>+ {{score}} points</h2>
                         </div>
@@ -421,6 +423,15 @@ const quiz = Vue.component('quiz', {
                             <button @click="reset">HOME</button>
                         <div class="centerItems">
                             <div class="linkButton">Your Profile</div>
+                        </div>
+                    </div>
+                    <div v-show="this.finished && this.gameConfig.type=='demo'">
+                        <div class="textoCentrado">
+                            <h2 class="textoFinQuiz">Your score was:<br>7/10 in 50 seconds</h2>
+                        </div>
+                        <div class="centerItems">
+                            <h4>Would you like to see more? <router-link to="/register" style="text-decoration: none;">JOIN THE LEAGUE NOW!</router-link></h4>
+                            <button @click="reset">HOME</button>
                         </div>
                     </div>
                 </div>`,
