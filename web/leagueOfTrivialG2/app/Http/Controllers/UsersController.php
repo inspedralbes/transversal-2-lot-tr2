@@ -80,6 +80,11 @@ class UsersController extends Controller
             return response(["error" => "Credenciales incorrectas", "code" => Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
         }
     }
+    
+    public function dailyPlayed(Request $request){
+        User::where('id',$request->idUser)->update(['dailyPlayed' => 1]);
+
+    }
     public function logout()
     {
         $cookie = Cookie::forget('cookie_token');

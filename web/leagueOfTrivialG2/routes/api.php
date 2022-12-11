@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //RUTES PER A GUARDAR
 Route::post('/store-user', [UsersController::class, 'store']);
+Route::post('/dailyPlayed', [UsersController::class, 'dailyPlayed']);
 Route::post('/store-data', [GamesController::class, 'store']);
 Route::post('/store-score', [RankingsController::class, 'store']);
 Route::post('/store-dailyScore', [RankingsController::class, 'storeDaily']);

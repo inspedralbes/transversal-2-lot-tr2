@@ -129,13 +129,13 @@ const home = Vue.component('portada', {
                             </router-link>
                         </button>
                         <br>
-                        <button class="linkButton" v-show="!dailyPlayed">
+                        <button class="linkButton" v-show="!dailyIsPlayed">
                             <router-link to="/game/1" style="text-decoration: none;">
                                 Daily Quiz
                             </router-link>
                             
                         </button>
-                        <button class="linkButton" @click="checkDaily" v-show="!dailyPlayed">
+                        <button class="linkButton" @click="checkDaily" v-show="!dailyIsPlayed">
                         HAS JUGADO HOOY?
                         </button>
                     </div>
@@ -154,6 +154,9 @@ const home = Vue.component('portada', {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        dailyIsPlayed(){
+            return userStore().loginInfo.dailyPlayed;
         }
     },
     methods: {
@@ -353,7 +356,7 @@ const lobby = Vue.component('quiz-lobby', {
                 </div>
                 <div v-show="mode==2">
                     <div v-show="!checked">
-                        <p>You are going to play a demo.<p>
+                        <p>You are going to play a demo.</p>
                         <button @click="demoQuiz">PLAY DEMO</button>
                     </div>
                     <div v-show="checked">
@@ -492,6 +495,15 @@ const quiz = Vue.component('quiz', {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
+                fetch("../leagueOfTrivialG2/public/api/dailyPlayed", {
+                    method: 'POST',
+                    body: JSON.stringify(params),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                userStore().loginInfo.dailyPlayed=1;
+                
             }
 
             this.finished = false;
