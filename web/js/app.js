@@ -246,6 +246,24 @@ const lobby = Vue.component('quiz-lobby', {
                     this.startGame();
                 });
         },
+        demoQuiz: function () {
+            fetch(` ../leagueOfTrivialG2/public/api/get-demo`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.questions = JSON.parse(data);
+                    console.log(this.questions);
+                    for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].done = false;
+                        this.questions[index].answers = [];
+                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
+                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
+                    }
+                    this.startGame();
+                });
+        },
         startGame: function () {
             const datos = {
                 difficulty: null,
@@ -265,15 +283,20 @@ const lobby = Vue.component('quiz-lobby', {
                     }
                 })
 
-            } else {
+            } if (this.mode == 1) {
                 datos.difficulty = null;
                 datos.category = null;
                 datos.quiz = this.questions;
                 this.gameType.type = "daily";
             }
+            if (this.mode == 2) {
+                datos.difficulty = null;
+                datos.category = null;
+                datos.quiz = this.questions;
+                this.gameType.type = "demo";
+            }
             console.log(datos);
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
-
             this.checked = true;
         }
         // resetGame: function () {
@@ -324,6 +347,13 @@ const lobby = Vue.component('quiz-lobby', {
                         <div>You are going to play toda's quiz, you can only do one attempt per day.</div>
                         <button @click="dailyQuiz">PLAY DAILY</button>
                     </div>
+                    <div v-show="checked">
+                        <quiz :quiz="questions" :gameConfig="gameType"></quiz>
+                    </div>
+                </div>
+                <div v-show="mode==2">
+                    <p>You are going to play a demo.<p>
+                    <button @click="demoQuiz">PLAY DEMO</button>
                     <div v-show="checked">
                         <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                     </div>
