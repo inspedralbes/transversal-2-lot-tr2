@@ -9,6 +9,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
+ 
 class Kernel extends ConsoleKernel
 {
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
 
             DB::table('rankings')->where('idGame', $id_game)->delete();
             // DB::table('games')->where('type', 'daily')->delete();
+            DB::table('users')->update(['dailyPlayed' => 0]);
 
             $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
             DB::table('games')->where('type', 'daily')->update(['quiz' => $response]);
