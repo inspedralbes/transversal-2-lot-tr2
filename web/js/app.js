@@ -406,16 +406,20 @@ const lobby = Vue.component('quiz-lobby', {
                 <div v-show="mode==0">
                     <div v-show="!checked">
                         <div>Checked names: {{ gameType.difficulty }}</div>
-
-                        <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
-                        <label for="easy">Easy</label>
-                        
-                        <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
-                        <label for="medium">Medium</label>
-                        
-                        <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
-                        <label for="difficult">Hard</label>
-
+                        <div class="input-container">
+                            <div class="input-container-easy">
+                                <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
+                                <label for="easy"><i class="bi bi-fire"></i><br>Easy</label>
+                            </div>
+                            <div class="input-container-medium">
+                                <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
+                                <label for="medium"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Medium</label>
+                            </div>
+                            <div class="input-container-hard">
+                                <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
+                                <label for="hard"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Hard</label>
+                            </div>
+                        </div>
                         <div>
                             Selected: {{ gameType.category }}
                             <select v-model="gameType.category">
