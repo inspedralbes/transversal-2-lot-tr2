@@ -71,7 +71,8 @@ const ranking = Vue.component('ranking', {
         return {
             ranking: [],
             daily: false,
-            global: false
+            global: true,
+            infoChallenge: []
         }
     },
     mounted() {
@@ -109,28 +110,64 @@ const ranking = Vue.component('ranking', {
                     this.global = true;
                     this.daily = false;
                 });
+        },
+        info: function (id) {
+            this.infoChallenge.idChallenger = userStore().loginInfo.id;
+            this.infoChallenge.challengersName = userStore().loginInfo.userName;
+            this.infoChallenge.idChallenged = this.ranking[id].idUser;
+            this.infoChallenge.challengedsName = this.ranking[id].userName;
+            this.infoChallenge.challengedsScore = this.ranking[id].score;
+            console.log(this.infoChallenge);
+            this.$router.push({ name: 'challenge', params: { infoChallenge: this.infoChallenge } })
         }
     },
-    template: `<div id="ranking-marco">
-                <div id="ranking-diffSelect">
-                    <div class="diff1"><button @click="globalRank">Global</button></div>
-                    <div class="diff2"><button @click="dailyRank">Daily Ranking</button></div>
-                </div>
-                <div id="ranking-fondo">
-                    <table id="ranking-table">
-                        <tr class="ranking-cell ranking-titulo">
-                            <th class="colNum">#</th>
-                            <th class="colName">USER</th>
-                            <th class="colScore">SCORE</th>
-                        </tr>
-                            <tr class="ranking-cell" v-for="(score,index) in ranking">
-                                <td>{{index+1}}</td>
-                                <td>{{score.userName}}</td>
-                                <td>{{score.score}}</td>
-                            </tr>
-                    </table>
-                </div>
-            </div>`
+    template: `<div>
+                <barra-nav></barra-nav>
+                    <div id="ranking-marco">
+                        <div id="ranking-diffSelect">
+                            <div class="diff1"><button @click="globalRank">Global</button></div>
+                            <div class="diff2"><button @click="dailyRank">Daily</button></div>
+                        </div>
+                        <div id="ranking-fondo">
+                            <table id="ranking-table">
+                                <tr class="ranking-cell ranking-titulo">
+                                    <th class="colNum">#</th>
+                                    <th class="colName">USER</th>
+                                    <th class="colScore">SCORE</th>
+                                    <th v-show="global"></th>
+                                </tr>
+                                    <tr class="ranking-cell" v-for="(score,index) in ranking">
+                                        <td>{{index+1}}</td>
+                                        <td>{{score.userName}}</td>
+                                        <td>{{score.score}}</td>
+                                        <td v-show="global"><img src="../img/challenge.png" width="20px" @click="info(index)"></td>
+                                    </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>`
+});
+const challenge = Vue.component('challenge', {
+    props: ['infoChallenge'],
+    mounted() {
+        fetch("../leagueOfTrivialG2/public/api/get-challenge-info", {
+            method: 'POST',
+            body: JSON.stringify(this.infoChallenge),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+    },
+    template: `<div style="color:white">
+                    {{this.infoChallenge.idChallenger}} <br>
+                    {{this.infoChallenge.challengersName}}<br>
+                    {{this.infoChallenge.idChallenged}} <br>
+                    {{this.infoChallenge.challengedsName}} <br>
+                    {{this.infoChallenge.challengedsScore}}
+                </div>`
 });
 const home = Vue.component('portada', {
     data: function () {
@@ -902,6 +939,11 @@ const routes = [{
 }, {
     path: '/ranking',
     component: ranking
+}, {
+    path: '/challenge',
+    name: 'challenge',
+    component: challenge,
+    props: true
 }]
 
 const router = new VueRouter({

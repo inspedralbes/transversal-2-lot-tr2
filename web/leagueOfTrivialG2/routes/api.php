@@ -38,8 +38,10 @@ Route::get('/get-games', [GamesController::class, 'index']);
 Route::get('/get-daily', [GamesController::class, 'getDaily']);
 Route::get('/get-demo', [GamesController::class, 'getDemo']);
 Route::get('/get-rankings', [RankingsController::class, 'index']);
-Route::get('/get-challenges', [ChallengesController::class, 'index']);
+// Route::get('/get-challenges', [ChallengesController::class, 'index']);
 Route::get('/get-dailyRankings', [RankingsController::class, 'dailyRanking']);
+Route::get('/get-challenge-info', [RankingsController::class, 'dailyRanking']);
+
 
 //LOGIN
 // Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);
