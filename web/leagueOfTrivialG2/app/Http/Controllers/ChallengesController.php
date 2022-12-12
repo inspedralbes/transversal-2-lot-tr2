@@ -10,13 +10,12 @@ class ChallengesController extends Controller
 {
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'seen' => 'required',
-        //     'winner' => 'required',
-        // ]);
         $challenge = new Challenge();
         $challenge->seen = false;
         $challenge->winner = $request->winner;
+        $challenge->idChallenger = $request->idChallenger;
+        $challenge->idChallenged = $request->idChallenged;
+        $challenge->idGame=$request->idGame;
 
         $challenge->save();
     }
@@ -29,7 +28,8 @@ class ChallengesController extends Controller
     }
     public function getGametoChallenge(Request $request)
     {
-        $game = DB::select('SELECT quiz FROM games WHERE games.id = ' . $request->idGame . '');
+        $game = DB::table('games')->where('id', $request->idGame)->value('quiz');
+
         return response()->json($game);
     }
 }

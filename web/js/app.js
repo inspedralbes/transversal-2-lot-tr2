@@ -1,10 +1,10 @@
 var tmp = null;
 Vue.component('barra-nav', {
-    template: `<div class="header">
-                        <div class="header_div1">
+    template: `<div class="header1">
+                        <div class="header1_div1">
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
                                 <template #button-content>
-                                    <span class="sr-only" style="color:white">League Of Trivial</span>
+                                    <span class="header1_div1-element sr-only">League Of Trivial</span>
                                 </template>
                                 <b-dropdown-item @click="goHome">Home</b-dropdown-item>
                                 <b-dropdown-item>
@@ -15,23 +15,20 @@ Vue.component('barra-nav', {
                                 <b-dropdown-item href="#">Something else here...</b-dropdown-item>
                             </b-dropdown>                  
                         </div>
-                        <div class="header_div2">
-                                                    
-                        </div>
-                        <div v-show="!isLogged" class="header_div3" v-b-modal.login>
-                            <router-link to="/login" style="text-decoration: none; color:black">
-                                Login
+                        <div v-show="!isLogged" class="header1_div2" v-b-modal.login>
+                            <router-link to="/login" class="header1_div2-element">
+                                <span>Login</span>
                             </router-link>
                             <router-view></router-view>              
                         </div>
-                        <div v-show="isLogged" class="header_div3">
+                        <div v-show="isLogged" class="header1_div2">
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret style="background-color:white">
                                 <template #button-content>
                                     <span style="font-size:20px;">{{userName}}&nbsp;</span>
                                     <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
                                 </template>
                                 <b-dropdown-item href="#">
-                                    <router-link to="/myProfile" style="text-decoration: none; color:black;">Profile</router-link> 
+                                    <router-link :to="{path: '/profile/' + idUser}" style="text-decoration: none; color:black;">Profile</router-link> 
                                 </b-dropdown-item>
                                 <b-dropdown-item href="#" @click="logOut" style="text-decoration: none;">Logout</b-dropdown-item>
                                 <b-dropdown-item href="#" style="text-decoration: none;">
@@ -46,6 +43,9 @@ Vue.component('barra-nav', {
         },
         userName() {
             return userStore().loginInfo.userName;
+        },
+        idUser() {
+            return userStore().loginInfo.id;
         }
     },
     methods: {
@@ -135,15 +135,29 @@ const ranking = Vue.component('ranking', {
                                 </tr>
                                     <tr class="ranking-cell" v-for="(score,index) in ranking">
                                         <td>{{index+1}}</td>
-                                        <td><router-link :to="{path: '/profile/' + score.idUser}">{{score.userName}}</router-link></td>
+                                        <td v-show="isLogged"><router-link :to="{path: '/profile/' + score.idUser}">{{score.userName}}</router-link></td>
+                                        <td v-show="!isLogged">{{score.userName}}</td>
                                         <td>{{score.score}}</td>
                                     </tr>
                             </table>
                         </div>
                     </div>
-                </div>`
+                </div>`,
+    computed: {
+        isLogged() {
+            return userStore().logged;
+        }
+    }
 });
 const challenge = Vue.component('challenge', {
+    data: function () {
+        return {
+            questions:[],
+            gameType:[],
+            ready:false,
+            info:[]
+        }
+    },
     props: ['infoChallenge'],
     mounted() {
         params = {
@@ -157,23 +171,40 @@ const challenge = Vue.component('challenge', {
             }
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                this.questions = JSON.parse(data);
+                    console.log(this.questions);
+                    for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].done = false;
+                        this.questions[index].answers = [];
+                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
+                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
+                    }
+                    this.gameType.difficulty=this.infoChallenge.difficulty;
+                    this.gameType.category=this.infoChallenge.category;
+                    this.gameType.type="challenge";
+                    this.info.idChallenged=this.infoChallenge.idChallenged;
+                    this.info.idChallenger=this.infoChallenge.idChallenger;
+                    this.info.idGame=this.infoChallenge.idGame;
+                    this.info.initialScore=this.infoChallenge.challengedsScore;
+                    console.log(this.gameType);
             })
     },
-    template: `<div style="color:white">
-                    YOU ARE ABOUT TO CHALLENGE {{this.infoChallenge.challengedsName}} <br>
-                    WHO GOT {{this.infoChallenge.challengedsScore}} POINTS
+    template: `<div>
+                    <div style="color:white" v-show="!ready">
+                        YOU ARE ABOUT TO CHALLENGE {{this.infoChallenge.challengedsName}} <br>
+                        WHO GOT {{this.infoChallenge.challengedsScore}} POINTS
 
-                    ARE YOU SURE?<br>
-                    <button><router-link to="/game/3">LET'S GO</router-link></button>
-                    <button><router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">I changed my mind..</router-link></button>
-
-                </div>`,
-    methods: {
-        start() {
-            console.log("LETS GO");
-        }
-    }
+                        ARE YOU SURE?<br>
+                        <button @click="ready=true">LET'S GO</button>
+                        <button><router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">I changed my mind..</router-link></button>
+                    </div>
+                    <div v-show="ready">
+                        <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="info"></quiz>
+                    </div>
+                </div>`
 });
 const home = Vue.component('portada', {
     data: function () {
@@ -453,13 +484,14 @@ Vue.component('timer', {
 });
 
 const quiz = Vue.component('quiz', {
-    props: ['quiz', 'gameConfig'],
+    props: ['quiz', 'gameConfig','challengeInfo'],
     data: function () {
         return {
             selectedAnswers: [],
             finished: false,
             score: 0,
-            currentQuestion: 0
+            currentQuestion: 0,
+            winner:0,
         }
     },
     template: `<div>
@@ -499,12 +531,31 @@ const quiz = Vue.component('quiz', {
                             <button @click="reset">HOME</button>
                         </div>
                     </div>
+                    <div v-if="this.finished && this.gameConfig.type=='challenge'">
+                        <div class="textoCentrado">
+                            <h2 class="textoFinQuiz">You've finished the challenge!</h2>
+                        </div>
+                        <div class="centerItems">
+                            <h4>The results are ...</h4>
+                            <div v-if="winner==0">
+                                IT'S A TIE!!! 
+                            </div>
+                            <div v-if="winner==this.challengeInfo.idChallenger">
+                                CONGRATS, YOU'VE WON!! 
+                            </div>
+                            <div v-if="winner==this.challengeInfo.idChallenged">
+                                Oh, no... You've lost :(
+                            </div>
+                            <button @click="reset">HOME</button>
+                        </div>
+                    </div>
                 </div>`,
     methods: {
         saveAnswer: function (respuesta, index) {
+            console.log(this.challengeInfo);
             this.selectedAnswers[index] = respuesta;
             if (respuesta == this.quiz[index].correctAnswer) {
-                if (this.gameConfig.type == "normal") {
+                if (this.gameConfig.type == "normal" || this.gameConfig.type=="challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
                         case "easy": this.score += 100;
@@ -530,7 +581,17 @@ const quiz = Vue.component('quiz', {
             this.currentQuestion++;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
+                if(this.gameConfig.type=="challenge"){
+                    if(this.score>this.challengeInfo.initialScore){
+                        this.winner=this.challengeInfo.idChallenger;
+                    }else if(this.score<this.challengeInfo.initialScore){
+                        this.winner=this.challengeInfo.idChallenged;
+                    }else{
+                        this.winner=0;
+                    }
+                }
                 this.finished = true;
+                
             }
             console.log(this.finished);
         },
@@ -566,6 +627,22 @@ const quiz = Vue.component('quiz', {
                 })
                 userStore().loginInfo.dailyPlayed = 1;
 
+            }
+            if (this.gameConfig.type == "challenge") {
+                challengeParams = {
+                    idChallenger: this.challengeInfo.idChallenger,
+                    idChallenged: this.challengeInfo.idChallenged,
+                    winner: this.winner,
+                    idGame: this.challengeInfo.idGame,
+                }
+                console.log(challengeParams);
+                fetch("../leagueOfTrivialG2/public/api/store-challenge", {
+                    method: 'POST',
+                    body: JSON.stringify(challengeParams),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
             }
 
             this.finished = false;
@@ -616,26 +693,6 @@ const card = Vue.component('card', {
         },
     }
 })
-const myProfile = Vue.component("myProfile", {
-    data: function () {
-        return {
-            user: ''
-        }
-    },
-    template: `<div>
-                    Name:{{this.user.name}}
-                    Email:{{this.user.email}}
-    
-    </div>`,
-    mounted() {
-        fetch(`../leagueOfTrivialG2/public/api/user`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                this.user = data;
-            });
-    }
-});
 const profile = Vue.component("profile", {
     props: ['idUser'],
     data: function () {
@@ -645,36 +702,46 @@ const profile = Vue.component("profile", {
             infoChallenge: []
         }
     },
-    template: `<div v-if="loadedData" style="color: white">
-                    Name:{{this.user.info[0].name}} <br>
-                    Username:{{this.user.info[0].userName}} <br>
-                    Email:{{this.user.info[0].email}} <br>
-                    <div v-if="this.user.info[0].status==null">
-                        Status: No status yet
+    template: `<div>
+                    <barra-nav></barra-nav>
+                    <div v-if="idUser==getUser" class="header2" id="profile_Header">
+                        <div class="header2_div2">Edit Profile</div>
                     </div>
-                    <div v-if="this.user.info[0].status!=null">
-                        Status: {{this.user.info[0].status}}
-                    </div>
-                    TOTAL XP
-                    {{this.user.xp[0].xp}}
-                    <div>
-                    <h2>HISTORIAL</h2>
-                    <table>
-                        <tr class="ranking-cell ranking-titulo">
-                            <th class="colName">DATE</th>
-                            <th class="colName">CATEGORY</th>
-                            <th class="colName">DIFFICULTY</th>
-                            <th class="colScore">SCORE</th>
-                            <th></th>
-                        </tr>
-                        <tr class="ranking-cell" v-for="(game,index) in user.historic">
-                            <td>{{game.date}}</td>
-                            <td>{{game.category}}</td>
-                            <td>{{game.difficulty}}</td>
-                            <td>{{game.puntuacio}}</td>
-                            <td><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
-                        </tr>
-                    </table>
+                    <div v-if="loadedData">
+                        <div class="centerItems" id="gridPerfil">
+                            <div class="perfilAvatar">f</div>
+                            <div class="perfilNombre">{{this.user.info[0].name}}</div>
+                            <div class="perfilInfo">{{this.user.info[0].userName}}</div>
+                            <div class="perfilInfo">{{this.user.info[0].email}}</div>
+                            <div v-if="this.user.info[0].status==null" class="profileStatus">
+                                Tell everyone something about you!
+                            </div>
+                            <div v-if="this.user.info[0].status!=null" class="profileStatus">
+                                "{{this.user.info[0].status}}"
+                            </div>
+                            <br>
+                            <div id="barra">
+                                <div class="progreso"></div>
+                                {{this.user.xp[0].xp}} / 750
+                            </div>
+                            <div class="gridDeNiveles">
+                                <div class="nivelActual">Platinum</div>
+                                <div class="nivelSiguiente">Master</div>
+                            </div>
+                            
+                            <div class="lastPlayed">
+                                <p>Last Played</p>
+                                <table>
+                                    <tr v-for="(game,index) in user.historic">
+                                        <td>{{game.date}}</td>
+                                        <td>{{game.category}}</td>
+                                        <td>{{game.difficulty}}</td>
+                                        <td>{{game.puntuacio}}</td>
+                                        <td v-if="idUser!=getUser"><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>`,
     mounted() {
@@ -705,9 +772,16 @@ const profile = Vue.component("profile", {
             this.infoChallenge.challengedsName = this.user.info[0].userName;
             this.infoChallenge.challengedsScore = this.user.historic[idGame].puntuacio;
             this.infoChallenge.idGame = this.user.historic[idGame].idGame;
+            this.infoChallenge.category = this.user.historic[idGame].category;
+            this.infoChallenge.difficulty = this.user.historic[idGame].difficulty;
             console.log(this.infoChallenge);
             this.$router.push({ name: 'challenge', params: { infoChallenge: this.infoChallenge } })
 
+        }
+    },
+    computed: {
+        getUser() {
+            return userStore().loginInfo.id;
         }
     }
 })
@@ -910,12 +984,6 @@ const register = Vue.component("register", {
                                 </button>
                             </form>
                         </div>
-                        <div class="screen__background">
-                            <span class="screen__background__shape screen__background__shape4"></span>
-                            <span class="screen__background__shape screen__background__shape3"></span>
-                            <span class="screen__background__shape screen__background__shape2"></span>
-                            <span class="screen__background__shape screen__background__shape1"></span>
-                        </div>
                     </div>
                   </div>
                 </div>`,
@@ -989,10 +1057,7 @@ const register = Vue.component("register", {
 })
 
 // -----------------Vue Routes-----------------
-const routes = [{
-    path: '/game',
-    component: lobby
-},
+const routes = [
 {
     path: '/game/:mode',
     component: lobby,
@@ -1011,9 +1076,6 @@ const routes = [{
             name: 'modalLogin'
         }
     ]
-}, {
-    path: '/myProfile',
-    component: myProfile
 }, {
     path: '/profile/:idUser',
     name: 'profile',

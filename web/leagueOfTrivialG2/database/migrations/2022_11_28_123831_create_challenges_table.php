@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->boolean('seen');
             $table->integer('winner');
-            $table->timestamp('creationDate');
+            $table->timestamps();
             $table->primary(['idGame', 'idChallenger', 'idChallenged']);
             $table->foreign('idGame')->references('id')->on('games')->onDelete('cascade');
             $table->foreign('idChallenger')->references('id')->on('users')->onDelete('cascade');
