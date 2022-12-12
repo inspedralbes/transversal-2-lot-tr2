@@ -41,7 +41,7 @@ Route::get('/get-rankings', [RankingsController::class, 'index']);
 // Route::get('/get-challenges', [ChallengesController::class, 'index']);
 Route::get('/get-dailyRankings', [RankingsController::class, 'dailyRanking']);
 // Route::get('/get-challenge-info', [RankingsController::class, 'dailyRanking']);
-Route::get('/get-userRanking', [UsersController::class, 'userInfo']);
+Route::post('/get-userRanking', [UsersController::class, 'userInfo']);
 
 
 
