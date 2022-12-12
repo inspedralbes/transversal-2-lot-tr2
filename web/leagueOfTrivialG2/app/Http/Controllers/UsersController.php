@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -80,14 +81,20 @@ class UsersController extends Controller
             return response(["error" => "Credenciales incorrectas", "code" => Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
         }
     }
-    
-    public function dailyPlayed(Request $request){
-        User::where('id',$request->idUser)->update(['dailyPlayed' => 1]);
 
+    public function dailyPlayed(Request $request)
+    {
+        User::where('id', $request->idUser)->update(['dailyPlayed' => 1]);
     }
     public function logout()
     {
         $cookie = Cookie::forget('cookie_token');
         Auth::logout();
+    }
+    public function userInfo(Request $request)
+    {
+        $user = $request->id;
+        $info = DB::select('SELECT rankings.idGame, rankings.puntuacio, users.name, users.userName, users.status from users JOIN rankings ON rankings.idUser=users.id WHERE users.id=' . $user . ';');
+        return response()->json($info);
     }
 }
