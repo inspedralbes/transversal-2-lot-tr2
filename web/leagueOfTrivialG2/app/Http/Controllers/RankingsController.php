@@ -42,7 +42,7 @@ class RankingsController extends Controller
     }
     public function dailyRanking()
     {
-        $rankings = DB::select('SELECT rankings.puntuacio AS score, users.userName FROM rankings JOIN users ON users.id=rankings.idUser JOIN games ON games.id=rankings.idGame WHERE games.type="daily" GROUP BY users.userName ORDER BY rankings.puntuacio DESC;');
+        $rankings = DB::select('SELECT rankings.puntuacio AS score, users.userName FROM rankings JOIN users ON users.id=rankings.idUser JOIN games ON games.id=rankings.idGame WHERE games.type="daily" ORDER BY rankings.puntuacio DESC;');
 
         return response()->json($rankings);
     }
