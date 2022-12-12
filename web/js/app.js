@@ -69,7 +69,9 @@ Vue.component('barra-nav', {
 const ranking = Vue.component('ranking', {
     data: function () {
         return {
-            ranking: []
+            ranking: [],
+            daily: false,
+            global: false
         }
     },
     mounted() {
@@ -86,12 +88,33 @@ const ranking = Vue.component('ranking', {
                 // console.log(this.ranking);
             });
     },
+    methods: {
+        dailyRank: function () {
+
+            fetch(`../leagueOfTrivialG2/public/api/get-dailyRankings`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.ranking = data;
+                    this.daily = true;
+                    this.global = false
+                });
+        },
+        globalRank: function () {
+            fetch(`../leagueOfTrivialG2/public/api/get-rankings`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.ranking = data;
+                    this.global = true;
+                    this.daily = false;
+                });
+        }
+    },
     template: `<div id="ranking-marco">
                 <div id="ranking-diffSelect">
-                    <div class="diff1">Global</div>
-                    <div class="diff2">Lv 1</div>
-                    <div class="diff3">Lv 2</div>
-                    <div class="diff4">Lv 3</div>
+                    <div class="diff1"><button @click="globalRank">Global</button></div>
+                    <div class="diff2"><button @click="dailyRank">Daily Ranking</button></div>
                 </div>
                 <div id="ranking-fondo">
                     <table id="ranking-table">
@@ -107,7 +130,6 @@ const ranking = Vue.component('ranking', {
                             </tr>
                     </table>
                 </div>
-                <div id="ranking-pagina">1 / 23</div>
             </div>`
 });
 const home = Vue.component('portada', {
@@ -155,7 +177,7 @@ const home = Vue.component('portada', {
         isLogged() {
             return userStore().logged;
         },
-        dailyIsPlayed(){
+        dailyIsPlayed() {
             return userStore().loginInfo.dailyPlayed;
         }
     },
@@ -502,8 +524,8 @@ const quiz = Vue.component('quiz', {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
-                userStore().loginInfo.dailyPlayed=1;
-                
+                userStore().loginInfo.dailyPlayed = 1;
+
             }
 
             this.finished = false;
