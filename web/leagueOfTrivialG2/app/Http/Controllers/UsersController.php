@@ -93,8 +93,8 @@ class UsersController extends Controller
     }
     public function userInfo(Request $request)
     {
-        $user = $request->id;
-        $info = DB::select('SELECT rankings.idGame, rankings.puntuacio, users.name, users.userName, users.status from users JOIN rankings ON rankings.idUser=users.id WHERE users.id=' . $user . ';');
+        $user = $request->idUser;
+        $info = DB::select('SELECT rankings.idGame, rankings.puntuacio, users.name, users.userName, users.email, users.status, games.date from users JOIN rankings ON rankings.idUser=users.id JOIN games ON games.id=rankings.idGame  WHERE users.id=' . $user . 'ORDER BY games.date DESC;');
         return response()->json($info);
     }
 }
