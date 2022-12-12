@@ -152,10 +152,10 @@ const ranking = Vue.component('ranking', {
 const challenge = Vue.component('challenge', {
     data: function () {
         return {
-            questions:[],
-            gameType:[],
-            ready:false,
-            info:[]
+            questions: [],
+            gameType: [],
+            ready: false,
+            info: []
         }
     },
     props: ['infoChallenge'],
@@ -172,24 +172,24 @@ const challenge = Vue.component('challenge', {
         }).then(response => response.json())
             .then(data => {
                 this.questions = JSON.parse(data);
-                    console.log(this.questions);
-                    for (let index = 0; index < this.questions.length; index++) {
-                        this.questions[index].done = false;
-                        this.questions[index].answers = [];
-                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
-                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
-                    }
-                    this.gameType.difficulty=this.infoChallenge.difficulty;
-                    this.gameType.category=this.infoChallenge.category;
-                    this.gameType.type="challenge";
-                    this.info.idChallenged=this.infoChallenge.idChallenged;
-                    this.info.idChallenger=this.infoChallenge.idChallenger;
-                    this.info.idGame=this.infoChallenge.idGame;
-                    this.info.initialScore=this.infoChallenge.challengedsScore;
-                    console.log(this.gameType);
+                console.log(this.questions);
+                for (let index = 0; index < this.questions.length; index++) {
+                    this.questions[index].done = false;
+                    this.questions[index].answers = [];
+                    this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
+                    this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
+                    this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
+                    this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
+                    this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
+                }
+                this.gameType.difficulty = this.infoChallenge.difficulty;
+                this.gameType.category = this.infoChallenge.category;
+                this.gameType.type = "challenge";
+                this.info.idChallenged = this.infoChallenge.idChallenged;
+                this.info.idChallenger = this.infoChallenge.idChallenger;
+                this.info.idGame = this.infoChallenge.idGame;
+                this.info.initialScore = this.infoChallenge.challengedsScore;
+                console.log(this.gameType);
             })
     },
     template: `<div>
@@ -220,7 +220,7 @@ const home = Vue.component('portada', {
                 <div v-show="isLogged">
                     <div class="centerItems">
                         <button class="linkButton">
-                            <router-link to="/game" style="text-decoration: none;">
+                            <router-link to="/game/0" style="text-decoration: none;">
                                 Random Quiz
                             </router-link>
                         </button>
@@ -484,14 +484,14 @@ Vue.component('timer', {
 });
 
 const quiz = Vue.component('quiz', {
-    props: ['quiz', 'gameConfig','challengeInfo'],
+    props: ['quiz', 'gameConfig', 'challengeInfo'],
     data: function () {
         return {
             selectedAnswers: [],
             finished: false,
             score: 0,
             currentQuestion: 0,
-            winner:0,
+            winner: 0,
         }
     },
     template: `<div>
@@ -555,7 +555,7 @@ const quiz = Vue.component('quiz', {
             console.log(this.challengeInfo);
             this.selectedAnswers[index] = respuesta;
             if (respuesta == this.quiz[index].correctAnswer) {
-                if (this.gameConfig.type == "normal" || this.gameConfig.type=="challenge") {
+                if (this.gameConfig.type == "normal" || this.gameConfig.type == "challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
                         case "easy": this.score += 100;
@@ -581,17 +581,17 @@ const quiz = Vue.component('quiz', {
             this.currentQuestion++;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
-                if(this.gameConfig.type=="challenge"){
-                    if(this.score>this.challengeInfo.initialScore){
-                        this.winner=this.challengeInfo.idChallenger;
-                    }else if(this.score<this.challengeInfo.initialScore){
-                        this.winner=this.challengeInfo.idChallenged;
-                    }else{
-                        this.winner=0;
+                if (this.gameConfig.type == "challenge") {
+                    if (this.score > this.challengeInfo.initialScore) {
+                        this.winner = this.challengeInfo.idChallenger;
+                    } else if (this.score < this.challengeInfo.initialScore) {
+                        this.winner = this.challengeInfo.idChallenged;
+                    } else {
+                        this.winner = 0;
                     }
                 }
                 this.finished = true;
-                
+
             }
             console.log(this.finished);
         },
@@ -664,27 +664,29 @@ const card = Vue.component('card', {
     props: ['question', 'number'],
     data: function () {
         return {
-
+            activeButton: ''
         }
     },
     template: `<div id="gamecard-juego">
-                    <div class="pregunta">
-                        <div id="num_pregunta">{{number+1}} / 10</div>
-                        <div>{{question.question}}</div>
-                        <div id="icona_pregunta">?</div>
-                    </div>
-                    <div id="gamecard-respuestas">
-                        <div v-for="respuesta in question.answers">
-                            <button type="radio" class="respuesta" :disabled='question.done' :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done}" @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</button>
-                        </div>
-                        <div v-show="question.done">
-                            <button class="next" @click="$emit('changeQuestion')">NEXT</button>
-                        </div>
-                    </div>
-                </div>`,
+    <div class="pregunta">
+        <div id="num_pregunta">{{number+1}} / 10</div>
+        <div>{{question.question}}</div>
+    </div>
+    <div id="gamecard-respuestas">
+        <div v-for="(respuesta,index) in question.answers">
+            <button type="radio" class="respuesta" :disabled='question.done'
+                :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done, 'selected': activeButton === index ? 'notSelected' : ''}"
+                @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</button>
+        </div>
+        <div v-show="question.done">
+            <b-button class="next" @click="$emit('changeQuestion')">NEXT<span class="arrow"></span></b-button>
+        </div>
+    </div>
+</div>`,
     methods: {
         checkAnswer: function (respuesta, index) {
             this.question.done = false
+            this.activeButton = index;
             if (!this.question.done) {
                 this.question.done = true;
                 this.$forceUpdate();
@@ -1058,38 +1060,38 @@ const register = Vue.component("register", {
 
 // -----------------Vue Routes-----------------
 const routes = [
-{
-    path: '/game/:mode',
-    component: lobby,
-    props: true
-},
-{
-    path: '/register',
-    component: register
-}, {
-    path: '/',
-    component: home,
-    children: [
-        {
-            path: '/login',
-            component: login,
-            name: 'modalLogin'
-        }
-    ]
-}, {
-    path: '/profile/:idUser',
-    name: 'profile',
-    component: profile,
-    props: true
-}, {
-    path: '/ranking',
-    component: ranking
-}, {
-    path: '/challenge',
-    name: 'challenge',
-    component: challenge,
-    props: true
-}]
+    {
+        path: '/game/:mode',
+        component: lobby,
+        props: true
+    },
+    {
+        path: '/register',
+        component: register
+    }, {
+        path: '/',
+        component: home,
+        children: [
+            {
+                path: '/login',
+                component: login,
+                name: 'modalLogin'
+            }
+        ]
+    }, {
+        path: '/profile/:idUser',
+        name: 'profile',
+        component: profile,
+        props: true
+    }, {
+        path: '/ranking',
+        component: ranking
+    }, {
+        path: '/challenge',
+        name: 'challenge',
+        component: challenge,
+        props: true
+    }]
 
 const router = new VueRouter({
     routes // short for `routes: routes`
