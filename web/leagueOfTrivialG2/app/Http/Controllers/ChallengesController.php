@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Challenge;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChallengesController extends Controller
 {
@@ -25,5 +26,10 @@ class ChallengesController extends Controller
         $challenges = json_encode($challenges);
 
         return response()->json($challenges);
+    }
+    public function getGametoChallenge(Request $request)
+    {
+        $game = DB::select('SELECT quiz FROM games WHERE games.id = ' . $request->idGame . '');
+        return response()->json($game);
     }
 }

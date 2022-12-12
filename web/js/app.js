@@ -31,7 +31,7 @@ Vue.component('barra-nav', {
                                     <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
                                 </template>
                                 <b-dropdown-item href="#">
-                                    <router-link to="/profile" style="text-decoration: none; color:black;">Profile</router-link> 
+                                    <router-link to="/myProfile" style="text-decoration: none; color:black;">Profile</router-link> 
                                 </b-dropdown-item>
                                 <b-dropdown-item href="#" @click="logOut" style="text-decoration: none;">Logout</b-dropdown-item>
                                 <b-dropdown-item href="#" style="text-decoration: none;">
@@ -71,8 +71,9 @@ const ranking = Vue.component('ranking', {
         return {
             ranking: [],
             daily: false,
-            global: true,
-            infoChallenge: []
+            global: false,
+            infoChallenge: [],
+            userData: []
         }
     },
     mounted() {
@@ -111,14 +112,11 @@ const ranking = Vue.component('ranking', {
                     this.daily = false;
                 });
         },
-        info: function (id) {
-            this.infoChallenge.idChallenger = userStore().loginInfo.id;
-            this.infoChallenge.challengersName = userStore().loginInfo.userName;
-            this.infoChallenge.idChallenged = this.ranking[id].idUser;
-            this.infoChallenge.challengedsName = this.ranking[id].userName;
-            this.infoChallenge.challengedsScore = this.ranking[id].score;
-            console.log(this.infoChallenge);
-            this.$router.push({ name: 'challenge', params: { infoChallenge: this.infoChallenge } })
+        userProfile: function (id) {
+
+            this.idUser = this.ranking[id].idUser;
+            console.log(this.idUser);
+            this.$router.push({ name: 'profile', params: { idUser: this.idUser } })
         }
     },
     template: `<div>
@@ -134,13 +132,11 @@ const ranking = Vue.component('ranking', {
                                     <th class="colNum">#</th>
                                     <th class="colName">USER</th>
                                     <th class="colScore">SCORE</th>
-                                    <th v-show="global"></th>
                                 </tr>
                                     <tr class="ranking-cell" v-for="(score,index) in ranking">
                                         <td>{{index+1}}</td>
-                                        <td>{{score.userName}}</td>
+                                        <td><router-link :to="{path: '/profile/' + score.idUser}">{{score.userName}}</router-link></td>
                                         <td>{{score.score}}</td>
-                                        <td v-show="global"><img src="../img/challenge.png" width="20px" @click="info(index)"></td>
                                     </tr>
                             </table>
                         </div>
@@ -150,9 +146,12 @@ const ranking = Vue.component('ranking', {
 const challenge = Vue.component('challenge', {
     props: ['infoChallenge'],
     mounted() {
-        fetch("../leagueOfTrivialG2/public/api/get-challenge-info", {
+        params = {
+            idGame: this.infoChallenge.idGame
+        }
+        fetch("../leagueOfTrivialG2/public/api/get-challenge", {
             method: 'POST',
-            body: JSON.stringify(this.infoChallenge),
+            body: JSON.stringify(params),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
@@ -162,12 +161,19 @@ const challenge = Vue.component('challenge', {
             })
     },
     template: `<div style="color:white">
-                    {{this.infoChallenge.idChallenger}} <br>
-                    {{this.infoChallenge.challengersName}}<br>
-                    {{this.infoChallenge.idChallenged}} <br>
-                    {{this.infoChallenge.challengedsName}} <br>
-                    {{this.infoChallenge.challengedsScore}}
-                </div>`
+                    YOU ARE ABOUT TO CHALLENGE {{this.infoChallenge.challengedsName}} <br>
+                    WHO GOT {{this.infoChallenge.challengedsScore}} POINTS
+
+                    ARE YOU SURE?<br>
+                    <button><router-link to="/game/3">LET'S GO</router-link></button>
+                    <button><router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">I changed my mind..</router-link></button>
+
+                </div>`,
+    methods: {
+        start() {
+            console.log("LETS GO");
+        }
+    }
 });
 const home = Vue.component('portada', {
     data: function () {
@@ -193,9 +199,6 @@ const home = Vue.component('portada', {
                                 Daily Quiz
                             </router-link>
                             
-                        </button>
-                        <button class="linkButton" @click="checkDaily" v-show="!dailyIsPlayed">
-                        HAS JUGADO HOOY?
                         </button>
                     </div>
                 </div>
@@ -613,7 +616,7 @@ const card = Vue.component('card', {
         },
     }
 })
-const profile = Vue.component("profile", {
+const myProfile = Vue.component("myProfile", {
     data: function () {
         return {
             user: ''
@@ -631,6 +634,81 @@ const profile = Vue.component("profile", {
                 console.log(data)
                 this.user = data;
             });
+    }
+});
+const profile = Vue.component("profile", {
+    props: ['idUser'],
+    data: function () {
+        return {
+            user: '',
+            loadedData: false,
+            infoChallenge: []
+        }
+    },
+    template: `<div v-if="loadedData" style="color: white">
+                    Name:{{this.user.info[0].name}} <br>
+                    Username:{{this.user.info[0].userName}} <br>
+                    Email:{{this.user.info[0].email}} <br>
+                    <div v-if="this.user.info[0].status==null">
+                        Status: No status yet
+                    </div>
+                    <div v-if="this.user.info[0].status!=null">
+                        Status: {{this.user.info[0].status}}
+                    </div>
+                    TOTAL XP
+                    {{this.user.xp[0].xp}}
+                    <div>
+                    <h2>HISTORIAL</h2>
+                    <table>
+                        <tr class="ranking-cell ranking-titulo">
+                            <th class="colName">DATE</th>
+                            <th class="colName">CATEGORY</th>
+                            <th class="colName">DIFFICULTY</th>
+                            <th class="colScore">SCORE</th>
+                            <th></th>
+                        </tr>
+                        <tr class="ranking-cell" v-for="(game,index) in user.historic">
+                            <td>{{game.date}}</td>
+                            <td>{{game.category}}</td>
+                            <td>{{game.difficulty}}</td>
+                            <td>{{game.puntuacio}}</td>
+                            <td><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>`,
+    mounted() {
+        params = {
+            idUser: this.idUser
+        }
+        console.log("EL ID DEL USUARIO ES " + this.idUser);
+        fetch("../leagueOfTrivialG2/public/api/get-userRanking", {
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                "Content-type": "application/json;charset=UTF-8"
+            }
+        }).then(response => {
+            return response.json()
+        }).then(data => {
+            console.log(data)
+            this.user = data;
+            this.loadedData = true;
+        });
+
+    },
+    methods: {
+        startChallenge(idGame) {
+            this.infoChallenge.idChallenger = userStore().loginInfo.id;
+            this.infoChallenge.challengersName = userStore().loginInfo.userName;
+            this.infoChallenge.idChallenged = this.idUser;
+            this.infoChallenge.challengedsName = this.user.info[0].userName;
+            this.infoChallenge.challengedsScore = this.user.historic[idGame].puntuacio;
+            this.infoChallenge.idGame = this.user.historic[idGame].idGame;
+            console.log(this.infoChallenge);
+            this.$router.push({ name: 'challenge', params: { infoChallenge: this.infoChallenge } })
+
+        }
     }
 })
 const login = Vue.component("login", {
@@ -934,8 +1012,13 @@ const routes = [{
         }
     ]
 }, {
-    path: '/profile',
-    component: profile
+    path: '/myProfile',
+    component: myProfile
+}, {
+    path: '/profile/:idUser',
+    name: 'profile',
+    component: profile,
+    props: true
 }, {
     path: '/ranking',
     component: ranking
@@ -973,8 +1056,6 @@ const userStore = Pinia.defineStore('usuario', {
         }
     }
 })
-
-Vue.config.ignoredElements = [/^ion-/];
 
 // -----------------Vue App-----------------
 var app = new Vue({
