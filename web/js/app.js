@@ -498,11 +498,13 @@ const quiz = Vue.component('quiz', {
             score: 0,
             currentQuestion: 0,
             winner: 0,
+            nCorrect: 0,
         }
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
-                    <p>Your score: {{this.score}}</p><timer class="timer"></timer>
+                    <p v-show="this.gameConfig.type!='demo'">Your score: {{this.score}}</p>
+                    <timer class="timer"></timer>
                     <br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
@@ -511,7 +513,7 @@ const quiz = Vue.component('quiz', {
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='normal' || this.finished && this.gameConfig.type=='daily'" >
                         <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">Your score was:<br>7/10 in 50 seconds<br><br><br>+ {{score}} points</h2>
+                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in 50 seconds<br><br><br>+ {{score}} points</h2>
                         </div>
                         <div class="centerItems" id="divXP">
                             <div class="gridDeNiveles">
@@ -524,18 +526,18 @@ const quiz = Vue.component('quiz', {
                                 </div>
                             </div>
                             <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button>
-                            <button @click="reset">HOME</button>
+                            <button @click="finishGame">HOME</button>
                         <div class="centerItems">
                             <div class="linkButton">Your Profile</div>
                         </div>
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='demo'">
                         <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">Your score was:<br>7/10 in 50 seconds</h2>
+                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in 50 seconds</h2>
                         </div>
                         <div class="centerItems">
                             <h4>Would you like to see more? <router-link to="/register" style="text-decoration: none;">JOIN THE LEAGUE NOW!</router-link></h4>
-                            <button @click="reset">HOME</button>
+                            <button @click="finishGame">HOME</button>
                         </div>
                     </div>
                     <div v-if="this.finished && this.gameConfig.type=='challenge'">
@@ -553,7 +555,7 @@ const quiz = Vue.component('quiz', {
                             <div v-if="winner==this.challengeInfo.idChallenged">
                                 Oh, no... You've lost :(
                             </div>
-                            <button @click="reset">HOME</button>
+                            <button @click="finishGame">HOME</button>
                         </div>
                     </div>
                 </div>`,
@@ -562,6 +564,7 @@ const quiz = Vue.component('quiz', {
             console.log(this.challengeInfo);
             this.selectedAnswers[index] = respuesta;
             if (respuesta == this.quiz[index].correctAnswer) {
+                this.nCorrect++;
                 if (this.gameConfig.type == "normal" || this.gameConfig.type == "challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
@@ -601,8 +604,11 @@ const quiz = Vue.component('quiz', {
 
             }
             console.log(this.finished);
+            if (this.finished) {
+                this.saveGame();
+            }
         },
-        reset: function () {
+        saveGame: function () {
             const params = {
                 score: this.score,
                 idUser: userStore().loginInfo.id
@@ -652,11 +658,12 @@ const quiz = Vue.component('quiz', {
                 })
             }
 
-            this.finished = false;
-            this.score = 0;
-            this.currentQuestion = 0;
-            this.selectedAnswers = [];
+
             // this.$emit('reset');
+
+        },
+        finishGame() {
+            this.finished = false;
             this.$router.push({ path: '/' })
         }
     },
@@ -683,7 +690,7 @@ const card = Vue.component('card', {
         <div v-for="(respuesta,index) in question.answers">
             <button type="radio" class="respuesta" :disabled='question.done'
                 :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done, 'selected': activeButton === index ? 'notSelected' : ''}"
-                @click="checkAnswer(respuesta['text'], number);">{{respuesta['text']}}</button>
+                @click="checkAnswer(respuesta['text'], number, index);">{{respuesta['text']}}</button>
         </div>
         <div v-show="question.done">
             <b-button class="next" @click="$emit('changeQuestion')">NEXT<span class="arrow"></span></b-button>
@@ -691,33 +698,33 @@ const card = Vue.component('card', {
     </div>
 </div>`,
     methods: {
-        checkAnswer: function (respuesta, index) {
+        checkAnswer: function (respuesta, index, numResposta) {
             this.question.done = false
-            this.activeButton = index;
+            this.activeButton = numResposta;
             if (!this.question.done) {
                 this.question.done = true;
                 this.$forceUpdate();
                 this.$emit('gameStatus', respuesta, index);
             }
+            console.log("LA RESPOSTA ES : " + numResposta);
         },
     }
 })
 const answers = Vue.component('answers', {
     props: ['quizQuestions'],
-    data: function () {
-        return {
-
-        }
+    mounted() {
+        console.log(this.quizQuestions);
     },
     template: `<div>
                     <h1>QUIZ SOLUTIONS</h1>
                     <div v-for="(question, index) in quizQuestions">
-                        <h3>question.question {{index+1}}</h3>
+                        <h3>{{index+1}}. {{question.question}}</h3>
                         <ul v-for="(respuesta,num) in question.answers">
-                        
-                            <li :class="correctAnswer: respuesta['estat'], wrongAnswer: !respuesta['estat']">{{num+1}} {{respuesta['text']}}</li>
+                            <li :class="{'wrongAnswer': !respuesta['estat'], 'correctAnswer': respuesta['estat']}">{{respuesta['text']}}</li>
                         </ul>
+                        <br>
                     </div>
+                    <button><router-link to="/">Home</router-link></button>
                 </div>`
 });
 const profile = Vue.component("profile", {
