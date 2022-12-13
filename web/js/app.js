@@ -25,7 +25,7 @@ Vue.component('barra-nav', {
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret style="background-color:white">
                                 <template #button-content>
                                     <span style="font-size:20px;">{{userName}}&nbsp;</span>
-                                    <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
+                                    <b-avatar variant="info" :src="avatar"></b-avatar>
                                 </template>
                                 <b-dropdown-item href="#">
                                     <router-link :to="{path: '/profile/' + idUser}" style="text-decoration: none; color:black;">Profile</router-link> 
@@ -40,6 +40,9 @@ Vue.component('barra-nav', {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        avatar() {
+            return userStore().loginInfo.imageUrl;
         },
         userName() {
             return userStore().loginInfo.userName;
@@ -58,7 +61,7 @@ Vue.component('barra-nav', {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
-
+            this.$router.push({ path: '/' })
         },
         goHome: function () {
             this.$router.push({ path: '/' })
@@ -113,7 +116,6 @@ const ranking = Vue.component('ranking', {
                 });
         },
         userProfile: function (id) {
-
             this.idUser = this.ranking[id].idUser;
             console.log(this.idUser);
             this.$router.push({ name: 'profile', params: { idUser: this.idUser } })
@@ -705,7 +707,8 @@ const profile = Vue.component("profile", {
         return {
             user: '',
             loadedData: false,
-            infoChallenge: []
+            infoChallenge: [],
+            alert: false
         }
     },
     template: `<div>
@@ -715,7 +718,13 @@ const profile = Vue.component("profile", {
                     </div>
                     <div v-if="loadedData">
                         <div class="centerItems" id="gridPerfil">
-                            <div class="perfilAvatar">f</div>
+                            <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.user.info[0].imageUrl+')'}"></div>
+                            <div v-if="idUser==getUser">
+                                <button @click="change">Change Avatar</button>
+                                <p v-if="alert">Remember to save your changes</p>
+                                <button @click="save">SAVE</button>
+
+                            </div>
                             <div class="perfilNombre">{{this.user.info[0].name}}</div>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
                             <div class="perfilInfo">{{this.user.info[0].email}}</div>
@@ -782,6 +791,19 @@ const profile = Vue.component("profile", {
             this.infoChallenge.difficulty = this.user.historic[idGame].difficulty;
             console.log(this.infoChallenge);
             this.$router.push({ name: 'challenge', params: { infoChallenge: this.infoChallenge } })
+        },
+        change: function () {
+            let num = 0;
+            userAvatar = '';
+            this.alert = true;
+            type = ["bottts", "croodles", "micah"];
+            num = Math.floor(Math.random() * 1000000);
+            console.log("el numero random es " + num)
+            userAvatar = type[Math.floor(Math.random() * 3)];
+            console.log("el usuario és: " + userAvatar)
+            this.user.info[0].imageUrl = "https://avatars.dicebear.com/api/" + userAvatar + "/" + num + ".svg?"
+        },
+        save: function () {
 
         }
     },
@@ -853,10 +875,10 @@ const login = Vue.component("login", {
         }
     },
     methods: {
-        login: function () {
+        login: async function () {
             this.processing = true;
             try {
-                fetch("../leagueOfTrivialG2/public/api/login", {
+                await fetch("../leagueOfTrivialG2/public/api/login", {
                     method: 'POST',
                     body: JSON.stringify(this.form),
                     headers: {
@@ -913,9 +935,13 @@ const register = Vue.component("register", {
                 name: '',
                 username: '',
                 email: '',
-                password: ''
+                password: '',
+                avatar: ''
                 // password_confirmation: ''
             },
+            numRandom: 0,
+            userAvatarType: '',
+            type: ["bottts", "croodles", "micah"],
             validEmail: false,
             validName: false,
             validUserName: false,
@@ -1032,6 +1058,12 @@ const register = Vue.component("register", {
             }
         },
         send: function (event) {
+            this.numRandom = Math.floor(Math.random() * 1000000);
+            console.log("el numero random es " + this.numRandom)
+            this.userAvatarType = this.type[Math.floor(Math.random() * 3)];
+            console.log("el usuario és: " + this.userAvatarType)
+            this.form.avatar = "https://avatars.dicebear.com/api/" + this.userAvatarType + "/" + this.numRandom + ".svg?"
+
             // event.preventDefault()
             // alert(JSON.stringify(this.form))
             fetch("../leagueOfTrivialG2/public/api/store-user", {
