@@ -708,7 +708,9 @@ const profile = Vue.component("profile", {
             user: '',
             loadedData: false,
             infoChallenge: [],
-            alert: false
+            alert: false,
+            change: false,
+            message: ''
         }
     },
     template: `<div>
@@ -720,10 +722,10 @@ const profile = Vue.component("profile", {
                         <div class="centerItems" id="gridPerfil">
                             <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.user.info[0].imageUrl+')'}"></div>
                             <div v-if="idUser==getUser">
-                                <button @click="change">Change Avatar</button>
+                                <button @click="changeAvatar">Change Avatar</button>
                                 <p v-if="alert">Remember to save your changes</p>
+                                <p v-if="change">{{this.message}}</p>
                                 <button @click="save">SAVE</button>
-
                             </div>
                             <div class="perfilNombre">{{this.user.info[0].name}}</div>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
@@ -777,7 +779,6 @@ const profile = Vue.component("profile", {
             this.user = data;
             this.loadedData = true;
         });
-
     },
     methods: {
         startChallenge(idGame) {
@@ -792,10 +793,11 @@ const profile = Vue.component("profile", {
             console.log(this.infoChallenge);
             this.$router.push({ name: 'challenge', params: { infoChallenge: this.infoChallenge } })
         },
-        change: function () {
+        changeAvatar: function () {
             let num = 0;
             userAvatar = '';
             this.alert = true;
+            this.change = false;
             type = ["bottts", "croodles", "micah"];
             num = Math.floor(Math.random() * 1000000);
             console.log("el numero random es " + num)
@@ -804,7 +806,24 @@ const profile = Vue.component("profile", {
             this.user.info[0].imageUrl = "https://avatars.dicebear.com/api/" + userAvatar + "/" + num + ".svg?"
         },
         save: function () {
-
+            let form = {
+                idUser: this.idUser,
+                imageUrl: this.user.info[0].imageUrl
+            }
+            fetch(`../leagueOfTrivialG2/public/api/update-picture`, {
+                method: 'POST',
+                body: JSON.stringify(form),
+                headers: {
+                    "Content-type": "application/json;charset=UTF-8"
+                }
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.message = data;
+                    this.alert = false;
+                    this.change = true;
+                    userStore().loginInfo.imageUrl = this.user.info[0].imageUrl
+                });
         }
     },
     computed: {
