@@ -102,7 +102,7 @@ class UsersController extends Controller
     }
     public function updateProfilePic(Request $request)
     {
-        DB::update('UPDATE users set imageUrl = ' . $request->imageUrl . '  where id=' . $request->idUser . ';');
+        DB::update('UPDATE users set imageUrl = "' . $request->imageUrl . '"  where id=' . $request->idUser . ';');
         return response()->json(["OK" => "Your profile picture has been successfully updated"]);
     }
 }
