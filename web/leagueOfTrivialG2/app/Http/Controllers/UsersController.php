@@ -99,4 +99,8 @@ class UsersController extends Controller
         $xp = DB::select('SELECT SUM(rankings.puntuacio) AS xp FROM rankings WHERE idUser=' . $user . ';');
         return response()->json(['info' => $userInfo, 'historic' => $historic, 'xp' => $xp]);
     }
+    public function updateProfilePic(Request $request)
+    {
+        User::where('id', $request->idUser)->update(['imageUrl' => $request->imageUrl]);
+    }
 }
