@@ -4,7 +4,7 @@ Vue.component('barra-nav', {
                         <div class="header1_div1">
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
                                 <template #button-content>
-                                    <span class="header1_div1-element sr-only">League Of Trivial</span>
+                                    <span class="header1_div1-element sr-only"><img src="../img/logo-sm.png" width="80px"></span>
                                 </template>
                                 <b-dropdown-item @click="goHome">Home</b-dropdown-item>
                                 <b-dropdown-item>
@@ -68,6 +68,16 @@ Vue.component('barra-nav', {
 
         }
     }
+});
+Vue.component('foter', {
+    template: `<div>
+            <footer>
+                <div class="footer-copyright">
+                    <p>League Of Trivial @2022 made by: Mario Benavente, Sergi Cantero and Yolanda Moreno.</p><br>
+                    <p>All questions, categories are the work of the creators of The Trivia Api. For any question about the rights click here.</p>
+                </div>
+            </footer>
+    </div>`
 });
 const ranking = Vue.component('ranking', {
     data: function () {
@@ -216,8 +226,8 @@ const home = Vue.component('portada', {
     },
     template: `<div>
                 <barra-nav></barra-nav>
-                <div class="titulo textoCentrado">
-                    <h1>LEAGUE OF TRIVIAL</h1>
+                <div class="textoCentrado">
+                    <img src="../img/fina.gif" style="width:600px">
                 </div>
                 <div v-show="isLogged">
                     <div class="centerItems">
@@ -244,6 +254,7 @@ const home = Vue.component('portada', {
                         </button>
                     </div>
                 </div>
+                <foter></foter>
             </div>`,
 
     computed: {
@@ -284,6 +295,21 @@ const home = Vue.component('portada', {
 
 });
 const lobby = Vue.component('quiz-lobby', {
+    mounted() {
+        fetch(`https://the-trivia-api.com/api/categories`)
+            .then((response) => response.json())
+            .then((data) => {
+                this.categories.key = Object.keys(data);
+                this.categories.value = Object.values(data);
+                this.categories.value[0].splice(0, 2);
+                this.categories.value[1].splice(0, 2);
+                this.categories.value[2].splice(this.categories.value[2].length - 2, 2);
+                this.categories.value[8].splice(this.categories.value[8].length - 2, 2);
+                this.categories.value[9].splice(this.categories.value[9].length - 2, 2);
+                console.log(this.categories.value);
+            });
+
+    },
     props: {
         mode: {
             type: String,
@@ -302,6 +328,10 @@ const lobby = Vue.component('quiz-lobby', {
             playVisible: false,
             questions: {
             },
+            categories: {
+                key: "",
+                value: ""
+            }
         }
     },
     methods: {
@@ -397,9 +427,6 @@ const lobby = Vue.component('quiz-lobby', {
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
             this.checked = true;
         }
-        // resetGame: function () {
-        //     this.checked = false;
-        // }
 
     },
     template: `<div>
@@ -422,21 +449,10 @@ const lobby = Vue.component('quiz-lobby', {
                                 <label for="hard"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Hard</label>
                             </div>
                         </div>
-                        <div>
-                            Selected: {{ gameType.category }}
-                            <select v-model="gameType.category">
-                                <option disabled value="">Please select one...</option>
-                                <option value="arts_and_literature">Arts & Literature</option>
-                                <option value="film_and_tv">Film & TV</option>
-                                <option value="food_and_drink">Food & Drink</option>
-                                <option value="knowledge">General Knowledge</option>
-                                <option value="geography">Geography</option>
-                                <option value="history">History</option>
-                                <option value="music">Music</option>
-                                <option value="science">Science</option>
-                                <option value="society_and_culture">Society & Culture</option>
-                                <option value="sport_and_leisure">Sport & Leisure</option>
-                            </select>
+                        <div>Checked category: {{ gameType.category }}</div>
+                        <div class="input-container" v-for="(gameCategory,index) in categories.key">
+                            <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
+                            <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }">{{gameCategory}}</label>
                         </div>
                         <button @click="getQuiz();">Take Quiz!</button>
                     </div>
@@ -772,10 +788,10 @@ const profile = Vue.component("profile", {
                                 <div class="nivelSiguiente">Master</div>
                             </div>
                             <div class="categoriesPlayed">
-                                <div v-for="category in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }">{{category.quant}}<br>{{category.category}}</div>
+                                <div v-for="category in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{category.quant}}<br>{{category.category}}</p></div>
                             </div>
                             <div class="lastPlayed">
-                                <p>Last Played</p>
+                                <p>Last Played</p><br>
                                 <table>
                                     <tr v-for="(game,index) in user.historic">
                                         <td>{{game.date}}</td>
