@@ -31,7 +31,27 @@
     <!-- Load the following for vue-routes -->
     <script src="https://unpkg.com/vue-router@3/dist/vue-router.js"></script>
     <link rel="stylesheet" href="../css/estils.css">
+    <style>
+        ul {
+            list-style-type: none;
+        }
 
+        .correctAnswer {
+            background-color: green;
+        }
+
+        .correctAnswer:before {
+            content: '\2713';
+        }
+
+        .wrongAnswer {
+            background-color: red;
+        }
+
+        .wrongAnswer:before {
+            content: 'X';
+        }
+    </style>
     <!-- <style>
         /* USAR BEM PARA TODO */
         /* IMPORTAR TIPOGRAFIA MIKADO */
