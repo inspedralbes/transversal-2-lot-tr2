@@ -355,9 +355,23 @@ td {
     background-color: #626bb6;
     padding: 0 9%;
 }
+
+
 #gridPerfil{
     padding-top: 30px;
+    border: 1px solid;
+    width: 92%;
+    max-width: 569PX;
+    padding-bottom: 6px;
+    margin-top: 20px;
 }
+
+@media only screen and (max-width: 400px) {
+    #gridPerfil {
+        padding-top: 30px;
+    }
+}
+
 .perfilAvatar {
     background-color: whitesmoke;
     width: 103px;
@@ -396,6 +410,17 @@ td {
     padding: 5px 3px;
 }
 
+.perfilCard{
+    display: flex;
+    place-items: center;
+    justify-content: center;
+}
+
+.perfilCard [content-width]{
+    display: flex;
+    place-items: center;
+    justify-content: center;
+}
 
 
 

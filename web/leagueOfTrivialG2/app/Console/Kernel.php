@@ -9,7 +9,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
- 
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
             // DB::table('tests')->where('id', 1)->update(['cont' => $cont + 1]);
             // $data=array("difficulty"=>null,"quiz"=>$response,"category"=>null,"type"=>'daily');
             // DB::table('games')->insert($data);
-        })->everyMinute();
+        })->dailyAt('23:00');
     }
 
     /**
