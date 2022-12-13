@@ -771,7 +771,9 @@ const profile = Vue.component("profile", {
                                 <div class="nivelActual">Platinum</div>
                                 <div class="nivelSiguiente">Master</div>
                             </div>
-                            
+                            <div class="categoriesPlayed">
+                                <div v-for="category in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }">{{category.quant}}<br>{{category.category}}</div>
+                            </div>
                             <div class="lastPlayed">
                                 <p>Last Played</p>
                                 <table>
