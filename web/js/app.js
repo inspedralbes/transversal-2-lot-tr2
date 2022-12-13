@@ -523,6 +523,7 @@ const quiz = Vue.component('quiz', {
                                     400 / 750
                                 </div>
                             </div>
+                            <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button>
                             <button @click="reset">HOME</button>
                         <div class="centerItems">
                             <div class="linkButton">Your Profile</div>
@@ -701,6 +702,24 @@ const card = Vue.component('card', {
         },
     }
 })
+const answers = Vue.component('answers', {
+    props: ['quizQuestions'],
+    data: function () {
+        return {
+
+        }
+    },
+    template: `<div>
+                    <h1>QUIZ SOLUTIONS</h1>
+                    <div v-for="(question, index) in quizQuestions">
+                        <h3>question.question {{index+1}}</h3>
+                        <ul v-for="(respuesta,num) in question.answers">
+                        
+                            <li :class="correctAnswer: respuesta['estat'], wrongAnswer: !respuesta['estat']">{{num+1}} {{respuesta['text']}}</li>
+                        </ul>
+                    </div>
+                </div>`
+});
 const profile = Vue.component("profile", {
     props: ['idUser'],
     data: function () {
@@ -1137,6 +1156,11 @@ const routes = [
         path: '/profile/:idUser',
         name: 'profile',
         component: profile,
+        props: true
+    }, {
+        path: '/answers',
+        name: 'answers',
+        component: answers,
         props: true
     }, {
         path: '/ranking',
