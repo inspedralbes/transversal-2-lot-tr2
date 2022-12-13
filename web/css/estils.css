@@ -264,7 +264,6 @@ body {
 }
 
 #ranking-marco {
-    background-color: #1e2742;
     display: grid;
     place-items: center;
     grid-template-rows: repeat(3, 56px);
@@ -273,7 +272,7 @@ body {
 }
 
 #ranking-fondo {
-    background-color: #2c365a;
+    background-color: #626bb6;
     grid-area: 2 / 1 / 3 / 2;
     width: 74%;
     max-width: 74%;
@@ -291,9 +290,9 @@ body {
 th,
 td {
     text-align: center;
-    background-color: #374275;
+    background-color: #767db6;
     padding: 6px 0;
-    border: 6px solid #2c365a;
+    border: 3px solid #626bb6;
 }
 
 
@@ -302,12 +301,13 @@ td {
 }
 
 #ranking-pagina {
-    background-color: #2c365a;
+    background-color: #626bb6;
     grid-area: 3 / 1 / 4 / 2;
     font-size: smaller;
     position: relative;
-    top: 9px;
+    top: 7px;
     left: 28.5%;
+    padding: 1px 4px;
 }
 
 .colNum {
@@ -328,30 +328,30 @@ td {
     font-size: smaller;
     position: relative;
     text-align: center;
-    top: -12px;
+    top: -6px;
 }
 
 .diff1 {
     grid-area: 1 / 1 / 2 / 2;
-    background-color: #2c365a;
+    background-color: #626bb6;
     padding: 0 11%;
 }
 
 .diff2 {
     grid-area: 1 / 2 / 2 / 3;
-    background-color: #2c365a;
+    background-color: #626bb6;
     padding: 0 9%;
 }
 
 .diff3 {
     grid-area: 1 / 3 / 2 / 4;
-    background-color: #2c365a;
+    background-color: #626bb6;
     padding: 0 9%;
 }
 
 .diff4 {
     grid-area: 1 / 4 / 2 / 5;
-    background-color: #2c365a;
+    background-color: #626bb6;
     padding: 0 9%;
 }
 
@@ -365,8 +365,7 @@ td {
 }
 
 .perfilNombre {
-    margin-top: 5px;
-    /* margin-bottom: 24px; */
+    margin: 16px 0;
     font-size: 30px;
 }
 
@@ -383,10 +382,16 @@ td {
 
 .lastPlayed {
     text-align: center;
+    padding-top: 19px;
 }
 
+.profile-table{
+    margin-top: 10px;
+}
 
-
+.profile-td{
+    padding: 5px 3px;
+}
 
 
 
