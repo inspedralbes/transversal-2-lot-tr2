@@ -230,6 +230,7 @@ body {
     font-size: medium;
     text-align: center;
     padding-bottom: 4%;
+    max-width: 569px;
 }
 
 .nivelActual {
@@ -250,7 +251,7 @@ body {
     font-size: smaller;
     text-align: center;
     z-index: -2;
-
+    max-width: 443px;
 }
 
 #barra .progreso {
@@ -354,7 +355,9 @@ td {
     background-color: #626bb6;
     padding: 0 9%;
 }
-
+#gridPerfil{
+    padding-top: 30px;
+}
 .perfilAvatar {
     background-color: whitesmoke;
     width: 103px;
