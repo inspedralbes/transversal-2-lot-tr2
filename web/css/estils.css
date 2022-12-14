@@ -119,6 +119,10 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+.titulo {
+    width: 600px;
+}
+
 .header1 {
     background-color: #272d46;
     display: grid;

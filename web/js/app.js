@@ -227,7 +227,7 @@ const home = Vue.component('portada', {
     template: `<div>
                 <barra-nav></barra-nav>
                 <div class="textoCentrado">
-                    <img src="../img/fina.gif" style="width:600px">
+                    <img class="titulo" src="../img/fina.gif">
                 </div>
                 <div v-show="isLogged">
                     <div class="centerItems">
@@ -461,9 +461,11 @@ const lobby = Vue.component('quiz-lobby', {
                             </div>
                         </div>
                         <div>Checked category: {{ gameType.category }}</div>
-                        <div v-for="(gameCategory,index) in categories.key">
-                            <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
-                            <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }">{{gameCategory}}</label>
+                        <div class="input-container-categories">
+                            <div v-for="(gameCategory,index) in categories.key">
+                                <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
+                                <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }">{{gameCategory}}</label>
+                            </div>
                         </div>
                         <button @click="getQuiz();">Take Quiz!</button>
                     </div>
