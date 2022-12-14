@@ -431,7 +431,6 @@ const lobby = Vue.component('quiz-lobby', {
     },
     template: `<div>
                 <barra-nav></barra-nav>
-                MODO: {{mode}}
                 <div v-show="mode==0">
                     <div v-show="!checked">
                         <div>Checked names: {{ gameType.difficulty }}</div>
@@ -464,7 +463,8 @@ const lobby = Vue.component('quiz-lobby', {
                         <div class="input-container-categories">
                             <div v-for="(gameCategory,index) in categories.key">
                                 <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
-                                <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }">{{gameCategory}}</label>
+                                <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }"></label>
+                                {{gameCategory}}
                             </div>
                         </div>
                         <button @click="getQuiz();">Take Quiz!</button>
@@ -771,7 +771,8 @@ const profile = Vue.component("profile", {
             infoChallenge: [],
             alert: false,
             change: false,
-            message: ''
+            message: '',
+            categories: []
         }
     },
     template: `<div>
@@ -788,7 +789,7 @@ const profile = Vue.component("profile", {
                                 <p v-if="change">{{this.message}}</p>
                                 <button @click="save">SAVE</button>
                             </div>
-                            <div>{{this.user.xp[0].xp}}<span><img src="../img/rupia.png" width="10px"></span></div>
+                            <div>{{this.user.xp[0].xp}} <span><img src="../img/rupia.png" width="10px"></span></div>
                             <div class="perfilNombre">{{this.user.info[0].name}}</div>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
                             <div class="perfilInfo">{{this.user.info[0].email}}</div>
@@ -808,7 +809,7 @@ const profile = Vue.component("profile", {
                                 <div class="nivelSiguiente">Master</div>
                             </div>
                             <div class="categoriesPlayed">
-                                <div v-for="category in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{category.quant}}<br>{{category.category}}</p></div>
+                                <div v-for="category in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{category.quant}}</p></div>
                             </div>
                             <div class="lastPlayed">
                                 <p>Last Played</p><br>
@@ -903,7 +904,6 @@ const login = Vue.component("login", {
     <b-modal class="screen" id="login" title="We are happy that you are back!">
 
     <div v-show="!isLogged">
-        <div class="login__title">Login</div>
         <span>{{this.errors['error']}}</span>
 
         <div class="login__field">
@@ -915,17 +915,18 @@ const login = Vue.component("login", {
         <div class="login__field">
             <i class="login__icon bi bi-lock-fill"></i>
             <b-form-input id="input-3" class="login__input" v-model="form.password" type="password"
-                placeholder="AÑADIR CONTRASEÑA LARAVEL..." required></b-form-input>
+                placeholder="Write your password..." required></b-form-input>
         </div>
         <br>
         Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
-            <h6 style="display: inline;">Join the league now!</h6>
+            <p class="link-register"> Join the league now!</h6>
         </router-link> <br>
     </div>
     <template #modal-footer>
         <div v-show="!isLogged">
             <div v-show="!processing" class="boton">
-                <button v-b-modal.modal-close_visit class="button login__submit" @click="login">Login</button>
+
+                <button v-b-modal.modal-close_visit class="login-button" @click="login">Login</button>
             </div>
             <div v-show="processing" class="boton">
                 <button v-b-modal.modal-close_visit class="button login__submit" disabled>

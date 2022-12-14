@@ -528,7 +528,8 @@ td {
     pointer-events: none;
 }
 
-.next {
+.next,
+.login-button {
     letter-spacing: 0.3em;
     color: white;
     padding: 7% 10%;
@@ -558,16 +559,26 @@ td {
     transition: 0.5s;
 }
 
-.next:hover {
+.login-button:after {
+    font-size: 20px;
+    font-weight: bolder;
+    position: relative;
+    opacity: 0;
+    left: 12px;
+    transition: 0.5s;
+}
+
+.next:hover,
+.login-button:hover {
     /* padding-right: 24px;
     padding-left:8px; */
     color: #fff;
     background-position: 99% 50%;
 }
 
-.next:hover:after {
+.next:hover:after,
+.login:after {
     opacity: 1;
-    /* right: 50px; */
 }
 
 /* REGISTER LOGIN */
@@ -592,12 +603,6 @@ td {
     height: 100%;
 }
 
-.login__title {
-    font-size: 18px;
-    margin-left: auto;
-    color: #7875B5;
-}
-
 .login {
     width: 320px;
     padding: 30px;
@@ -613,7 +618,7 @@ td {
 .login__icon {
     position: absolute;
     top: 30px;
-    color: #7875B5;
+    color: white;
 }
 
 .login__icon--hide {
@@ -631,20 +636,32 @@ td {
     background: none;
     padding: 10px;
     padding-left: 24px;
-    font-weight: 700;
     width: 75%;
     transition: .2s;
+    color: white;
 }
 
 .login__input:active,
 .login__input:focus,
 .login__input:hover {
+    color: white;
     outline: none;
-    border-bottom-color: #6A679E;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 2px solid white;
+    background-color: #303660;
 }
 
+.link-register {
+    display: inline;
+    color: #b967dd;
+}
 
-/* AÑADIR EL BOTON DE NEXT */
+.link-register:hover {
+    transition: 0.5s;
+    color: #a24677;
+}
+
 .login__submit {
     background: #fff;
     font-size: 14px;
@@ -658,7 +675,7 @@ td {
     align-items: center;
     text-align: left;
     width: 80%;
-    color: #4C489D;
+    color: white;
     box-shadow: 0px 2px 2px #5C5696;
     cursor: pointer;
     transition: .2s;
