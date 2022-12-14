@@ -59,13 +59,13 @@
             display: grid;
             grid-template-columns: repeat(3, 3fr);
             gap: 10px;
-            margin-bottom: 5em;
+            margin-bottom: 1em;
             margin-top: 1em;
         }
 
         .categories-container {
             height: 103px;
-            max-width: 103px;
+            width: 100px;
         }
 
         .categories-container p {
@@ -76,6 +76,42 @@
         .disabled {
             background-color: #686767;
             color: #666666
+        }
+
+        .input-container-categories {
+
+            text-align: center;
+            display: grid;
+            grid-template-columns: 100px 100px 100px 100px 100px;
+            gap: 10px;
+            margin-bottom: 1em;
+            margin-top: 1em;
+        }
+
+        .input-container-categories input {
+            display: none;
+        }
+
+        .input-container-categories label {
+            position: relative;
+            font-size: 18px;
+            text-align: center;
+            height: 6rem;
+            display: block;
+            cursor: pointer;
+            border-radius: 0.8em;
+            padding: 10px;
+        }
+
+        .modal-content {
+            background-color: #303660 !important;
+        }
+
+        .close {
+            border: 0;
+            background-color: transparent;
+            font-size: 26px;
+            color: white;
         }
     </style>
 </head>
