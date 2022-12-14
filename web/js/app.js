@@ -74,7 +74,7 @@ Vue.component('foter', {
             <footer>
                 <div class="footer-copyright">
                     <p>League Of Trivial @2022 made by: Mario Benavente, Sergi Cantero and Yolanda Moreno.</p><br>
-                    <p>All questions, categories are the work of the creators of The Trivia Api. For any question about the rights click here.</p>
+                    <p>All questions and categories are the work of the creators of <em>The Trivia Api</em>. For any question about the rights click <a class="link-license" href="https://the-trivia-api.com/license/">here</a>.</p>
                 </div>
             </footer>
     </div>`
@@ -819,7 +819,7 @@ const profile = Vue.component("profile", {
                                         <td>{{game.category}}</td>
                                         <td>{{game.difficulty}}</td>
                                         <td>{{game.puntuacio}}</td>
-                                        <td v-if="idUser!=getUser"><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
+                                        <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -894,6 +894,9 @@ const profile = Vue.component("profile", {
     computed: {
         getUser() {
             return userStore().loginInfo.id;
+        },
+        isLogged() {
+            return userStore().logged;
         }
     }
 })
@@ -919,7 +922,7 @@ const login = Vue.component("login", {
         </div>
         <br>
         Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
-            <p class="link-register"> Join the league now!</h6>
+            <p class="link-register"> Join the league now!</p>
         </router-link> <br>
     </div>
     <template #modal-footer>
@@ -929,9 +932,9 @@ const login = Vue.component("login", {
                 <button v-b-modal.modal-close_visit class="login-button" @click="login">Login</button>
             </div>
             <div v-show="processing" class="boton">
-                <button v-b-modal.modal-close_visit class="button login__submit" disabled>
+            <button v-b-modal.modal-close_visit class="login-button" disabled>
                     <b-spinner small type="grow"></b-spinner>
-                    Loading . . .
+                    Loading...
                 </button>
             </div>
         </div>
@@ -1043,61 +1046,58 @@ const register = Vue.component("register", {
                             <form class="login">
                                 <div class="login__title">JOIN THE LEAGUE!</div>
                                 <!-- <span>{{this.errors['errors']}}</span> -->
-                                <div class="login__field">
-                                    <!-- <i class="login__icon bi bi-person-fill"></i> -->
-                                    <i class="login__icon bi bi-info-circle-fill"></i>
-                                    <input type="text" class="login__input" v-model="form.name" @keyup="validarName"
-                                        placeholder="Name">
-                                    <!-- <div v-if="validName && form.name.length>0" class="box">
-                                        <p style="color:green;">Correct name</p>
+                                <div class="register__form">
+                                    <div class="login__field">
+                                        <!-- <i class="login__icon bi bi-person-fill"></i> -->
+                                        <i class="login__icon bi bi-info-circle-fill"></i>
+                                        <input type="text" class="login__input" v-model="form.name" @keyup="validarName"
+                                            placeholder="Name">
+                                        <!-- <div v-if="validName && form.name.length>0" class="box">
+                                            <p style="color:green;">Correct name</p>
+                                        </div>
+                                        <div v-if="!validName && form.name.length>0" class="box">
+                                            <p style="color:red;">Incorrect name. Must contain at least 3 characters</p>
+                                        </div> -->
                                     </div>
-                                    <div v-if="!validName && form.name.length>0" class="box">
-                                        <p style="color:red;">Incorrect name. Must contain at least 3 characters</p>
-                                    </div> -->
-                                </div>
-                                <div class="login__field">
-                                    <i class="login__icon bi bi-envelope-fill"></i>
-                                    <input type="email" class="login__input" v-model="form.email" @keyup="validar"
-                                        placeholder="Email">
-                                    <!-- <div v-show="validEmail && form.email.length>0">
-                                        <p style="color:green;">Correct email</p>
+                                    <div class="login__field">
+                                        <i class="login__icon bi bi-envelope-fill"></i>
+                                        <input type="email" class="login__input" v-model="form.email" @keyup="validar"
+                                            placeholder="Email">
+                                        <!-- <div v-show="validEmail && form.email.length>0">
+                                            <p style="color:green;">Correct email</p>
+                                        </div>
+                                        <div v-show="!validEmail && form.email.length>0">
+                                            <p style="color:red;">Invalid Email </p>
+                                        </div> -->
                                     </div>
-                                    <div v-show="!validEmail && form.email.length>0">
-                                        <p style="color:red;">Invalid Email </p>
-                                    </div> -->
-                                </div>
-                                <div class="login__field">
-                                    <i class="login__icon bi bi-person-fill"></i>
-                                    <input type="text" class="login__input" v-model="form.username" @keyup="validarUserName"
-                                        placeholder="Username">
-                                    <!-- <div v-show="validUserName && form.username.length>0">
-                                        <p style="color:green;">Correct user name</p>
+                                    <div class="login__field">
+                                        <i class="login__icon bi bi-person-fill"></i>
+                                        <input type="text" class="login__input" v-model="form.username" @keyup="validarUserName"
+                                            placeholder="Username">
+                                        <!-- <div v-show="validUserName && form.username.length>0">
+                                            <p style="color:green;">Correct user name</p>
+                                        </div>
+                                        <div v-show="!validUserName && form.username.length>0">
+                                            <p style="color:red;">User name can only contain alphanumeric characters.</p>
+                                        </div> -->
                                     </div>
-                                    <div v-show="!validUserName && form.username.length>0">
-                                        <p style="color:red;">User name can only contain alphanumeric characters.</p>
-                                    </div> -->
-                                </div>
-                                <div class="login__field">
-                                    <i class="login__icon bi bi-lock-fill"></i>
-                                    <input :type="this.inputType" class="login__input" v-model="form.password" @keyup="validarPass"
-                                        placeholder="Password here">
-                                    <i class="login__icon--hide bi bi-eye" @click="hide"></i>
+                                    <div class="login__field">
+                                        <i class="login__icon bi bi-lock-fill"></i>
+                                        <input :type="this.inputType" class="login__input" v-model="form.password" @keyup="validarPass"
+                                            placeholder="Password here">
+                                        <i class="login__icon--hide bi bi-eye" @click="hide"></i>
 
-                                    <!-- <div v-show="validPass && form.password.length>0">
-                                        <p style="color:green;">Name correct</p>
+                                        <!-- <div v-show="validPass && form.password.length>0">
+                                            <p style="color:green;">Name correct</p>
+                                        </div>
+                                        <div v-show="!validPass && form.password.length>0">
+                                            <p style="color:red;">Password requires minimum eight characters, at least one letter and
+                                                one
+                                                number.</p>
+                                        </div> -->
                                     </div>
-                                    <div v-show="!validPass && form.password.length>0">
-                                        <p style="color:red;">Password requires minimum eight characters, at least one letter and
-                                            one
-                                            number.</p>
-                                    </div> -->
                                 </div>
-                                <button class="button login__submit">
-                                    <div class="input_box button">
-                                        <input class="button__text" @click="send" type="button" value="SIGN UP"></input>
-                                        <i class="button__icon bi bi-chevron-right"></i>
-                                    </div>
-                                </button>
+                                <b-button class="login-button" @click="send">Sign Up</b-button>
                             </form>
                         </div>
                     </div>
