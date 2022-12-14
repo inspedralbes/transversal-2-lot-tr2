@@ -522,12 +522,26 @@ const quiz = Vue.component('quiz', {
             currentQuestion: 0,
             winner: 0,
             nCorrect: 0,
+            counter: 150,
+            countdown:null
         }
+    },
+    created(){
+        this.countdown = setInterval(this.decrementSeconds, 1000)
+        // this.countdown = setInterval(function(){
+        //     console.log(this.counter);
+        //     this.counter--;
+        //     if(this.counter===0){
+        //         console.log("TIME OUT");
+        //         clearInterval(this.countdown);
+        //     }
+        // },1000);
+
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
                     <p v-show="this.gameConfig.type!='demo'">Your score: {{this.score}}</p>
-                    <timer class="timer"></timer>
+                    {{timeLeft}}
                     <br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
@@ -536,7 +550,7 @@ const quiz = Vue.component('quiz', {
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='normal' || this.finished && this.gameConfig.type=='daily'" >
                         <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in 50 seconds<br><br><br>+ {{score}} points</h2>
+                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds<br><br><br>+ {{score}} points</h2>
                         </div>
                         <div class="centerItems" id="divXP">
                             <div class="gridDeNiveles">
@@ -556,7 +570,7 @@ const quiz = Vue.component('quiz', {
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='demo'">
                         <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in 50 seconds</h2>
+                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds</h2>
                         </div>
                         <div class="centerItems">
                             <h4>Would you like to see more? <router-link to="/register" style="text-decoration: none;">JOIN THE LEAGUE NOW!</router-link></h4>
@@ -583,6 +597,17 @@ const quiz = Vue.component('quiz', {
                     </div>
                 </div>`,
     methods: {
+        decrementSeconds:function(){
+            if (this.counter > 0) {
+                this.counter--
+                return
+            }
+            
+            if(this.counter===0){
+                this.finished=true;
+                clearInterval(this.countdown)
+            }
+        },
         saveAnswer: function (respuesta, index) {
             console.log(this.challengeInfo);
             this.selectedAnswers[index] = respuesta;
@@ -624,6 +649,7 @@ const quiz = Vue.component('quiz', {
                     }
                 }
                 this.finished = true;
+                clearInterval(this.countdown)
 
             }
             console.log(this.finished);
@@ -681,10 +707,6 @@ const quiz = Vue.component('quiz', {
                     }
                 })
             }
-
-
-            // this.$emit('reset');
-
         },
         finishGame() {
             this.finished = false;
@@ -694,6 +716,9 @@ const quiz = Vue.component('quiz', {
     computed: {
         getUser() {
             return userStore().loginInfo.id;
+        },
+        timeLeft () {
+            return this.counter;
         }
     }
 });
