@@ -440,17 +440,28 @@ const lobby = Vue.component('quiz-lobby', {
                                 <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
                                 <label for="easy"><i class="bi bi-fire"></i><br>Easy</label>
                             </div>
-                            <div class="input-container-medium">
+                            <div v-if="getRupees>300" class="input-container-medium--active">
                                 <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
                                 <label for="medium"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Medium</label>
+                                
                             </div>
-                            <div class="input-container-hard">
+                            <div v-if="getRupees<=300" class="input-container-medium--disabled">
+                                <input type="radio" id="medium" value="medium">
+                                <label><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Medium</label>
+                                <p class="alert-message">You need minimum 300 <span><img src="../img/rupia.png" width="10px"></span></p>
+                            </div>
+                            <div v-if="getRupees>600" class="input-container-hard--active">
                                 <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
                                 <label for="hard"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Hard</label>
                             </div>
+                            <div v-if="getRupees<=600" class="input-container-hard--disabled">
+                                <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
+                                <label for="hard"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Hard</label>
+                                <p class="alert-message">You need minimum 600 <span><img src="../img/rupia.png" width="10px"></span></p>
+                            </div>
                         </div>
                         <div>Checked category: {{ gameType.category }}</div>
-                        <div class="input-container" v-for="(gameCategory,index) in categories.key">
+                        <div v-for="(gameCategory,index) in categories.key">
                             <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
                             <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }">{{gameCategory}}</label>
                         </div>
@@ -479,6 +490,11 @@ const lobby = Vue.component('quiz-lobby', {
                     </div>
                 </div>
               </div>`,
+    computed: {
+        getRupees() {
+            return userStore().loginInfo.rupees;
+        }
+    }
 });
 
 Vue.component('timer', {
@@ -638,6 +654,7 @@ const quiz = Vue.component('quiz', {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
+                userStore().loginInfo.rupees += this.score;
             }
             if (this.gameConfig.type == "daily") {
                 fetch("../leagueOfTrivialG2/public/api/store-dailyScore", {
@@ -769,6 +786,7 @@ const profile = Vue.component("profile", {
                                 <p v-if="change">{{this.message}}</p>
                                 <button @click="save">SAVE</button>
                             </div>
+                            <div>{{this.user.xp[0].xp}}<span><img src="../img/rupia.png" width="10px"></span></div>
                             <div class="perfilNombre">{{this.user.info[0].name}}</div>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
                             <div class="perfilInfo">{{this.user.info[0].email}}</div>

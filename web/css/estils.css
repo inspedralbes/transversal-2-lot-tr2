@@ -375,7 +375,7 @@ td {
 }
 
 .perfilNombre {
-    margin: 16px 0;
+    /* margin: 16px 0; */
     font-size: 30px;
 }
 
@@ -711,6 +711,12 @@ td {
     background-color: white;
 }
 
+.alert-message {
+    position: relative;
+    top: -90px;
+    text-align: center;
+}
+
 .input-container-easy label {
     border: 5px solid green;
     border-bottom: 10px solid green;
@@ -722,28 +728,41 @@ td {
     border-bottom: green;
 }
 
-.input-container-medium label {
+.input-container-medium--active label {
     border: 5px solid orange;
     border-bottom: 10px solid orange;
     color: orange;
 }
 
-.input-container-medium input:checked+label {
+.input-container-medium--active input:checked+label {
     background: linear-gradient(90deg, rgba(249, 174, 81, 1) 21%, rgba(245, 148, 20, 1) 87%);
     border-bottom: orange;
 }
 
-.input-container-hard label {
+.input-container-medium--disabled label {
+    border: 5px solid orange;
+    border-bottom: 10px solid orange;
+    color: orange;
+    opacity: 0.5;
+}
+
+.input-container-hard--active label {
     border: 5px solid red;
     border-bottom: 10px solid red;
     color: red;
 }
 
-.input-container-hard input:checked+label {
+.input-container-hard--active input:checked+label {
     background: linear-gradient(90deg, rgba(240, 118, 106, 1) 9%, rgba(218, 74, 104, 1) 89%);
     border-bottom: red;
 }
 
+.input-container-hard--disabled label {
+    border: 5px solid red;
+    border-bottom: 10px solid red;
+    color: red;
+    opacity: 0.5;
+}
 
 /***************** FOOTER ******************/
 

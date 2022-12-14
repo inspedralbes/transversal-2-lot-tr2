@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('userName');
             $table->string('email')->unique();
             $table->string('status')->nullable();
+            $table->integer('rupees')->default(0);
             $table->boolean('dailyPlayed')->default(0);
             $table->string('imageUrl')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            
         });
     }
 

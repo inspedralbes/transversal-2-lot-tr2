@@ -18,6 +18,7 @@ class RankingsController extends Controller
         $ranking->idUser = $request->idUser;
         $ranking->puntuacio = $request->score;
         $ranking->save();
+        DB::update('UPDATE users set rupees = rupees +' . $request->score . '  where id=' . $request->idUser . ';');
     }
     public function index()
     {
