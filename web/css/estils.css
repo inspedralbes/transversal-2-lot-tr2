@@ -621,8 +621,7 @@ td {
 }
 
 .login__icon--hide {
-    /* margin-left: -2vw; */
-    right: 50px;
+    right: 15px;
     top: 30px;
     color: white;
     cursor: pointer;
@@ -635,8 +634,8 @@ td {
     background: none;
     padding: 10px;
     padding-left: 24px;
-    width: 75%;
-    transition: .2s;
+    width: 100%;
+    /* transition: .2s; */
     color: white;
 }
 
