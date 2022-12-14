@@ -244,29 +244,16 @@ const home = Vue.component('portada', {
                 <div class="textoCentrado">
                     <img class="titulo" src="../img/fina.gif">
                 </div>
-                <div v-show="isLogged">
-                    <div class="centerItems">
-                        <button class="linkButton">
-                            <router-link to="/game/0" style="text-decoration: none;">
-                                Random Quiz
-                            </router-link>
-                        </button>
+                <div class="portada-principal" v-show="isLogged">
+                    <div class="centerItems_portada">
+                        <router-link class="linkButton_normal linkButton" to="/game/0">Random Quiz</router-link>
                         <br>
-                        <button class="linkButton" v-show="!dailyIsPlayed">
-                            <router-link to="/game/1" style="text-decoration: none;">
-                                Daily Quiz
-                            </router-link>
-                            
-                        </button>
+                        <router-link v-show="!dailyIsPlayed" class="linkButton_daily linkButton"to="/game/1">Daily Quiz</router-link>
                     </div>
                 </div>
-                <div v-show="!isLogged">
+                <div class="portada-demo" v-show="!isLogged">
                     <div class="centerItems">
-                        <button class="linkButton">
-                            <router-link to="/game/2" style="text-decoration: none;">
-                                Play Demo
-                            </router-link>
-                        </button>
+                        <router-link class="linkButton_demo linkButton" to="/game/2">Play Demo</router-link>
                     </div>
                 </div>
                 <foter></foter>
@@ -323,6 +310,42 @@ const lobby = Vue.component('quiz-lobby', {
                 this.categories.value[9].splice(this.categories.value[9].length - 2, 2);
                 console.log(this.categories.value);
             });
+        if (this.mode == 1) {
+            fetch(` ../leagueOfTrivialG2/public/api/get-daily`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.questions = JSON.parse(data);
+                    console.log(this.questions);
+                    for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].done = false;
+                        this.questions[index].answers = [];
+                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
+                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
+                    }
+                    this.startGame();
+                });
+        }
+        if (this.mode == 2) {
+            fetch(` ../leagueOfTrivialG2/public/api/get-demo`)
+                .then((response) => response.json())
+                .then((data) => {
+                    this.questions = JSON.parse(data);
+                    console.log(this.questions);
+                    for (let index = 0; index < this.questions.length; index++) {
+                        this.questions[index].done = false;
+                        this.questions[index].answers = [];
+                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
+                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
+                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
+                    }
+                    this.startGame();
+                });
+        }
 
     },
     props: {
@@ -369,43 +392,6 @@ const lobby = Vue.component('quiz-lobby', {
                     console.log(this.questions);
                     this.startGame();
                 });
-
-        },
-        dailyQuiz: function () {
-            fetch(` ../leagueOfTrivialG2/public/api/get-daily`)
-                .then((response) => response.json())
-                .then((data) => {
-                    this.questions = JSON.parse(data);
-                    console.log(this.questions);
-                    for (let index = 0; index < this.questions.length; index++) {
-                        this.questions[index].done = false;
-                        this.questions[index].answers = [];
-                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
-                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
-                    }
-                    this.startGame();
-                });
-        },
-        demoQuiz: function () {
-            fetch(` ../leagueOfTrivialG2/public/api/get-demo`)
-                .then((response) => response.json())
-                .then((data) => {
-                    this.questions = JSON.parse(data);
-                    console.log(this.questions);
-                    for (let index = 0; index < this.questions.length; index++) {
-                        this.questions[index].done = false;
-                        this.questions[index].answers = [];
-                        this.questions[index].answers.push({ "text": this.questions[index].correctAnswer, "estat": true });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[0], "estat": false });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[1], "estat": false });
-                        this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
-                        this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
-                    }
-                    this.startGame();
-                });
         },
         startGame: function () {
             const datos = {
@@ -447,34 +433,34 @@ const lobby = Vue.component('quiz-lobby', {
     template: `<div>
                 <barra-nav></barra-nav>
                 <div v-show="mode==0">
-                    <div v-show="!checked">
-                        <div>Checked names: {{ gameType.difficulty }}</div>
+                    <div class="centerItems quiz-lobby" v-show="!checked">
+                        <div class="quiz-lobby__titulo">Choose difficulty {{ gameType.difficulty }}</div>
                         <div class="input-container">
-                            <div class="input-container-easy">
+                            <div>
                                 <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
-                                <label for="easy"><i class="bi bi-fire"></i><br>Easy</label>
+                                <label class="easy-difficulty" for="easy">Easy</label>
                             </div>
-                            <div v-if="getRupees>300" class="input-container-medium--active">
+                            <div v-if="getRupees>300">
                                 <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
-                                <label for="medium"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Medium</label>
-                                
+                                <label class="medium-difficulty" for="medium">Medium</label>
+
                             </div>
-                            <div v-if="getRupees<=300" class="input-container-medium--disabled">
+                            <div v-if="getRupees<=300">
                                 <input type="radio" id="medium" value="medium">
-                                <label><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Medium</label>
+                                <label class="medium-difficulty disabled">Medium</label>
                                 <p class="alert-message">You need minimum 300 <span><img src="../img/rupia.png" width="10px"></span></p>
                             </div>
-                            <div v-if="getRupees>600" class="input-container-hard--active">
+                            <div v-if="getRupees>600">
                                 <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
-                                <label for="hard"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Hard</label>
+                                <label class="hard-difficulty" for="hard">Hard</label>
                             </div>
-                            <div v-if="getRupees<=600" class="input-container-hard--disabled">
+                            <div v-if="getRupees<=600">
                                 <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
-                                <label for="hard"><i class="bi bi-fire"></i><i class="bi bi-fire"></i><i class="bi bi-fire"></i><br>Hard</label>
+                                <label class="hard-difficulty disabled" for="hard">Hard</label>
                                 <p class="alert-message">You need minimum 600 <span><img src="../img/rupia.png" width="10px"></span></p>
                             </div>
                         </div>
-                        <div>Checked category: {{ gameType.category }}</div>
+                        <div class="quiz-lobby__titulo">Choose category {{ gameType.category }}</div>
                         <div class="input-container-categories">
                             <div v-for="(gameCategory,index) in categories.key">
                                 <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
@@ -482,29 +468,17 @@ const lobby = Vue.component('quiz-lobby', {
                                 {{gameCategory}}
                             </div>
                         </div>
-                        <button @click="getQuiz();">Take Quiz!</button>
+                        <button class="quiz-lobby__button" @click="getQuiz();">Take Quiz!</button>
                     </div>
                     <div v-show="checked">
                         <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                     </div>
                 </div>
                 <div v-show="mode==1">
-                    <div v-show="!checked">
-                        <div>You are going to play toda's quiz, you can only do one attempt per day.</div>
-                        <button @click="dailyQuiz">PLAY DAILY</button>
-                    </div>
-                    <div v-show="checked">
-                        <quiz :quiz="questions" :gameConfig="gameType"></quiz>
-                    </div>
+                    <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                 </div>
                 <div v-show="mode==2">
-                    <div v-show="!checked">
-                        <p>You are going to play a demo.</p>
-                        <button @click="demoQuiz">PLAY DEMO</button>
-                    </div>
-                    <div v-show="checked">
-                        <quiz :quiz="questions" :gameConfig="gameType"></quiz>
-                    </div>
+                    <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                 </div>
               </div>`,
     computed: {
