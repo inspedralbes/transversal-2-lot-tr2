@@ -1,5 +1,18 @@
 var tmp = null;
 Vue.component('barra-nav', {
+    async mounted() {
+        await fetch(`../leagueOfTrivialG2/public/api/check-user`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                tmp = data;
+                if (data.userName) {
+                    store = userStore();
+                    store.setEstado(data);
+                    store.logged = true;
+                }
+            });
+    },
     template: `<div class="header1">
                         <div class="header1_div1">
                             <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
@@ -61,7 +74,9 @@ Vue.component('barra-nav', {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
-            this.$router.push({ path: '/' })
+            if (this.$router.history.current.path != '/') {
+                this.$router.push({ path: '/' })
+            }
         },
         goHome: function () {
             this.$router.push({ path: '/' })
@@ -772,13 +787,16 @@ const profile = Vue.component("profile", {
             alert: false,
             change: false,
             message: '',
-            categories: []
+            categories: [],
+            edit: false
         }
     },
     template: `<div>
                     <barra-nav></barra-nav>
                     <div v-if="idUser==getUser" class="header2" id="profile_Header">
-                        <div class="header2_div2">Edit Profile</div>
+                        <div class="header2_div2">
+                        <b-button @click="editProfile">Edit Profile</b-button>
+                        </div>
                     </div>
                     <div v-if="loadedData">
                         <div class="centerItems" id="gridPerfil">
@@ -789,7 +807,7 @@ const profile = Vue.component("profile", {
                                 <p v-if="change">{{this.message}}</p>
                                 <button @click="save">SAVE</button>
                             </div>
-                            <div>{{this.user.xp[0].xp}} <span><img src="../img/rupia.png" width="10px"></span></div>
+                            <div>{{this.user.info[0].rupees}} <span><img src="../img/rupia.png" width="10px"></span></div>
                             <div class="perfilNombre">{{this.user.info[0].name}}</div>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
                             <div class="perfilInfo">{{this.user.info[0].email}}</div>
@@ -802,7 +820,7 @@ const profile = Vue.component("profile", {
                             <br>
                             <div id="barra">
                                 <div class="progreso"></div>
-                                {{this.user.xp[0].xp}} / 750
+                                {{this.user.info[0].rupees}} / 750
                             </div>
                             <div class="gridDeNiveles">
                                 <div class="nivelActual">Platinum</div>
@@ -869,6 +887,10 @@ const profile = Vue.component("profile", {
             userAvatar = type[Math.floor(Math.random() * 3)];
             console.log("el usuario és: " + userAvatar)
             this.user.info[0].imageUrl = "https://avatars.dicebear.com/api/" + userAvatar + "/" + num + ".svg?"
+        },
+        editProfile: function () {
+            console.log("VOY A EDITAR");
+            this.edit = true;
         },
         save: function () {
             let form = {

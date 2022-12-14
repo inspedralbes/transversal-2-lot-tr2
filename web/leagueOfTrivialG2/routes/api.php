@@ -43,6 +43,8 @@ Route::post('/get-challenge', [ChallengesController::class, 'getGametoChallenge'
 Route::post('/get-userRanking', [UsersController::class, 'userInfo']);
 Route::post('/update-picture', [UsersController::class, 'updateProfilePic']);
 
+Route::get('/check-user', [UsersController::class, 'checkLogin']);
+
 
 //LOGIN
 // Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);
