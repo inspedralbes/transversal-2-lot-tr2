@@ -477,6 +477,7 @@ td {
     padding: 15px;
     padding-bottom: 0%;
     height: 621px;
+    width: 100%;
     max-width: 500px;
     max-height: 800px;
 }
