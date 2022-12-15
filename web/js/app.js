@@ -1341,5 +1341,14 @@ var app = new Vue({
     },
     methods: {
         ...Pinia.mapActions(userStore, ['setEstado'])
-    }
+    },
+
+    created() {
+        window.addEventListener('beforeunload', function (event) {
+            event.preventDefault();
+            event.returnValue = "Don't leave!";
+            return "Don't leave!";
+        });
+
+    },
 })
