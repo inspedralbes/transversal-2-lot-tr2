@@ -1146,7 +1146,7 @@ const register = Vue.component("register", {
                                             <p style="color:green;">Valid name :)</p>
                                         </div>
                                         <div v-if="!validName && form.name.length>0" class="box">
-                                            <p style="color:red;">Invalid name. Must contain at least 3 characters</p>
+                                            <p style="color:red;">Name must contain at least 3 characters.</p>
                                         </div>
                                     </div>
                                     <div class="login__field">
@@ -1168,7 +1168,7 @@ const register = Vue.component("register", {
                                             <p style="color:green;">Valid user name :)</p>
                                         </div>
                                         <div v-show="!validUserName && form.username.length>0">
-                                            <p style="color:red;">Invalid name. Can only contain alphanumeric characters.</p>
+                                            <p style="color:red;">Name can only contain alphanumeric characters.</p>
                                         </div>
                                     </div>
                                     <div class="login__field">
