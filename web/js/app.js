@@ -4,7 +4,7 @@ Vue.component('barra-nav', {
         await fetch(`../leagueOfTrivialG2/public/api/check-user`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                console.log("check user: ", data);
                 tmp2 = data;
                 if (data.userName) {
                     store = userStore();
