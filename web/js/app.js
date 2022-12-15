@@ -212,37 +212,37 @@ const challenge = Vue.component('challenge', {
                 this.gameType.difficulty = this.infoChallenge.difficulty;
                 this.gameType.category = this.infoChallenge.category;
                 this.gameType.type = "challenge";
-                this.info.idChallenged = this.infoChallenge.idChallenged;
-                this.info.idChallenger = this.infoChallenge.idChallenger;
-                this.info.idGame = this.infoChallenge.idGame;
-                this.info.initialScore = this.infoChallenge.challengedsScore;
                 console.log(this.gameType);
             })
     },
     template: `<div>
-                    <div style="color:white" v-show="!ready">
-                    <div class="centerChallenge">
-                        <div class="challenge__title">You are about to get into a challenge</div>
+                    <div v-show="!ready">
+                        <div class="centerChallenge">
+                            <div class="challenge__title">You are about to get into a challenge</div>
                             <div class="challenge">
                                 <div class="challenge__challenger">
-                                    <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.infoChallenge.challengersImage+')'}"></div>
+                                    <div class="perfilAvatar"
+                                        :style="{backgroundImage: 'url('+this.infoChallenge.challengersImage+')'}"></div>
                                     {{this.infoChallenge.challengersName}} <br>
                                     no points yet
                                 </div>
                                 VS
-                                <div class="challenge__challenged"> 
-                                    <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.infoChallenge.challengedsImage+')'}"></div>
+                                <div class="challenge__challenged">
+                                    <div class="perfilAvatar"
+                                        :style="{backgroundImage: 'url('+this.infoChallenge.challengedsImage+')'}"></div>
                                     {{this.infoChallenge.challengedsName}} <br>
                                     {{this.infoChallenge.challengedsScore}} points
                                 </div>
                             </div>
                             <div class="challenge__title">Are you sure about that?</div>
-                            <button @click="ready=true">LET'S GO</button>
-                            <button><router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">I changed my mind..</router-link></button>
+                            <button class="linkButton--small linkButton_goBack">
+                                <router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">Nevermind</router-link>
+                            </button>
+                            <button @click="ready=true" class="linkButton--small linkButton_startChallenge">Let's go</button>
                         </div>
                     </div>
                     <div v-show="ready">
-                        <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="info"></quiz>
+                        <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="infoChallenge"></quiz>
                     </div>
                 </div>`
 });
@@ -501,30 +501,6 @@ const lobby = Vue.component('quiz-lobby', {
     }
 });
 
-Vue.component('timer', {
-    data() {
-        return {
-            countDown: 150
-        }
-    },
-    template: `<div>
-                {{this.countDown}}
-                </div>`,
-    methods: {
-        countDownTimer() {
-            if (this.countDown > 0) {
-                setTimeout(() => {
-                    this.countDown -= 1
-                    this.countDownTimer()
-                }, 1000)
-            }
-        }
-    },
-    created() {
-        this.countDownTimer()
-    }
-});
-
 const quiz = Vue.component('quiz', {
     props: ['quiz', 'gameConfig', 'challengeInfo'],
     data: function () {
@@ -543,21 +519,11 @@ const quiz = Vue.component('quiz', {
     },
     created() {
         this.countdown = setInterval(this.decrementSeconds, 1000)
-        // this.countdown = setInterval(function(){
-        //     console.log(this.counter);
-        //     this.counter--;
-        //     if(this.counter===0){
-        //         console.log("TIME OUT");
-        //         clearInterval(this.countdown);
-        //     }
-        // },1000);
-
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
-                    <p v-show="this.gameConfig.type!='demo'">Your score: {{this.score}}</p>
-                    {{timeLeft}}
-                    <br>
+                        <p v-show="this.gameConfig.type!='demo'">Your score: {{this.score}}</p>
+                        {{timeLeft}}<br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
                             <p v-if="pointsUp" class="tips plustip">{{tip}}&nbsp<span><img src="../img/rupia.png" width="10px"></span></p>
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
@@ -573,13 +539,13 @@ const quiz = Vue.component('quiz', {
                                 <div class="nivelActual">Platinum</div>
                                 <div class="nivelSiguiente">Master</div>
                             </div>
-                                <div id="barra">
-                                    <div class="progreso"></div>
-                                    400 / 750
-                                </div>
+                            <div id="barra">
+                                <div class="progreso"></div>
+                                400 / 750
                             </div>
-                            <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button>
-                            <button @click="finishGame">HOME</button>
+                        </div>
+                        <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button>
+                        <button @click="finishGame" class="button-home">Home</button>
                         <div class="centerItems">
                             <div class="linkButton">Your Profile</div>
                         </div>
@@ -590,7 +556,7 @@ const quiz = Vue.component('quiz', {
                         </div>
                         <div class="centerItems">
                             <h4>Would you like to see more? <router-link to="/register" style="text-decoration: none;">JOIN THE LEAGUE NOW!</router-link></h4>
-                            <button @click="finishGame">HOME</button>
+                            <button @click="finishGame" class="button-home">Home</button>
                         </div>
                     </div>
                     <div v-if="this.finished && this.gameConfig.type=='challenge'">
@@ -599,16 +565,31 @@ const quiz = Vue.component('quiz', {
                         </div>
                         <div class="centerItems">
                             <h4>The results are ...</h4>
-                            <div v-if="winner==0">
-                                IT'S A TIE!!! 
-                            </div>
-                            <div v-if="winner==this.challengeInfo.idChallenger">
-                                CONGRATS, YOU'VE WON!! 
-                            </div>
-                            <div v-if="winner==this.challengeInfo.idChallenged">
-                                Oh, no... You've lost :(
-                            </div>
-                            <button @click="finishGame">HOME</button>
+                                <div class="centerChallenge">
+                                        <div class="challenge">
+                                            <div class="challenge__challenger">
+                                                <i v-if="winner==this.challengeInfo.idChallenger" class="bi bi-trophy-fill trophy"></i>
+                                                <div v-else class="challenge__challenger__loser"></div>
+                                                <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.challengeInfo.challengersImage+')'}"></div>
+                                                {{this.challengeInfo.challengersName}} <br>
+                                                {{score}} points
+                                            </div>
+                                            <div style="font-size: 30px">VS</div>
+                                            <div class="challenge__challenged">
+                                                <i v-if="winner==this.challengeInfo.idChallenged" class="bi bi-trophy-fill trophy"></i> 
+                                                <div v-else class="challenge__challenger__loser"></div>
+                                                <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.challengeInfo.challengedsImage+')'}"></div>
+                                                {{this.challengeInfo.challengedsName}} <br>
+                                                {{this.challengeInfo.challengedsScore}} points
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div v-show="winner==this.challengeInfo.idChallenger" class="challenge__title">Congrats, you've won <i class="bi bi-emoji-sunglasses-fill" style="color:white"></i></div>
+                                        <div v-show="winner==this.challengeInfo.idChallenged" class="challenge__title">Oh, no... You've lost <i class="bi bi-emoji-frown-fill" style="color:white"></i></div>
+                                        <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
+                                    </div>
+                                </div> 
+                            <button @click="finishGame" class="button-home">Home</button>
                         </div>
                     </div>
                 </div>`,
@@ -663,9 +644,9 @@ const quiz = Vue.component('quiz', {
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
                 if (this.gameConfig.type == "challenge") {
-                    if (this.score > this.challengeInfo.initialScore) {
+                    if (this.score > this.challengeInfo.challengedsScore) {
                         this.winner = this.challengeInfo.idChallenger;
-                    } else if (this.score < this.challengeInfo.initialScore) {
+                    } else if (this.score < this.challengeInfo.challengedsScore) {
                         this.winner = this.challengeInfo.idChallenged;
                     } else {
                         this.winner = 0;
@@ -796,7 +777,7 @@ const answers = Vue.component('answers', {
                         </ul>
                         <br>
                     </div>
-                    <button><router-link to="/">Home</router-link></button>
+                    <button class="button-home"><router-link to="/">Home</router-link></button>
                 </div>`
 });
 const profile = Vue.component("profile", {
