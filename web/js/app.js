@@ -984,6 +984,20 @@ const profile = Vue.component("profile", {
 const login = Vue.component("login", {
     // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
     props: [],
+    data: function () {
+        return {
+            //Creamos objeto para tener la informacion del usuario junta.
+            processing: false,
+            form: {
+                email: '',
+                password: ''
+            },
+            perfil: {},
+            errors: [],
+            visibility: false,
+            inputType: "password"
+        }
+    },
     template: `<div>
     <b-modal class="screen" id="login" title="We are happy that you are back!">
 
@@ -998,8 +1012,9 @@ const login = Vue.component("login", {
         </div>
         <div class="login__field">
             <i class="login__icon bi bi-lock-fill"></i>
-            <b-form-input id="input-3" class="login__input" v-model="form.password" type="password"
+            <b-form-input id="input-3" class="login__input" v-model="form.password" :type="this.inputType"
                 placeholder="Write your password..." required></b-form-input>
+                <i class="login__icon--hide bi bi-eye" @click="hide"></i>
         </div>
         <br>
         Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
@@ -1029,19 +1044,7 @@ const login = Vue.component("login", {
         </div>
     </div>
 </b-modal>
-               </div>`,
-    data: function () {
-        return {
-            //Creamos objeto para tener la informacion del usuario junta.
-            processing: false,
-            form: {
-                email: '',
-                password: ''
-            },
-            perfil: {},
-            errors: []
-        }
-    },
+    </div>`,
     methods: {
         login: async function () {
             this.processing = true;
@@ -1082,6 +1085,16 @@ const login = Vue.component("login", {
             }
 
         },
+        hide: function () {
+            console.log("click");
+            if (!this.visibility) {
+                this.inputType = "text";
+                this.visibility = true;
+            } else {
+                this.inputType = "password";
+                this.visibility = false;
+            }
+        }
     },
     computed: {
         isLogged() {
@@ -1193,7 +1206,6 @@ const register = Vue.component("register", {
             } else if (this.form.email.length > 0) {
                 this.validEmail = false;
             }
-
         },
         validarName: function () {
             //Minimum 3 characters, max 20 characters and characters a-z/A-Z
@@ -1217,7 +1229,6 @@ const register = Vue.component("register", {
             //Minimum eight characters, at least one letter and one number:
             if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.form.password)) {
                 this.validPass = true;
-
             } else if (this.form.password.length > 0) {
                 this.validPass = false;
             }
@@ -1228,7 +1239,6 @@ const register = Vue.component("register", {
             this.userAvatarType = this.type[Math.floor(Math.random() * 3)];
             console.log("el usuario és: " + this.userAvatarType)
             this.form.avatar = "https://avatars.dicebear.com/api/" + this.userAvatarType + "/" + this.numRandom + ".svg?"
-
             // event.preventDefault()
             // alert(JSON.stringify(this.form))
             fetch("../leagueOfTrivialG2/public/api/store-user", {
@@ -1302,7 +1312,6 @@ const routes = [
 const router = new VueRouter({
     routes // short for `routes: routes`
 })
-
 
 // -----------------Vue Pinia-----------------
 Vue.use(Pinia.PiniaVuePlugin);
