@@ -1,11 +1,11 @@
-var tmp = null;
+var tmp2 = null;
 Vue.component('barra-nav', {
     async mounted() {
         await fetch(`../leagueOfTrivialG2/public/api/check-user`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                tmp = data;
+                tmp2 = data;
                 if (data.userName) {
                     store = userStore();
                     store.setEstado(data);
@@ -221,12 +221,25 @@ const challenge = Vue.component('challenge', {
     },
     template: `<div>
                     <div style="color:white" v-show="!ready">
-                        YOU ARE ABOUT TO CHALLENGE {{this.infoChallenge.challengedsName}} <br>
-                        WHO GOT {{this.infoChallenge.challengedsScore}} POINTS
-
-                        ARE YOU SURE?<br>
-                        <button @click="ready=true">LET'S GO</button>
-                        <button><router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">I changed my mind..</router-link></button>
+                    <div class="centerChallenge">
+                        <div class="challenge__title">You are about to get into a challenge</div>
+                            <div class="challenge">
+                                <div class="challenge__challenger">
+                                    <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.infoChallenge.challengersImage+')'}"></div>
+                                    {{this.infoChallenge.challengersName}} <br>
+                                    no points yet
+                                </div>
+                                VS
+                                <div class="challenge__challenged"> 
+                                    <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.infoChallenge.challengedsImage+')'}"></div>
+                                    {{this.infoChallenge.challengedsName}} <br>
+                                    {{this.infoChallenge.challengedsScore}} points
+                                </div>
+                            </div>
+                            <div class="challenge__title">Are you sure about that?</div>
+                            <button @click="ready=true">LET'S GO</button>
+                            <button><router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">I changed my mind..</router-link></button>
+                        </div>
                     </div>
                     <div v-show="ready">
                         <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="info"></quiz>
@@ -926,8 +939,10 @@ const profile = Vue.component("profile", {
         startChallenge(idGame) {
             this.infoChallenge.idChallenger = userStore().loginInfo.id;
             this.infoChallenge.challengersName = userStore().loginInfo.userName;
+            this.infoChallenge.challengersImage = userStore().loginInfo.imageUrl;
             this.infoChallenge.idChallenged = this.idUser;
             this.infoChallenge.challengedsName = this.user.info[0].userName;
+            this.infoChallenge.challengedsImage = this.user.info[0].imageUrl;
             this.infoChallenge.challengedsScore = this.user.historic[idGame].puntuacio;
             this.infoChallenge.idGame = this.user.historic[idGame].idGame;
             this.infoChallenge.category = this.user.historic[idGame].category;
