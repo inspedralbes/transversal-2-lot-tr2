@@ -523,10 +523,12 @@ const quiz = Vue.component('quiz', {
             winner: 0,
             nCorrect: 0,
             counter: 150,
-            countdown:null
+            countdown: null,
+            tip: "",
+            pointsUp: false
         }
     },
-    created(){
+    created() {
         this.countdown = setInterval(this.decrementSeconds, 1000)
         // this.countdown = setInterval(function(){
         //     console.log(this.counter);
@@ -544,6 +546,7 @@ const quiz = Vue.component('quiz', {
                     {{timeLeft}}
                     <br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
+                            <p v-if="pointsUp" class="tips plustip">{{tip}}&nbsp<span><img src="../img/rupia.png" width="10px"></span></p>
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
                             <br><br>
                         </div>
@@ -597,14 +600,13 @@ const quiz = Vue.component('quiz', {
                     </div>
                 </div>`,
     methods: {
-        decrementSeconds:function(){
+        decrementSeconds: function () {
             if (this.counter > 0) {
                 this.counter--
                 return
             }
-            
-            if(this.counter===0){
-                this.finished=true;
+            if (this.counter === 0) {
+                this.finished = true;
                 clearInterval(this.countdown)
             }
         },
@@ -617,19 +619,26 @@ const quiz = Vue.component('quiz', {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
                         case "easy": this.score += 100;
+                            this.pointsUp = true;
+                            this.tip = "+100";
                             console.log("easy score: " + this.score)
                             break;
                         case "medium": this.score += 200;
-                            console.log("medium score: " + this.score)
+                            this.pointsUp = true;
+                            this.tip = "+200";
 
+                            console.log("medium score: " + this.score)
                             break;
                         case "hard": this.score += 300;
+                            this.pointsUp = true;
+                            this.tip = "+300";
                             console.log("hard score: " + this.score)
-
                             break;
                     }
                 } else if (this.gameConfig.type == "daily") {
                     this.score += 10;
+                    this.tip = "+10";
+                    this.pointsUp = true;
                 }
             } else {
                 console.log("MAL");
@@ -637,6 +646,7 @@ const quiz = Vue.component('quiz', {
         },
         changeCard: function () {
             this.currentQuestion++;
+            this.pointsUp = false;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
                 if (this.gameConfig.type == "challenge") {
@@ -717,7 +727,7 @@ const quiz = Vue.component('quiz', {
         getUser() {
             return userStore().loginInfo.id;
         },
-        timeLeft () {
+        timeLeft() {
             return this.counter;
         }
     }
@@ -787,7 +797,9 @@ const profile = Vue.component("profile", {
             change: false,
             message: '',
             categories: [],
-            edit: false
+            edit: false,
+            categoriesTag: [],
+            quant: []
         }
     },
     template: `<div>
@@ -826,7 +838,7 @@ const profile = Vue.component("profile", {
                                 <div class="nivelSiguiente">Master</div>
                             </div>
                             <div class="categoriesPlayed">
-                                <div v-for="category in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{category.quant}}</p></div>
+                                <div v-for="(category,index) in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{categoriesTag[index]}}<br>{{category.quant}}</p></div>
                             </div>
                             <div class="lastPlayed">
                                 <p>Last Played</p><br>
@@ -839,6 +851,9 @@ const profile = Vue.component("profile", {
                                         <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
                                     </tr>
                                 </table>
+                            </div>
+                            <div class="chart">
+                                <canvas id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -860,6 +875,51 @@ const profile = Vue.component("profile", {
             console.log(data)
             this.user = data;
             this.loadedData = true;
+            console.log(this.user)
+
+
+            for (let i = 0; i < this.user.quantCateg.length; i++) {
+                this.categoriesTag[i] = this.user.quantCateg[i].category
+                this.quant[i] = this.user.quantCateg[i].quant
+                switch (this.categoriesTag[i]) {
+                    case "arts_and_literature": this.categoriesTag[i] = "Arts & Literature"
+                        break;
+                    case "film_and_tv": this.categoriesTag[i] = "Film & TV"
+                        break;
+                    case "food_and_drink": this.categoriesTag[i] == "Food & Drink"
+                        break
+                    case "general_knowledge": this.categoriesTag[i] = "General Knowledge"
+                        break
+                    case "geography": this.categoriesTag[i] = "Geography"
+                        break
+                    case "history": this.categoriesTag[i] = "History"
+                        break
+                    case "music": this.categoriesTag[i] = "Music"
+                        break
+                    case "science": this.categoriesTag[i] = "Science"
+                        break
+                    case "society_and_culture": this.categoriesTag[i] = "Culture"
+                        break
+                    case "sport_and_leisure": this.categoriesTag[i] = "Sport & Leisure"
+                }
+            }
+
+            setTimeout(() => {
+                ctx = document.getElementById('myChart');
+                console.log("CHART IS: " + ctx)
+                tmp_chart = new Chart(ctx, {
+                    //tmp_chart = new Chart("#myChart", {
+                    type: 'pie',
+                    data: {
+                        labels: this.categoriesTag,
+                        datasets: [{
+                            label: 'Times played',
+                            data: this.quant,
+                            borderWidth: 3
+                        }],
+                    },
+                });
+            }, 100);
         });
     },
     methods: {
@@ -924,6 +984,20 @@ const profile = Vue.component("profile", {
 const login = Vue.component("login", {
     // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
     props: [],
+    data: function () {
+        return {
+            //Creamos objeto para tener la informacion del usuario junta.
+            processing: false,
+            form: {
+                email: '',
+                password: ''
+            },
+            perfil: {},
+            errors: [],
+            visibility: false,
+            inputType: "password"
+        }
+    },
     template: `<div>
     <b-modal class="screen" id="login" title="We are happy that you are back!">
 
@@ -938,8 +1012,9 @@ const login = Vue.component("login", {
         </div>
         <div class="login__field">
             <i class="login__icon bi bi-lock-fill"></i>
-            <b-form-input id="input-3" class="login__input" v-model="form.password" type="password"
+            <b-form-input id="input-3" class="login__input" v-model="form.password" :type="this.inputType"
                 placeholder="Write your password..." required></b-form-input>
+                <i class="login__icon--hide bi bi-eye" @click="hide"></i>
         </div>
         <br>
         Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
@@ -969,19 +1044,7 @@ const login = Vue.component("login", {
         </div>
     </div>
 </b-modal>
-               </div>`,
-    data: function () {
-        return {
-            //Creamos objeto para tener la informacion del usuario junta.
-            processing: false,
-            form: {
-                email: '',
-                password: ''
-            },
-            perfil: {},
-            errors: []
-        }
-    },
+    </div>`,
     methods: {
         login: async function () {
             this.processing = true;
@@ -1022,6 +1085,16 @@ const login = Vue.component("login", {
             }
 
         },
+        hide: function () {
+            console.log("click");
+            if (!this.visibility) {
+                this.inputType = "text";
+                this.visibility = true;
+            } else {
+                this.inputType = "password";
+                this.visibility = false;
+            }
+        }
     },
     computed: {
         isLogged() {
@@ -1133,7 +1206,6 @@ const register = Vue.component("register", {
             } else if (this.form.email.length > 0) {
                 this.validEmail = false;
             }
-
         },
         validarName: function () {
             //Minimum 3 characters, max 20 characters and characters a-z/A-Z
@@ -1157,7 +1229,6 @@ const register = Vue.component("register", {
             //Minimum eight characters, at least one letter and one number:
             if (/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.form.password)) {
                 this.validPass = true;
-
             } else if (this.form.password.length > 0) {
                 this.validPass = false;
             }
@@ -1168,7 +1239,6 @@ const register = Vue.component("register", {
             this.userAvatarType = this.type[Math.floor(Math.random() * 3)];
             console.log("el usuario és: " + this.userAvatarType)
             this.form.avatar = "https://avatars.dicebear.com/api/" + this.userAvatarType + "/" + this.numRandom + ".svg?"
-
             // event.preventDefault()
             // alert(JSON.stringify(this.form))
             fetch("../leagueOfTrivialG2/public/api/store-user", {
@@ -1242,7 +1312,6 @@ const routes = [
 const router = new VueRouter({
     routes // short for `routes: routes`
 })
-
 
 // -----------------Vue Pinia-----------------
 Vue.use(Pinia.PiniaVuePlugin);
