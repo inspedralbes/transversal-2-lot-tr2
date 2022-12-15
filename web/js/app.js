@@ -999,52 +999,49 @@ const login = Vue.component("login", {
         }
     },
     template: `<div>
-    <b-modal class="screen" id="login" title="We are happy that you are back!">
-
-    <div v-show="!isLogged">
-        <span>{{this.errors['error']}}</span>
-
-        <div class="login__field">
-            <i class="login__icon bi bi-person-fill"></i>
-            <b-form-input id="input-2" class="login__input" v-model="form.email"
-                placeholder="Write your email..." required>
-            </b-form-input>
-        </div>
-        <div class="login__field">
-            <i class="login__icon bi bi-lock-fill"></i>
-            <b-form-input id="input-3" class="login__input" v-model="form.password" :type="this.inputType"
-                placeholder="Write your password..." required></b-form-input>
-                <i class="login__icon--hide bi bi-eye" @click="hide"></i>
-        </div>
-        <br>
-        Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
-            <p class="link-register"> Join the league now!</p>
-        </router-link> <br>
-    </div>
-    <template #modal-footer>
-        <div v-show="!isLogged">
-            <div v-show="!processing" class="boton">
-
-                <button v-b-modal.modal-close_visit class="login-button" @click="login">Login</button>
-            </div>
-            <div v-show="processing" class="boton">
-            <button v-b-modal.modal-close_visit class="login-button" disabled>
-                    <b-spinner small type="grow"></b-spinner>
-                    Loading...
-                </button>
-            </div>
-        </div>
-    </template>
-    <div v-show="isLogged">
-        <div class="card container-profile">
-            <div class="card-body text-center">
-                <h5 class="my-3">Welcome!</h5>
-                <p class="text-muted mb-4">{{userName}}</p>
-            </div>
-        </div>
-    </div>
-</b-modal>
-    </div>`,
+                <b-modal class="screen" id="login" title="We are happy that you are back!">
+                <div v-show="!isLogged">
+                    <div class="login__field">
+                        <i class="login__icon bi bi-person-fill"></i>
+                        <b-form-input id="input-2" class="login__input" v-model="form.email"
+                            placeholder="Write your email..." required>
+                        </b-form-input>
+                    </div>
+                    <div class="login__field">
+                        <i class="login__icon bi bi-lock-fill"></i>
+                        <b-form-input id="input-3" class="login__input" @keyup.enter="login" v-model="form.password" :type="this.inputType"
+                            placeholder="Write your password..." required></b-form-input>
+                            <i class="login__icon--hide bi bi-eye" @click="hide"></i>
+                    </div>
+                    <span class="error_login">{{this.errors['error']}}</span><br>
+                    <br>
+                    Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
+                        <p class="link-register"> Join the league now!</p>
+                    </router-link> <br>
+                </div>
+                <template #modal-footer>
+                    <div v-show="!isLogged">
+                        <div v-show="!processing" class="boton">
+                            <button v-b-modal.modal-close_visit class="login-button" @click="login">Login</button>
+                        </div>
+                        <div v-show="processing" class="boton">
+                        <button v-b-modal.modal-close_visit class="login-button" disabled>
+                                <b-spinner small type="grow"></b-spinner>
+                                Loading...
+                            </button>
+                        </div>
+                    </div>
+                </template>
+                <div v-show="isLogged">
+                    <div class="card container-profile">
+                        <div class="card-body text-center">
+                            <h5 class="my-3">Welcome!</h5>
+                            <p class="text-muted mb-4">{{userName}}</p>
+                        </div>
+                    </div>
+                </div>
+            </b-modal>
+        </div>`,
     methods: {
         login: async function () {
             this.processing = true;
