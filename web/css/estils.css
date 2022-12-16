@@ -616,6 +616,8 @@ body {
     grid-row-gap: 0px;
 }
 
+
+
 #ranking-fondo {
     background-color: #626bb6;
     grid-area: 2 / 1 / 3 / 2;
@@ -625,6 +627,9 @@ body {
     align-items: center;
     justify-content: center;
     padding: 5px 1%;
+    position: absolute;
+    top: 107px;
+
 }
 
 #ranking-table {
@@ -767,7 +772,10 @@ td {
     justify-content: center;
 }
 
-
+#centrarPerfil{
+    display: flex;
+    justify-content: center;
+}
 
 
 
@@ -796,10 +804,7 @@ td {
     padding-top: 2%;
     padding-bottom: 28px;
     height: 155px;
-    display: flex;
     background-color: #434874;
-    align-items: center;
-    justify-content: center;
     text-align: center;
     margin: 2%;
     margin-top: 1%;
@@ -807,6 +812,9 @@ td {
     align-items: center;
     justify-content: center;
     margin-top: 48px;
+    width: 303px;
+    max-width: 360px;
+
 }
 
 #gamecard-juego {
@@ -844,9 +852,7 @@ td {
     background-color: #434874;
     color: white;
     padding: 7% 10%;
-    /* width: 229px; */
-    width: 376px;
-    max-width: 450px;
+    width: 240px;
     border: 0;
     border-radius: 0.5em;
     border-bottom: 0.25em solid #242742;
@@ -1228,32 +1234,7 @@ td {
     opacity: 1;
 }
 
-@media only screen and (max-width: 360px) {
-    .input-container {
-        padding: 10px;
-        display: flex;
-        display: grid;
-        grid-template-columns: 60px;
-        grid-template-rows: repeat(3, 60px);
-        grid-column-gap: 0px;
-        grid-row-gap: 15px;
-    }
 
-    .input-container label {
-        position: relative;
-        height: 60px;
-        width: 148px;
-        font-size: 18px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        padding: 10px;
-        border-radius: 0.5em;
-        border-bottom: 0.25em solid #242742;
-        transition: 0.1s;
-    }
-}
 
 /***************** FOOTER ******************/
 
@@ -1516,4 +1497,46 @@ ul {
 .button-home a {
     color: white;
     text-decoration: none;
+}
+
+@media only screen and (max-width: 450px) {
+    .input-container {
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 160px;
+        grid-template-rows: repeat(3, 60px);
+        grid-column-gap: 0px;
+        grid-row-gap: 17px;
+    }
+
+    .input-container label {
+        position: relative;
+        height: 60px;
+        width: 155px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 0.5em;
+        border-bottom: 0.25em solid #242742;
+        transition: 0.1s;
+        text-align: center;
+    }
+
+    .input-container-categories {
+        text-align: center;
+        display: grid;
+        grid-template-columns: 90px 90px 90px;
+        gap: 10px;
+        margin-bottom: 1em;
+        margin-top: 1em;
+    }
+    
+    .header1_div2 {
+        grid-area: 1 / 9 / 2 / 10;
+        text-align: end;
+        padding-right: 14px;
+    }
+    
 }
