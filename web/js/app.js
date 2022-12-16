@@ -110,12 +110,6 @@ const ranking = Vue.component('ranking', {
             .then(data => {
                 console.log(data)
                 this.ranking = data;
-                // for (let index = 0; index < this.ranking.length; index++) {
-                //     tmp = new Date(this.ranking[index].created_at);
-                //     this.ranking[index].date = tmp.toLocaleDateString();
-                //     this.ranking[index].hour = tmp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                // }
-                // console.log(this.ranking);
             });
     },
     methods: {
@@ -169,6 +163,7 @@ const ranking = Vue.component('ranking', {
                             </table>
                         </div>
                     </div>
+                    <foter></foter>
                 </div>`,
     computed: {
         isLogged() {
@@ -216,6 +211,7 @@ const challenge = Vue.component('challenge', {
             })
     },
     template: `<div>
+                <barra-nav></barra-nav>
                     <div v-show="!ready">
                         <div class="centerChallenge">
                             <div class="challenge__title">You are about to get into a challenge</div>
@@ -244,6 +240,7 @@ const challenge = Vue.component('challenge', {
                     <div v-show="ready">
                         <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="infoChallenge"></quiz>
                     </div>
+                    <foter></foter>
                 </div>`
 });
 const home = Vue.component('portada', {
@@ -493,6 +490,7 @@ const lobby = Vue.component('quiz-lobby', {
                 <div v-show="mode==2">
                     <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                 </div>
+                <foter></foter>
               </div>`,
     computed: {
         getRupees() {
@@ -519,6 +517,10 @@ const quiz = Vue.component('quiz', {
     },
     created() {
         this.countdown = setInterval(this.decrementSeconds, 1000)
+
+        // window.onbeforeunload = function () {
+        //     return "Don't leave!";
+        // }
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
@@ -592,6 +594,7 @@ const quiz = Vue.component('quiz', {
                             <button @click="finishGame" class="button-home">Home</button>
                         </div>
                     </div>
+                    <foter></foter>
                 </div>`,
     methods: {
         decrementSeconds: function () {
@@ -772,6 +775,7 @@ const answers = Vue.component('answers', {
         console.log(this.quizQuestions);
     },
     template: `<div>
+                <barra-nav></barra-nav>
                     <h1>QUIZ SOLUTIONS</h1>
                     <div v-for="(question, index) in quizQuestions">
                         <h3>{{index+1}}. {{question.question}}</h3>
@@ -781,6 +785,7 @@ const answers = Vue.component('answers', {
                         <br>
                     </div>
                     <button class="button-home"><router-link to="/">Home</router-link></button>
+                    <foter></foter>
                 </div>`
 });
 const profile = Vue.component("profile", {
@@ -853,29 +858,31 @@ const profile = Vue.component("profile", {
 
                             <div class="lastChallenges">
                                 <p>Last Challenges</p><br>
-                                <table>
-                                        <tr v-for="(challenge,index) in userChallenges.challengesMade">
-                                            <td>{{user.info[0].userName}}</td>
-                                            <td>{{challenge.userName}}</td>
-                                            <td>{{challenge.winner}}</td>
-                                        </tr>
-                                        
-                                        <tr v-for="(faced,index) in userChallenges.challengesFaced">
-                                            <td>{{faced.userName}}</td>
-                                            <td>{{user.info[0].userName}}</td>
-                                            <td>{{faced.winner}}</td>
-                                        </tr>
-                                </table>
+                                
+                                <div v-for="(challenge,index) in userChallenges.challengesMade">
+                                    <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
+                                    <span style="font-size:25px">VS</span>
+                                    <b-avatar variant="info" class="avatar" :src="challenge.imageUrl" :title="challenge.userName"></b-avatar>
+                                    <span v-show="challenge.winner==idUser"><img src="../img/trophy.png" class="medal"></span>
+                                    <span v-show="challenge.winner!=idUser"><img src="../img/looser.png" class="medal"></span>
+                                </div>
+                                
+                                <div v-for="(faced,index) in userChallenges.challengesFaced">
+                                    <b-avatar class="avatar" variant="info" :src="faced.imageUrl" :title="faced.userName"></b-avatar>
+                                    <span style="font-size:25px">VS</span>
+                                    <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
+                                    <span v-show="faced.winner==idUser"><img src="../img/trophy.png" class="medal"></span>
+                                    <span v-show="faced.winner!=idUser"><img src="../img/looser.png" class="medal"></span>
+                                </div>
+                                
                             </div>
                             <div class="chart">
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
+                    <foter></foter>
                 </div>`,
-    beforeUnmount() {
-
-    },
     mounted() {
         params = {
             idUser: this.idUser
@@ -952,6 +959,7 @@ const profile = Vue.component("profile", {
 
                 console.log(this.userChallenges.challengesMade.length)
                 console.log(this.userChallenges.challengesFaced.length)
+                console.log("YO SOY " + this.idUser);
                 this.loadedData = true;
 
             });
@@ -1229,6 +1237,7 @@ const register = Vue.component("register", {
                         </div>
                     </div>
                   </div>
+                  <foter></foter>
                 </div>`,
 
     methods: {
@@ -1381,15 +1390,27 @@ var app = new Vue({
         ...Pinia.mapState(userStore, ['loginInfo', 'logged'])
     },
     methods: {
-        ...Pinia.mapActions(userStore, ['setEstado'])
+        ...Pinia.mapActions(userStore, ['setEstado']),
+        logOut: function () {
+            store.logged = false;
+            store.loginInfo = {};
+            fetch("../leagueOfTrivialG2/public/api/logout", {
+                method: 'POST',
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            if (this.$router.history.current.path != '/') {
+                this.$router.push({ path: '/' })
+            }
+        }
     },
-
     created() {
-        window.addEventListener('beforeunload', function (event) {
-            event.preventDefault();
-            event.returnValue = "Don't leave!";
-            return "Don't leave!";
-        });
+        window.onbeforeunload = function () {
 
-    },
+            return "Don't leave!";
+        }
+
+    }
+
 })
