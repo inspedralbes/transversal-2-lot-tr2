@@ -21,7 +21,7 @@ Vue.component('barra-nav', {
                                 </template>
                                 <b-dropdown-item @click="goHome">Home</b-dropdown-item>
                                 <b-dropdown-item>
-                                    <router-link to="/ranking" style="text-decoration: none; color:black">
+                                    <router-link to="/ranking" class="dropdown-item_routerLink">
                                         Global Ranking
                                     </router-link>
                                 </b-dropdown-item>
@@ -41,12 +41,9 @@ Vue.component('barra-nav', {
                                     <b-avatar variant="info" :src="avatar"></b-avatar>
                                 </template>
                                 <b-dropdown-item href="#">
-                                    <router-link :to="{path: '/profile/' + idUser}" style="text-decoration: none; color:black;">Profile</router-link> 
+                                    <router-link :to="{path: '/profile/' + idUser}" class="dropdown-item_routerLink">Profile</router-link> 
                                 </b-dropdown-item>
                                 <b-dropdown-item href="#" @click="logOut" style="text-decoration: none;">Logout</b-dropdown-item>
-                                <b-dropdown-item href="#" style="text-decoration: none;">
-                                    <router-link to="/ranking" style="text-decoration: none; color:black;">My Rankings</router-link> 
-                                </b-dropdown-item>
                             </b-dropdown>
                         </div> 
                 </div>`,
@@ -155,7 +152,12 @@ const ranking = Vue.component('ranking', {
                                     <th class="colScore">SCORE</th>
                                 </tr>
                                     <tr class="ranking-cell" v-for="(score,index) in ranking" :class="score.idUser == userLogged ? 'myself' : score.idUser ">
-                                        <td>{{index+1}}</td>
+                                        <td v-if="index==0 || index==1 || index==2">
+                                            <span v-if="index==0"><img src="../img/medal0.png" class="medal"></span>
+                                            <span v-if="index==1"><img src="../img/medal1.png" class="medal"></span>
+                                            <span v-if="index==2"><img src="../img/medal2.png" class="medal"></span>
+                                        </td>
+                                        <td v-else>{{index+1}}</td>
                                         <td v-show="isLogged"><router-link :to="{path: '/profile/' + score.idUser}" style="text-decoration:none">{{score.userName}}</router-link></td>
                                         <td v-show="!isLogged">{{score.userName}}</td>
                                         <td>{{score.score}}</td>
@@ -602,8 +604,6 @@ const quiz = Vue.component('quiz', {
                                 </div> 
                             <button @click="finishGame" class="button-home">Home</button>
                         </div>
-                    </div>
-                    <foter></foter>
                 </div>`,
     methods: {
         decrementSeconds: function () {
@@ -621,6 +621,7 @@ const quiz = Vue.component('quiz', {
             this.selectedAnswers[index] = respuesta;
             if (respuesta == this.quiz[index].correctAnswer) {
                 this.nCorrect++;
+
                 if (this.gameConfig.type == "normal" || this.gameConfig.type == "challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
@@ -646,6 +647,12 @@ const quiz = Vue.component('quiz', {
                     this.tip = "+10";
                     this.pointsUp = true;
                 }
+                // else if (this.gameConfig.type == "demo") {
+                //     this.pointsUp = true;
+                //     this.tip = "+10";
+                //     console.log("demo score: " + this.score)
+
+                // }
             } else {
                 console.log("MAL");
             }
@@ -666,7 +673,6 @@ const quiz = Vue.component('quiz', {
                 }
                 this.finished = true;
                 clearInterval(this.countdown)
-
             }
             console.log(this.finished);
             if (this.finished) {
@@ -794,7 +800,6 @@ const answers = Vue.component('answers', {
                         <br>
                     </div>
                     <button class="button-home"><router-link to="/">Home</router-link></button>
-                    <foter></foter>
                 </div>`
 });
 const profile = Vue.component("profile", {
@@ -808,9 +813,8 @@ const profile = Vue.component("profile", {
             ],
             loadedData: false,
             infoChallenge: [],
-            alert: false,
-            change: false,
             message: '',
+            saved: false,
             categories: [],
             edit: false,
             categoriesTag: [],
@@ -821,27 +825,29 @@ const profile = Vue.component("profile", {
                     <barra-nav></barra-nav>
                     <div v-if="idUser==getUser" class="header2" id="profile_Header">
                         <div class="header2_div2">
-                        <b-button @click="editProfile">Edit Profile</b-button>
+                        <b-button @click="editProfile" v-show="!edit">Edit Profile</b-button>
                         </div>
                     </div>
                     <div v-if="loadedData" id="centrarPerfil">
                         <div class="centerItems" id="gridPerfil">
                             <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.user.info[0].imageUrl+')'}"></div>
-                            <div v-if="idUser==getUser">
-                                <button @click="changeAvatar">Change Avatar</button>
-                                <p v-if="alert">Remember to save your changes</p>
-                                <p v-if="change">{{this.message}}</p>
-                                <button @click="save">SAVE</button>
-                            </div>
+                                <div v-if="edit">
+                                    <button @click="changeAvatar">Change Avatar</button>
+                                </div>
                             <div>{{this.user.info[0].rupees}} <span><img src="../img/rupia.png" width="10px"></span></div>
                             <div class="perfilNombre">{{this.user.info[0].name}}</div>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
                             <div class="perfilInfo">{{this.user.info[0].email}}</div>
-                            <div v-if="this.user.info[0].status==null" class="profileStatus">
+                            <div v-if="this.user.info[0].status==null && !edit" class="profileStatus">
                                 Tell everyone something about you!
                             </div>
-                            <div v-if="this.user.info[0].status!=null" class="profileStatus">
+                            <div v-if="this.user.info[0].status!=null && !edit" class="profileStatus">
                                 "{{this.user.info[0].status}}"
+                            </div>
+                            <input v-if="edit" v-model="user.info[0].status" class="profileStatus" type="text"></input>
+                            <p v-if="saved" class="success_message">{{this.message}}</p>
+                            <div v-if="edit">
+                                <button @click="save">SAVE</button>
                             </div>
                             <br>
                             <div id="barra">
@@ -856,20 +862,20 @@ const profile = Vue.component("profile", {
                                 <div v-for="(category,index) in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{categoriesTag[index]}}<br>{{category.quant}}</p></div>
                             </div>
                             <div class="lastPlayed">
-                                <p>Last Played</p><br>
+                                <p class="profile_title">Last Played</p>
                                 <table>
                                     <tr v-for="(game,index) in user.historic">
                                         <td>{{game.date}}</td>
-                                        <td>{{game.category}}</td>
+                                        <td>{{categoriesTag[index]}}</td>
                                         <td>{{game.difficulty}}</td>
                                         <td>{{game.puntuacio}}</td>
-                                        <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" width="20px" @click="startChallenge(index)"></td>
+                                        <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" class="challenge_icon" @click="startChallenge(index)"></td>
                                     </tr>
                                 </table>
                             </div>
 
                             <div class="lastChallenges">
-                                <p>Last Challenges</p>
+                                <p class="profile_title">Last Challenges</p>
                                 <div v-for="(challenge,index) in userChallenges.challengesMade">
                                     <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
                                     <span style="font-size:20px">VS</span>
@@ -888,6 +894,7 @@ const profile = Vue.component("profile", {
                                 
                             </div>
                             <div class="chart">
+                                <p class="profile_title">Your Statistics</p>
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
@@ -952,8 +959,21 @@ const profile = Vue.component("profile", {
                             borderWidth: 3
                         }],
                     },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: true,
+                                align: 'start',
+                                labels: {
+                                    color: 'rgb(255,255,255)',
+                                    padding: 20,
+                                    boxWidth: 12
+                                }
+                            }
+                        }
+                    }
                 });
-            }, 50);
+            }, 100);
         });
         setTimeout(() => {
             fetch("../leagueOfTrivialG2/public/api/get-userChallenges", {
@@ -994,8 +1014,7 @@ const profile = Vue.component("profile", {
         changeAvatar: function () {
             let num = 0;
             userAvatar = '';
-            this.alert = true;
-            this.change = false;
+            this.changeImg = true;
             type = ["bottts", "croodles", "micah"];
             num = Math.floor(Math.random() * 1000000);
             console.log("el numero random es " + num)
@@ -1010,7 +1029,8 @@ const profile = Vue.component("profile", {
         save: function () {
             let form = {
                 idUser: this.idUser,
-                imageUrl: this.user.info[0].imageUrl
+                imageUrl: this.user.info[0].imageUrl,
+                status: this.user.info[0].status
             }
             fetch(`../leagueOfTrivialG2/public/api/update-picture`, {
                 method: 'POST',
@@ -1021,9 +1041,9 @@ const profile = Vue.component("profile", {
             }).then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    this.message = data;
-                    this.alert = false;
-                    this.change = true;
+                    this.message = "Your changes have been successfuly updated";
+                    this.saved = true;
+                    this.edit = false;
                     userStore().loginInfo.imageUrl = this.user.info[0].imageUrl
                 });
         }
@@ -1069,7 +1089,7 @@ const login = Vue.component("login", {
                             placeholder="Write your password..." required></b-form-input>
                             <i class="login__icon--hide bi bi-eye" @click="hide"></i>
                     </div>
-                    <span class="error_login">{{this.errors['error']}}</span><br>
+                    <span class="error_message">{{this.errors['error']}}</span><br>
                     <br>
                     Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
                         <p class="link-register"> Join the league now!</p>
@@ -1180,9 +1200,10 @@ const register = Vue.component("register", {
             validName: false,
             validUserName: false,
             validPass: false,
-            errors: [],
+            result: [],
             visibility: false,
-            inputType: "password"
+            inputType: "password",
+            errorMessage: ''
         }
     },
     template: `<div>
@@ -1192,17 +1213,16 @@ const register = Vue.component("register", {
                         <div class="screen__content">
                             <form class="login" @keyup.enter="send">
                                 <div class="login__title">JOIN THE LEAGUE!</div>
-                                <span>{{this.errors['errors']}}</span>
                                 <div class="register__form">
                                     <div class="login__field">
                                         <i class="login__icon bi bi-info-circle-fill"></i>
                                         <input type="text" class="login__input" v-model="form.name" @keyup="validarName"
                                             placeholder="Name">
                                         <div v-if="validName && form.name.length>0" class="box">
-                                            <p style="color:green;">Valid name :)</p>
+                                            <p class="success_message">Valid name :)</p>
                                         </div>
                                         <div v-if="!validName && form.name.length>0" class="box">
-                                            <p style="color:red;">Name must contain at least 3 characters.</p>
+                                            <p class="error_message">Name must contain at least 3 characters.</p>
                                         </div>
                                     </div>
                                     <div class="login__field">
@@ -1210,10 +1230,10 @@ const register = Vue.component("register", {
                                         <input type="email" class="login__input" v-model="form.email" @keyup="validar"
                                             placeholder="Email">
                                         <div v-show="validEmail && form.email.length>0">
-                                            <p style="color:green;">Valid email :)</p>
+                                            <p class="success_message">Valid email :)</p>
                                         </div>
                                         <div v-show="!validEmail && form.email.length>0">
-                                            <p style="color:red;">Invalid Email :(</p>
+                                            <p class="error_message">Invalid Email :(</p>
                                         </div>
                                     </div>
                                     <div class="login__field">
@@ -1221,10 +1241,10 @@ const register = Vue.component("register", {
                                         <input type="text" class="login__input" v-model="form.username" @keyup="validarUserName"
                                             placeholder="Username">
                                         <div v-show="validUserName && form.username.length>0">
-                                            <p style="color:green;">Valid user name :)</p>
+                                            <p class="success_message">Valid user name :)</p>
                                         </div>
                                         <div v-show="!validUserName && form.username.length>0">
-                                            <p style="color:red;">Name can only contain alphanumeric characters.</p>
+                                            <p class="error_message">Name can only contain alphanumeric characters.</p>
                                         </div>
                                     </div>
                                     <div class="login__field">
@@ -1234,16 +1254,17 @@ const register = Vue.component("register", {
                                         <i class="login__icon--hide bi bi-eye" @click="hide"></i>
 
                                         <div v-show="validPass && form.password.length>0">
-                                            <p style="color:green;">Valid Password :)</p>
+                                            <p class="success_message">Valid Password :)</p>
                                         </div>
                                         <div v-show="!validPass && form.password.length>0">
-                                            <p style="color:red;">Password requires minimum eight characters, at least one letter and
+                                            <p class="error_message">Password requires minimum eight characters, at least one letter and
                                                 one
                                                 number.</p>
                                         </div>
                                     </div>
+                                    <span class="error_message">{{this.errorMessage}}</span>
                                 </div>
-                                <b-button class="login-button" @click="send">Sign Up</b-button>
+                                <b-button v-if="this.validEmail && this.validName && this.validUserName && this.validPass" class="login-button" @click="send">Sign Up</b-button>
                             </form>
                         </div>
                     </div>
@@ -1302,10 +1323,15 @@ const register = Vue.component("register", {
                 }
             }).then(response => response.json())
                 .then(data => {
-                    console.log(data)
-                    this.errors = data;
-                    if (this.errors['name']) {
+
+                    this.result = data;
+
+                    // this.errors = Object.values(this.errors)
+                    console.log(this.errors)
+                    if (this.result['name']) {
                         this.$router.push({ path: '/' });
+                    } else {
+                        this.errorMessage = "Email or username is already taken."
                     }
                 });
         },
