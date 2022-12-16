@@ -73,4 +73,11 @@ class ChallengesController extends Controller
 
         return response()->json($game);
     }
+    public function userChallenges(Request $request)
+    {
+        $challengesMade = DB::select('SELECT * FROM `challenges` JOIN users ON users.id=challenges.idChallenged WHERE challenges.idChallenger=' . $request->idUser . ';');
+        $challengesFaced = DB::select('SELECT * FROM `challenges` JOIN users ON users.id=challenges.idChallenger WHERE challenges.idChallenged=' . $request->idUser . ';');
+
+        return response()->json(['challengesMade' => $challengesMade, 'challengesFaced' => $challengesFaced]);
+    }
 }

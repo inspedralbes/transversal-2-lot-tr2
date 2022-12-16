@@ -40,6 +40,8 @@ Route::get('/get-demo', [GamesController::class, 'getDemo']);
 Route::get('/get-rankings', [RankingsController::class, 'index']);
 Route::get('/get-dailyRankings', [RankingsController::class, 'dailyRanking']);
 Route::post('/get-challenge', [ChallengesController::class, 'getGametoChallenge']);
+Route::post('/get-userChallenges', [ChallengesController::class, 'userChallenges']);
+
 Route::post('/get-userRanking', [UsersController::class, 'userInfo']);
 Route::post('/update-picture', [UsersController::class, 'updateProfilePic']);
 
