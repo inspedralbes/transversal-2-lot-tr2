@@ -785,6 +785,7 @@ const profile = Vue.component("profile", {
     data: function () {
         return {
             user: '',
+            userChallenges: '',
             loadedData: false,
             infoChallenge: [],
             alert: false,
@@ -846,12 +847,32 @@ const profile = Vue.component("profile", {
                                     </tr>
                                 </table>
                             </div>
+
+                            <div class="lastChallenges">
+                                <p>Last Challenges</p><br>
+                                <table>
+                                        <tr v-for="(challenge,index) in userChallenges.challengesMade">
+                                            <td>{{user.info[0].userName}}</td>
+                                            <td>{{challenge.userName}}</td>
+                                            <td>{{challenge.winner}}</td>
+                                        </tr>
+                                        
+                                        <tr v-for="(faced,index) in userChallenges.challengesFaced">
+                                            <td>{{faced.userName}}</td>
+                                            <td>{{user.info[0].userName}}</td>
+                                            <td>{{faced.winner}}</td>
+                                        </tr>
+                                </table>
+                            </div>
                             <div class="chart">
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>`,
+    beforeUnmount() {
+
+    },
     mounted() {
         params = {
             idUser: this.idUser
@@ -868,9 +889,7 @@ const profile = Vue.component("profile", {
         }).then(data => {
             console.log(data)
             this.user = data;
-            this.loadedData = true;
             console.log(this.user)
-
 
             for (let i = 0; i < this.user.quantCateg.length; i++) {
                 this.categoriesTag[i] = this.user.quantCateg[i].category
@@ -913,8 +932,27 @@ const profile = Vue.component("profile", {
                         }],
                     },
                 });
-            }, 100);
+            }, 50);
         });
+        setTimeout(() => {
+            fetch("../leagueOfTrivialG2/public/api/get-userChallenges", {
+                method: 'POST',
+                body: JSON.stringify(params),
+                headers: {
+                    "Content-type": "application/json;charset=UTF-8"
+                }
+            }).then(response => {
+                return response.json()
+            }).then(data => {
+                console.log(data)
+                this.userChallenges = data;
+
+                console.log(this.userChallenges.challengesMade.length)
+                console.log(this.userChallenges.challengesFaced.length)
+                this.loadedData = true;
+
+            });
+        }, 10);
     },
     methods: {
         startChallenge(idGame) {
