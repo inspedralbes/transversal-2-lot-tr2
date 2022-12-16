@@ -154,9 +154,9 @@ const ranking = Vue.component('ranking', {
                                     <th class="colName">USER</th>
                                     <th class="colScore">SCORE</th>
                                 </tr>
-                                    <tr class="ranking-cell" v-for="(score,index) in ranking">
+                                    <tr class="ranking-cell" v-for="(score,index) in ranking" :class="score.idUser == userLogged ? 'myself' : score.idUser ">
                                         <td>{{index+1}}</td>
-                                        <td v-show="isLogged"><router-link :to="{path: '/profile/' + score.idUser}">{{score.userName}}</router-link></td>
+                                        <td v-show="isLogged"><router-link :to="{path: '/profile/' + score.idUser}" style="text-decoration:none">{{score.userName}}</router-link></td>
                                         <td v-show="!isLogged">{{score.userName}}</td>
                                         <td>{{score.score}}</td>
                                     </tr>
@@ -168,6 +168,15 @@ const ranking = Vue.component('ranking', {
     computed: {
         isLogged() {
             return userStore().logged;
+        },
+        userLogged() {
+            return userStore().loginInfo.idUser;
+        },
+        classObject: function () {
+            return {
+                active: this.isActive && !this.error,
+                'text-danger': this.error && this.error.type === 'fatal'
+            }
         }
     }
 });
@@ -792,8 +801,11 @@ const profile = Vue.component("profile", {
     props: ['idUser'],
     data: function () {
         return {
-            user: '',
-            userChallenges: '',
+            user: { "info": [{ "name": "", "userName": "", "imageUrl": "https://avatars.dicebear.com/api/croodles/611347.svg?", "email": "", "status": null, "rupees": 0 }], "historic": [{ "puntuacio": 0, "idUser": 0, "idGame": 0, "date": "", "difficulty": "", "category": "" }], "quantCateg": [{ "quant": 0, "category": "" }] },
+            userChallenges: [
+                challengesMade = {},
+                challengesFaced = {},
+            ],
             loadedData: false,
             infoChallenge: [],
             alert: false,
@@ -812,7 +824,7 @@ const profile = Vue.component("profile", {
                         <b-button @click="editProfile">Edit Profile</b-button>
                         </div>
                     </div>
-                    <div v-if="loadedData">
+                    <div v-if="loadedData" id="centrarPerfil">
                         <div class="centerItems" id="gridPerfil">
                             <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.user.info[0].imageUrl+')'}"></div>
                             <div v-if="idUser==getUser">
@@ -857,11 +869,10 @@ const profile = Vue.component("profile", {
                             </div>
 
                             <div class="lastChallenges">
-                                <p>Last Challenges</p><br>
-                                
+                                <p>Last Challenges</p>
                                 <div v-for="(challenge,index) in userChallenges.challengesMade">
                                     <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
-                                    <span style="font-size:25px">VS</span>
+                                    <span style="font-size:20px">VS</span>
                                     <b-avatar variant="info" class="avatar" :src="challenge.imageUrl" :title="challenge.userName"></b-avatar>
                                     <span v-show="challenge.winner==idUser"><img src="../img/trophy.png" class="medal"></span>
                                     <span v-show="challenge.winner!=idUser"><img src="../img/looser.png" class="medal"></span>
@@ -869,7 +880,7 @@ const profile = Vue.component("profile", {
                                 
                                 <div v-for="(faced,index) in userChallenges.challengesFaced">
                                     <b-avatar class="avatar" variant="info" :src="faced.imageUrl" :title="faced.userName"></b-avatar>
-                                    <span style="font-size:25px">VS</span>
+                                    <span style="font-size:20px">VS</span>
                                     <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
                                     <span v-show="faced.winner==idUser"><img src="../img/trophy.png" class="medal"></span>
                                     <span v-show="faced.winner!=idUser"><img src="../img/looser.png" class="medal"></span>
