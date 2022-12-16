@@ -716,6 +716,14 @@ td {
     }
 }
 
+.avatar {
+    background-color: white !important;
+}
+
+.medal {
+    width: 20px;
+}
+
 .perfilAvatar {
     background-color: whitesmoke;
     width: 103px;
