@@ -874,8 +874,31 @@ td {
     pointer-events: none;
 }
 
-.next,
-.login-button {
+.login-button{
+    letter-spacing: 0.3em;
+    color: white;
+    padding: 8% 0%;
+    padding-right: 3px;
+    padding-left: 10px;
+    width: 83%;
+    max-width: 200px;
+    transition: all 0.7s ease-out;
+    background: linear-gradient(270deg, rgba(188, 107, 234, 1) 0%, rgba(165, 70, 118, 1) 28%, rgba(76, 82, 134, 1) 62%, rgba(76, 82, 134, 1) 92%);
+    background-position: 1% 50%;
+    background-size: 300% 300%;
+    text-decoration: none;
+    margin-left: 17px;
+    border: 0;
+    border-radius: 0.5em;
+    border-bottom: 0.25em solid #242742;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+    text-align: center;
+}
+
+.next {
     letter-spacing: 0.3em;
     color: white;
     padding: 7% 10%;
@@ -895,9 +918,6 @@ td {
     position: relative;
     transition: 0.5s;
     text-align: center;
-}
-
-.next {
     position: relative;
     top: 82px;
 }
@@ -1165,6 +1185,33 @@ td {
 
 .quiz-lobby__button:hover:after {
     opacity: 1;
+}
+
+@media only screen and (max-width: 360px) {
+    .input-container {
+        padding: 10px;
+        display: flex;
+        display: grid;
+        grid-template-columns: 60px;
+        grid-template-rows: repeat(3, 60px);
+        grid-column-gap: 0px;
+        grid-row-gap: 15px;
+    }
+
+    .input-container label {
+        position: relative;
+        height: 60px;
+        width: 148px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 0.5em;
+        border-bottom: 0.25em solid #242742;
+        transition: 0.1s;
+    }
 }
 
 /***************** FOOTER ******************/
