@@ -824,6 +824,13 @@ td {
     place-items: center;
     padding-top: 23px;
     padding-bottom: 7px;
+    animation-duration: 0.5s;
+    animation-delay: 0.1s;
+    animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
+    animation-fill-mode: backwards;
+    animation-name: animate-flip;
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
 
 #gamecard-respuestas {
@@ -846,6 +853,10 @@ td {
     -moz-transition: 0.1s;
     -webkit-transition: 0.1s;
     transition: 0.1s;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
+    animation-fill-mode: backwards;
+    animation-name: animate-pop;
 }
 
 .respuesta:hover {
@@ -920,6 +931,11 @@ td {
     text-align: center;
     position: relative;
     top: 82px;
+    animation-duration: 0.2s;
+    animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
+    animation-fill-mode: backwards;
+    animation-name: animate-pop;
+    animation-delay: 0.1s;
 }
 
 .next:after {
@@ -952,6 +968,31 @@ td {
 .next:hover:after,
 .login:after {
     opacity: 1;
+}
+
+@keyframes animate-pop {
+    0% {
+        opacity: 0;
+        transform: scale(0.5, 0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+
+@keyframes animate-flip {
+    0% {
+        opacity: 0;
+        transform: rotateX(-120deg) scale(0.9, 0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotateX(0deg) scale(1, 1);
+    }
 }
 
 /* REGISTER LOGIN */
@@ -1240,4 +1281,239 @@ footer li {
 
 .footer-copyright p {
     margin-bottom: 0px;
+}
+
+
+ul {
+    list-style-type: none;
+}
+
+.correctAnswer {
+    background-color: green;
+}
+
+.correctAnswer:before {
+    content: '\2713';
+}
+
+.wrongAnswer {
+    background-color: red;
+}
+
+.wrongAnswer:before {
+    content: 'X';
+}
+
+.categoriesPlayed {
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(3, 3fr);
+    gap: 10px;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.categories-container {
+    height: 103px;
+    width: 100px;
+}
+
+.categories-container p {
+    position: relative;
+    top: 90%;
+}
+
+.disabled {
+    background-color: #686767;
+    color: #666666
+}
+
+.input-container-categories {
+
+    text-align: center;
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px 100px;
+    gap: 10px;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.input-container-categories input {
+    display: none;
+}
+
+.input-container-categories label {
+    position: relative;
+    font-size: 18px;
+    text-align: center;
+    height: 6rem;
+    display: block;
+    cursor: pointer;
+    border-radius: 0.8em;
+    padding: 10px;
+}
+
+.modal-content {
+    background-color: #303660 !important;
+}
+
+.close {
+    border: 0;
+    background-color: transparent;
+    font-size: 26px;
+    color: white;
+}
+
+.link-license {
+    display: inline;
+    color: #b967dd;
+}
+
+.link-license:hover {
+    transition: 0.5s;
+    color: #a24677;
+}
+
+.register__form {
+    margin-bottom: 2em;
+}
+
+.login__title {
+    margin-top: 0;
+}
+
+.challenge {
+    display: grid;
+    grid-template-columns: 100px 150px 100px;
+    text-align: center;
+    place-items: center;
+    margin-top: 6%;
+    margin-bottom: 6%;
+}
+
+.challenge__title {
+    font-size: 28px;
+}
+
+.linkButton_startChallenge {
+    color: white;
+    background: linear-gradient(90deg, rgba(139, 194, 93, 1) 21%, rgba(96, 172, 50, 1) 87%);
+}
+
+.linkButton_goBack {
+    background: linear-gradient(90deg, rgba(255, 67, 10, 1) 0%, rgba(241, 40, 88, 0.9948354341736695) 100%);
+    margin-right: 20px;
+}
+
+.linkButton_goBack a {
+    color: white;
+    text-decoration: none;
+}
+
+.linkButton_startChallenge:hover {
+    /* background: linear-gradient(90deg, rgb(156, 196, 124) 21%, rgb(114, 172, 78) 87%); */
+    border-bottom-width: 0;
+    top: 0.2em;
+}
+
+.linkButton_goBack:hover {
+    /* background: linear-gradient(90deg, rgb(255, 90, 40) 0%, rgba(241, 75, 114, 0.995) 100%); */
+    border-bottom-width: 0;
+    top: 0.2em;
+}
+
+.linkButton--small {
+    /* box-shadow: rgba(0, 0, 0, 0.288) 0px 6px 3px, rgba(0, 0, 0, 0.24) 0px 3px 2px; */
+    padding: 10px;
+    margin-top: 0.2em;
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+    top: 0;
+    transition: all 0.1s ease;
+    text-align: center;
+    border: 0;
+    border-radius: 0.5em;
+    width: 135px;
+    border-bottom: 0.25em solid #242742;
+
+}
+
+.challenge__challenger__loser {
+    margin-top: 50px;
+}
+
+.trophy {
+    color: white;
+    display: inline-block;
+    font-size: 30px;
+    animation: shake 3.2s linear infinite;
+}
+
+@keyframes shake {
+    0% {
+        transform: scale(1)
+    }
+
+    5.55556% {
+        transform: scale(.9) rotate(-8deg)
+    }
+
+    11.11111% {
+        transform: scale(.9) rotate(-8deg)
+    }
+
+    16.66667% {
+        transform: scale(1.3) rotate(8deg)
+    }
+
+    22.22222% {
+        transform: scale(1.3) rotate(-8deg)
+    }
+
+    27.77778% {
+        transform: scale(1.3) rotate(8deg)
+    }
+
+    33.33333% {
+        transform: scale(1.3) rotate(-8deg)
+    }
+
+    38.88889% {
+        transform: scale(1.3) rotate(8deg)
+    }
+
+    44.44444% {
+        transform: scale(1) rotate(0)
+    }
+
+    100% {
+        transform: scale(1) rotate(0)
+    }
+}
+
+.button-home {
+    background-color: #434874;
+    color: white;
+    width: 100px;
+    padding: 10px;
+    height: 50px;
+    border: 0;
+    border-radius: 0.5em;
+    border-bottom: 0.25em solid #242742;
+
+    position: relative;
+    top: 0;
+    transition: all 0.1s ease;
+}
+
+.button-home:hover {
+    background-color: #4c5286;
+    border-bottom-width: 0;
+    top: 0.2em
+}
+
+.button-home a {
+    color: white;
+    text-decoration: none;
 }

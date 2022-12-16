@@ -741,7 +741,7 @@ const card = Vue.component('card', {
     </div>
     <div id="gamecard-respuestas">
         <div v-for="(respuesta,index) in question.answers">
-            <button type="radio" class="respuesta" :disabled='question.done'
+            <button type="radio" class="respuesta" :style="animation(index)" :disabled='question.done'
                 :class="{'false': !respuesta['estat'] & question.done, 'correct': respuesta['estat'] & question.done, 'selected': activeButton === index ? 'notSelected' : ''}"
                 @click="checkAnswer(respuesta['text'], number, index);">{{respuesta['text']}}</button>
         </div>
@@ -761,6 +761,9 @@ const card = Vue.component('card', {
             }
             console.log("LA RESPOSTA ES : " + numResposta);
         },
+        animation: function (num) {
+            return `animation-delay: ${num * 0.2}s`;
+        }
     }
 })
 const answers = Vue.component('answers', {
