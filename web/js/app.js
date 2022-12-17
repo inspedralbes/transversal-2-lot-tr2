@@ -25,7 +25,6 @@ Vue.component('barra-nav', {
                                         Global Ranking
                                     </router-link>
                                 </b-dropdown-item>
-                                <b-dropdown-item href="#">Something else here...</b-dropdown-item>
                             </b-dropdown>                  
                         </div>
                         <div v-show="!isLogged" class="header1_div2" v-b-modal.login>
@@ -107,6 +106,7 @@ const ranking = Vue.component('ranking', {
             .then(data => {
                 console.log(data)
                 this.ranking = data;
+                console.log("El usuario es " + this.ranking[0].idUser);
             });
     },
     methods: {
@@ -141,8 +141,8 @@ const ranking = Vue.component('ranking', {
                 <barra-nav></barra-nav>
                     <div id="ranking-marco">
                         <div id="ranking-diffSelect">
-                            <div class="diff1"><button @click="globalRank">Global</button></div>
-                            <div class="diff2"><button @click="dailyRank">Daily</button></div>
+                            <div class="diff1"><a @click="globalRank">Global</a></div>
+                            <div class="diff2"><a @click="dailyRank">Daily</a></div>
                         </div>
                         <div id="ranking-fondo">
                             <table id="ranking-table">
@@ -151,14 +151,14 @@ const ranking = Vue.component('ranking', {
                                     <th class="colName">USER</th>
                                     <th class="colScore">SCORE</th>
                                 </tr>
-                                    <tr class="ranking-cell" v-for="(score,index) in ranking" :class="score.idUser == userLogged ? 'myself' : score.idUser ">
+                                    <tr class="ranking-cell" v-for="(score,index) in ranking" :class="classObject(index)">
                                         <td v-if="index==0 || index==1 || index==2">
                                             <span v-if="index==0"><img src="../img/medal0.png" class="medal"></span>
                                             <span v-if="index==1"><img src="../img/medal1.png" class="medal"></span>
                                             <span v-if="index==2"><img src="../img/medal2.png" class="medal"></span>
                                         </td>
                                         <td v-else>{{index+1}}</td>
-                                        <td v-show="isLogged"><router-link :to="{path: '/profile/' + score.idUser}" style="text-decoration:none">{{score.userName}}</router-link></td>
+                                        <td v-show="isLogged"><router-link :to="{path: '/profile/' + score.idUser}">{{score.userName}}</router-link></td>
                                         <td v-show="!isLogged">{{score.userName}}</td>
                                         <td>{{score.score}}</td>
                                     </tr>
@@ -174,10 +174,13 @@ const ranking = Vue.component('ranking', {
         userLogged() {
             return userStore().loginInfo.idUser;
         },
-        classObject: function () {
-            return {
-                active: this.isActive && !this.error,
-                'text-danger': this.error && this.error.type === 'fatal'
+        classObject() {
+            return user => {
+                console.log("EL USUARIO ES" + this.ranking[user].idUser);
+                console.log("YO SOY " + userStore().loginInfo.id);
+                return [
+                    this.ranking[user].idUser == userStore().loginInfo.id ? 'myself' : 'notMyself'
+                ]
             }
         }
     }
@@ -992,7 +995,6 @@ const profile = Vue.component("profile", {
                 console.log(this.userChallenges.challengesFaced.length)
                 console.log("YO SOY " + this.idUser);
                 this.loadedData = true;
-
             });
         }, 10);
     },
