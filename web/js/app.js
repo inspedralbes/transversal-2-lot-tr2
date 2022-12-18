@@ -676,8 +676,7 @@ const quiz = Vue.component('quiz', {
             this.pointsUp = false;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
-                // this.score *= this.timeLeft / 100
-                this.score = 0;
+                this.score *= this.timeLeft / 100
                 this.score = Math.round(this.score);
                 if (this.gameConfig.type == "challenge") {
                     if (this.score > this.challengeInfo.challengedsScore) {
