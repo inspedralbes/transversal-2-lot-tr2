@@ -615,6 +615,12 @@ body {
     line-height: 2em;
 }
 
+.textoFinChallenge {
+    padding-top: 5%;
+    text-align: center;
+    line-height: 2em;
+}
+
 #divXP {
     padding-top: 8%;
 
@@ -1653,6 +1659,12 @@ ul .correctAnswer {
     margin-top: 10%;
 }
 
+.centerChallengeResult {
+    margin: auto;
+    width: 60%;
+    text-align: center;
+}
+
 .challenge__title {
     font-size: 28px;
     margin-bottom: 1em;
@@ -1784,9 +1796,10 @@ ul .correctAnswer {
 .seeAnswers {
     background: radial-gradient(circle at 10% 20%, rgb(236, 158, 248) 0%, rgb(131, 83, 241) 90.1%);
     color: white;
-    width: 100px;
+    width: 124px;
     padding: 10px;
     height: 50px;
+    display: inline-flex;
     border: 0;
     border-radius: 0.5em;
     border-bottom: 0.25em solid #242742;
@@ -1794,6 +1807,7 @@ ul .correctAnswer {
     top: 0;
     text-decoration: none;
     transition: all 0.1s ease;
+    margin-right: 30px;
 }
 
 .seeAnswers:hover {

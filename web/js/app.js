@@ -586,11 +586,11 @@ const quiz = Vue.component('quiz', {
                     </div>
                     <div v-if="this.finished && this.gameConfig.type=='challenge'">
                         <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">You've finished the challenge!</h2>
+                            <h2 class="textoFinChallenge">You've finished the challenge!</h2>
                         </div>
                         <div class="centerItems">
                             <h4>The results are ...</h4>
-                                <div class="centerChallenge">
+                                <div class="centerChallengeResult">
                                         <div class="challenge">
                                             <div class="challenge__challenger">
                                                 <i v-if="winner==this.challengeInfo.idChallenger" class="bi bi-trophy-fill trophy"></i>
@@ -612,10 +612,10 @@ const quiz = Vue.component('quiz', {
                                         <div v-show="winner==this.challengeInfo.idChallenger" class="challenge__title">Congrats, you've won <i class="bi bi-emoji-sunglasses-fill" style="color:white"></i></div>
                                         <div v-show="winner==this.challengeInfo.idChallenged" class="challenge__title">Oh, no... You've lost <i class="bi bi-emoji-frown-fill" style="color:white"></i></div>
                                         <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
+                                        <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
+                                        <button @click="finishGame" class="button-home">Home</button>
                                     </div>
                                 </div>
-                                <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link>
-                                <button @click="finishGame" class="button-home">Home</button>
                         </div>
                         
                 </div>`,
@@ -676,7 +676,8 @@ const quiz = Vue.component('quiz', {
             this.pointsUp = false;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
-                this.score *= this.timeLeft / 100
+                // this.score *= this.timeLeft / 100
+                this.score = 0;
                 this.score = Math.round(this.score);
                 if (this.gameConfig.type == "challenge") {
                     if (this.score > this.challengeInfo.challengedsScore) {
