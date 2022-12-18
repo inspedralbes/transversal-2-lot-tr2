@@ -106,9 +106,9 @@ class UsersController extends Controller
         // $xp = DB::select('SELECT SUM(rankings.puntuacio) AS xp FROM rankings WHERE idUser=' . $user . ';');
         return response()->json(['info' => $userInfo, 'historic' => $historic, 'quantCateg' => $quantCategories]);
     }
-    public function updateProfilePic(Request $request)
+    public function updateProfile(Request $request)
     {
-        DB::update('UPDATE users set imageUrl = "' . $request->imageUrl . '", status="' . $request->status . '"  where id=' . $request->idUser . ';');
+        DB::update('UPDATE users set imageUrl = "' . $request->imageUrl . '", name="'.$request->name.'", status="' . $request->status . '"  where id=' . $request->idUser . ';');
         return response()->json(Response::HTTP_OK);
     }
     public function inGame(Request $request)

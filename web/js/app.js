@@ -290,7 +290,7 @@ const home = Vue.component('portada', {
     },
     mounted() {
         setTimeout(() => {
-            if (userStore().loginInfo.inGame != 0) {
+            if (userStore().logged && userStore().loginInfo.inGame != 0) {
                 const params = {
                     idUser: userStore().loginInfo.id
                 }
@@ -303,6 +303,8 @@ const home = Vue.component('portada', {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
+            } else {
+                console.log("ALL OK");
             }
         }, 1000);
     }
@@ -467,7 +469,7 @@ const lobby = Vue.component('quiz-lobby', {
                 <barra-nav></barra-nav>
                 <div v-show="mode==0">
                     <div class="centerItems quiz-lobby" v-show="!checked">
-                        <div class="quiz-lobby__titulo">Choose difficulty {{ gameType.difficulty }}</div>
+                        <div class="quiz-lobby__titulo">Choose difficulty</div>
                         <div class="input-container">
                             <div>
                                 <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
@@ -493,15 +495,15 @@ const lobby = Vue.component('quiz-lobby', {
                                 <p class="alert-message">You need minimum 600 <span><img src="../img/rupia.png" width="10px"></span></p>
                             </div>
                         </div>
-                        <div class="quiz-lobby__titulo">Choose category {{ gameType.category }}</div>
+                        <div class="quiz-lobby__titulo">Choose category</div>
                         <div class="input-container-categories">
-                            <div v-for="(gameCategory,index) in categories.key">
+                            <div v-for="(gameCategory,index) in categories.key" class="category">
                                 <input type="radio" :id="categories.value[index]" :value="categories.value[index].join()" v-model="gameType.category">
                                 <label :for="categories.value[index]" :style="{ 'background-image': 'url(../img/' + categories.value[index] + '.png)' }"></label>
                                 {{gameCategory}}
                             </div>
                         </div>
-                        <button class="quiz-lobby__button" @click="getQuiz();">Take Quiz!</button>
+                        <button v-show="gameType.category && gameType.difficulty" class="quiz-lobby__button" @click="getQuiz();">Take Quiz!</button>
                     </div>
                     <div v-show="checked">
                         <quiz :quiz="questions" :gameConfig="gameType"></quiz>
@@ -513,7 +515,6 @@ const lobby = Vue.component('quiz-lobby', {
                 <div v-show="mode==2">
                     <quiz :quiz="questions" :gameConfig="gameType"></quiz>
                 </div>
-                <foter></foter>
               </div>`,
     computed: {
         getRupees() {
@@ -559,21 +560,8 @@ const quiz = Vue.component('quiz', {
                         <div class="textoCentrado">
                             <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds<br><br><br>+ {{score}} points</h2>
                         </div>
-                        <div class="centerItems" id="divXP">
-                            <div class="gridDeNiveles">
-                                <div class="nivelActual">Platinum</div>
-                                <div class="nivelSiguiente">Master</div>
-                            </div>
-                            <div id="barra">
-                                <div class="progreso"></div>
-                                400 / 750
-                            </div>
-                        </div>
                         <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button>
                         <button @click="finishGame" class="button-home">Home</button>
-                        <div class="centerItems">
-                            <div class="linkButton">Your Profile</div>
-                        </div>
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='demo'">
                         <div class="textoCentrado">
@@ -613,7 +601,8 @@ const quiz = Vue.component('quiz', {
                                         <div v-show="winner==this.challengeInfo.idChallenged" class="challenge__title">Oh, no... You've lost <i class="bi bi-emoji-frown-fill" style="color:white"></i></div>
                                         <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
                                     </div>
-                                </div> 
+                                </div>
+                            <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button> 
                             <button @click="finishGame" class="button-home">Home</button>
                         </div>
                 </div>`,
@@ -809,16 +798,18 @@ const answers = Vue.component('answers', {
         console.log(this.quizQuestions);
     },
     template: `<div>
-                <barra-nav></barra-nav>
-                    <h1>QUIZ SOLUTIONS</h1>
-                    <div v-for="(question, index) in quizQuestions">
-                        <h3>{{index+1}}. {{question.question}}</h3>
-                        <ul v-for="(respuesta,num) in question.answers">
-                            <li :class="{'wrongAnswer': !respuesta['estat'], 'correctAnswer': respuesta['estat']}">{{respuesta['text']}}</li>
-                        </ul>
-                        <br>
+                    <barra-nav></barra-nav>
+                    <div class="solutions">
+                        <h1 class="solutions__title">QUIZ SOLUTIONS</h1>
+                        <div v-for="(question, index) in quizQuestions">
+                            <h3>{{index+1}}. {{question.question}}</h3>
+                            <ul v-for="(respuesta,num) in question.answers">
+                                <li :class="{'wrongAnswer': !respuesta['estat'], 'correctAnswer': respuesta['estat']}">{{respuesta['text']}}</li>
+                            </ul>
+                            <br>
+                        </div>
+                        <button class="button-home"><router-link to="/">Home</router-link></button>
                     </div>
-                    <button class="button-home"><router-link to="/">Home</router-link></button>
                 </div>`
 });
 const profile = Vue.component("profile", {
@@ -842,40 +833,33 @@ const profile = Vue.component("profile", {
     },
     template: `<div>
                     <barra-nav></barra-nav>
-                    <div v-if="idUser==getUser" class="header2" id="profile_Header">
-                        <div class="header2_div2">
-                        <b-button @click="editProfile" v-show="!edit">Edit Profile</b-button>
-                        </div>
-                    </div>
+                    
                     <div v-if="loadedData" id="centrarPerfil">
                         <div class="centerItems" id="gridPerfil">
+                            <div v-if="idUser==getUser" class="header2" id="profile_Header">
+                                <div class="header2_div2">
+                                    <button @click="editProfile" class="profile_edit" v-show="!edit">Edit</button>
+                                </div>
+                            </div>
                             <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.user.info[0].imageUrl+')'}"></div>
                                 <div v-if="edit">
-                                    <button @click="changeAvatar">Change Avatar</button>
+                                    <button @click="changeAvatar" class="profile_changeAvatar">Change Avatar</button>
                                 </div>
                             <div>{{this.user.info[0].rupees}} <span><img src="../img/rupia.png" width="10px"></span></div>
-                            <div class="perfilNombre">{{this.user.info[0].name}}</div>
+                            <div class="perfilNombre" v-if="!edit">{{this.user.info[0].name}}</div>
+                            <input v-if="edit" v-model="user.info[0].name" class="perfilNombre editName" style="border:1px solid white" type="text"></input>
                             <div class="perfilInfo">{{this.user.info[0].userName}}</div>
                             <div class="perfilInfo">{{this.user.info[0].email}}</div>
-                            <div v-if="this.user.info[0].status==null && !edit" class="profileStatus">
+                            <div v-if="this.user.info[0].status==null && !edit || this.user.info[0].status=='' && !edit" class="profileStatus">
                                 Tell everyone something about you!
                             </div>
-                            <div v-if="this.user.info[0].status!=null && !edit" class="profileStatus">
+                            <div v-if="this.user.info[0].status!=null && this.user.info[0].status!='' && !edit" class="profileStatus">
                                 "{{this.user.info[0].status}}"
                             </div>
-                            <input v-if="edit" v-model="user.info[0].status" class="profileStatus" type="text"></input>
+                            <input v-if="edit" v-model="user.info[0].status" class="profileStatus editStatus" type="text"></input>
                             <p v-if="saved" class="success_message">{{this.message}}</p>
                             <div v-if="edit">
-                                <button @click="save">SAVE</button>
-                            </div>
-                            <br>
-                            <div id="barra">
-                                <div class="progreso"></div>
-                                {{this.user.info[0].rupees}} / 750
-                            </div>
-                            <div class="gridDeNiveles">
-                                <div class="nivelActual">Platinum</div>
-                                <div class="nivelSiguiente">Master</div>
+                                <button @click="save" class="profile_edit">SAVE</button>
                             </div>
                             <div class="categoriesPlayed">
                                 <div v-for="(category,index) in user.quantCateg" class="categories-container" :style="{ 'background-image': 'url(../img/' + category.category + '.png)' }"><p>{{categoriesTag[index]}}<br>{{category.quant}}</p></div>
@@ -946,7 +930,7 @@ const profile = Vue.component("profile", {
                         break;
                     case "film_and_tv": this.categoriesTag[i] = "Film & TV"
                         break;
-                    case "food_and_drink": this.categoriesTag[i] == "Food & Drink"
+                    case "food_and_drink": this.categoriesTag[i] = "Food & Drink"
                         break
                     case "general_knowledge": this.categoriesTag[i] = "General Knowledge"
                         break
@@ -1048,9 +1032,10 @@ const profile = Vue.component("profile", {
             let form = {
                 idUser: this.idUser,
                 imageUrl: this.user.info[0].imageUrl,
-                status: this.user.info[0].status
+                status: this.user.info[0].status,
+                name: this.user.info[0].name
             }
-            fetch(`../leagueOfTrivialG2/public/api/update-picture`, {
+            fetch(`../leagueOfTrivialG2/public/api/update-profile`, {
                 method: 'POST',
                 body: JSON.stringify(form),
                 headers: {
@@ -1094,7 +1079,8 @@ const login = Vue.component("login", {
     },
     template: `<div>
                 <b-modal class="screen" id="login" title="We are happy that you are back!">
-                <div v-show="!isLogged" @keyup.enter="login">
+                <div @keyup.enter="login">
+                <span class="error_message">{{this.errors['error']}}</span>
                     <div class="login__field">
                         <i class="login__icon bi bi-person-fill"></i>
                         <b-form-input id="input-2" class="login__input" v-model="form.email"
@@ -1107,33 +1093,27 @@ const login = Vue.component("login", {
                             placeholder="Write your password..." required></b-form-input>
                             <i class="login__icon--hide bi bi-eye" @click="hide"></i>
                     </div>
-                    <span class="error_message">{{this.errors['error']}}</span><br>
-                    <br>
-                    Don't have an account yet?<router-link to="/register" style="text-decoration: none;">
-                        <p class="link-register"> Join the league now!</p>
-                    </router-link> <br>
+                    
+                    <div class="login_link-register">
+                    Don't have an account yet?
+                    <router-link to="/register" style="text-decoration: none;">
+                        <span class="link-register"> Join the league now!</span>
+                    </router-link>
+                    </div>
                 </div>
                 <template #modal-footer>
-                    <div v-show="!isLogged">
+                    <div>
                         <div v-show="!processing" class="boton">
                             <button v-b-modal.modal-close_visit class="login-button" @click="login">Login</button>
                         </div>
                         <div v-show="processing" class="boton">
                         <button v-b-modal.modal-close_visit class="login-button" disabled>
                                 <b-spinner small type="grow"></b-spinner>
-                                Loading...
+                                Loading
                             </button>
                         </div>
                     </div>
                 </template>
-                <div v-show="isLogged">
-                    <div class="card container-profile">
-                        <div class="card-body text-center">
-                            <h5 class="my-3">Welcome!</h5>
-                            <p class="text-muted mb-4">{{userName}}</p>
-                        </div>
-                    </div>
-                </div>
             </b-modal>
         </div>`,
     methods: {
