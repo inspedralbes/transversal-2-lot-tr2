@@ -30,6 +30,10 @@ Route::post('/store-score', [RankingsController::class, 'store']);
 Route::post('/store-dailyScore', [RankingsController::class, 'storeDaily']);
 Route::post('/checkDaily', [RankingsController::class, 'checkDaily']);
 Route::post('/store-challenge', [ChallengesController::class, 'store']);
+Route::post('/set-ingame', [UsersController::class, 'inGame']);
+Route::post('/set-finishedGame', [UsersController::class, 'gameFinished']);
+Route::post('/penalize', [UsersController::class, 'penalize']);
+
 
 
 //RUTES PER A MOSTRAR

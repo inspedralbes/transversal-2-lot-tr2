@@ -1,0 +1,3 @@
+The free swagger accounts have an expiration date of 14 days, if you can not view the project you have the documentation in this same folder
+
+LINK: https://app.swaggerhub.com/apis/A21SERCANDIA_1/LeagueOfTrivial-G2/0.1

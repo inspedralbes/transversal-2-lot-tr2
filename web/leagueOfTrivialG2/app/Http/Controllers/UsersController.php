@@ -90,6 +90,7 @@ class UsersController extends Controller
     public function dailyPlayed(Request $request)
     {
         User::where('id', $request->idUser)->update(['dailyPlayed' => 1]);
+        DB::update('UPDATE users set inGame = 0 where id=' . $request->idUser . ';');
     }
     public function logout()
     {
@@ -109,5 +110,22 @@ class UsersController extends Controller
     {
         DB::update('UPDATE users set imageUrl = "' . $request->imageUrl . '", status="' . $request->status . '"  where id=' . $request->idUser . ';');
         return response()->json(Response::HTTP_OK);
+    }
+    public function inGame(Request $request)
+    {
+        if ($request->idGame != null) {
+            DB::update('UPDATE users set inGame = "' . $request->idGame . '" where id=' . $request->idUser . ';');
+        } else {
+            $idGame = DB::table('games')->where('type', 'daily')->value('id');
+            DB::update('UPDATE users set inGame = "' . $idGame . '" where id=' . $request->idUser . ';');
+        }
+    }
+    public function gameFinished(Request $request)
+    {
+        DB::update('UPDATE users set inGame = 0 where id=' . $request->idUser . ';');
+    }
+    public function penalize(Request $request)
+    {
+        DB::update('UPDATE users set inGame = 0, rupees=rupees-250 where id=' . $request->idUser . ';');
     }
 }

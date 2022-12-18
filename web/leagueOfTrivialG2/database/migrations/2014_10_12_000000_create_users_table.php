@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('imageUrl')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->integer('inGame')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

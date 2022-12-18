@@ -21,6 +21,7 @@ class GamesController extends Controller
         $game->category = $request->category;
         $game->quiz = json_encode($request->quiz);
         $game->save();
+        return response()->json($game->id);
     }
     public function index()
     {

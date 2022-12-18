@@ -1,0 +1,1083 @@
+<!doctype html>
+<html>
+  <head>
+    <title>League Of Trivial G2</title>
+    <style type="text/css">
+      body {
+      	font-family: Trebuchet MS, sans-serif;
+      	font-size: 15px;
+      	color: #444;
+      	margin-right: 24px;
+      }
+      
+      h1	{
+      	font-size: 25px;
+      }
+      h2	{
+      	font-size: 20px;
+      }
+      h3	{
+      	font-size: 16px;
+      	font-weight: bold;
+      }
+      hr	{
+      	height: 1px;
+      	border: 0;
+      	color: #ddd;
+      	background-color: #ddd;
+      }
+      
+      .app-desc {
+        clear: both;
+        margin-left: 20px;
+      }
+      .param-name {
+        width: 100%;
+      }
+      .license-info {
+        margin-left: 20px;
+      }
+      
+      .license-url {
+        margin-left: 20px;
+      }
+      
+      .model {
+        margin: 0 0 0px 20px;
+      }
+      
+      .method {
+        margin-left: 20px;
+      }
+      
+      .method-notes	{
+      	margin: 10px 0 20px 0;
+      	font-size: 90%;
+      	color: #555;
+      }
+      
+      pre {
+        padding: 10px;
+        margin-bottom: 2px;
+      }
+      
+      .http-method {
+       text-transform: uppercase;
+      }
+      
+      pre.get {
+        background-color: #0f6ab4;
+      }
+      
+      pre.post {
+        background-color: #10a54a;
+      }
+      
+      pre.put {
+        background-color: #c5862b;
+      }
+      
+      pre.delete {
+        background-color: #a41e22;
+      }
+      
+      .huge	{
+      	color: #fff;
+      }
+      
+      pre.example {
+        background-color: #f3f3f3;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      
+      code {
+        white-space: pre;
+      }
+      
+      .nickname {
+        font-weight: bold;
+      }
+      
+      .method-path {
+        font-size: 1.5em;
+        background-color: #0f6ab4;
+      }
+      
+      .up {
+        float:right;
+      }
+      
+      .parameter {
+        width: 500px;
+      }
+      
+      .param {
+        width: 500px;
+        padding: 10px 0 0 20px;
+        font-weight: bold;
+      }
+      
+      .param-desc {
+        width: 700px;
+        padding: 0 0 0 20px;
+        color: #777;
+      }
+      
+      .param-type {
+        font-style: italic;
+      }
+      
+      .param-enum-header {
+      width: 700px;
+      padding: 0 0 0 60px;
+      color: #777;
+      font-weight: bold;
+      }
+      
+      .param-enum {
+      width: 700px;
+      padding: 0 0 0 80px;
+      color: #777;
+      font-style: italic;
+      }
+      
+      .field-label {
+        padding: 0;
+        margin: 0;
+        clear: both;
+      }
+      
+      .field-items	{
+      	padding: 0 0 15px 0;
+      	margin-bottom: 15px;
+      }
+      
+      .return-type {
+        clear: both;
+        padding-bottom: 10px;
+      }
+      
+      .param-header {
+        font-weight: bold;
+      }
+      
+      .method-tags {
+        text-align: right;
+      }
+      
+      .method-tag {
+        background: none repeat scroll 0% 0% #24A600;
+        border-radius: 3px;
+        padding: 2px 10px;
+        margin: 2px;
+        color: #FFF;
+        display: inline-block;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+  <h1>League Of Trivial G2</h1>
+    <div class="app-desc">Project that consists of creating an application from an api that returns questions and answers by categories and difficulty.</div>
+    <div class="app-desc">More information: <a href="https://helloreverb.com">https://helloreverb.com</a></div>
+    <div class="app-desc">Contact Info: <a href="hello@helloreverb.com">hello@helloreverb.com</a></div>
+    <div class="app-desc">Version: 0.1</div>
+    
+    <div class="license-info">All rights reserved</div>
+    <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Default">Default</a></h4>
+  <ul>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiCheckDailyPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/checkDaily</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiCheckUserGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/check-user</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiDailyPlayedPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/dailyPlayed</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetChallengePost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-challenge</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDailyGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-daily</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDailyRankingsGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-dailyRankings</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDemoGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-demo</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetGamesGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-games</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetRankingsGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-rankings</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUserChallengesPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-userChallenges</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUserRankingPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-userRanking</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUsersGet"><code><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-users</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiLoginPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/login</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiLogoutPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/logout</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreChallengePost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-challenge</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreDailyScorePost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-dailyScore</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreDataPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-data</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreScorePost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-score</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreUserPost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-user</code></a></li>
+  <li><a href="#transversal2LotTr2WebLeagueOfTrivialG2PublicApiUpdatePicturePost"><code><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/update-picture</code></a></li>
+  </ul>
+
+  <h1><a name="Default">Default</a></h1>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiCheckDailyPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/checkDaily</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiCheckDailyPost</span>)</div>
+    <div class="method-notes">Checks if user played daily game.</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      Object
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{ }</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Auto generated using Swagger Inspector
+        <a href="#Object">Object</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>[{&quot;timesPlayed&quot;:0}]</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiCheckUserGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/check-user</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiCheckUserGet</span>)</div>
+    <div class="method-notes">Check if user exists in laravel token and cookies. If yes it autologins with that information so that when you refresh the page you don't lose your data.</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      Object
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{ }</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#Object">Object</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>{}</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiDailyPlayedPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/dailyPlayed</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiDailyPlayedPost</span>)</div>
+    <div class="method-notes">Checks if user played the daily game</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetChallengePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-challenge</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetChallengePost</span>)</div>
+    <div class="method-notes">Returns the questions and answers of a game.</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idGame (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDailyGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-daily</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDailyGet</span>)</div>
+    <div class="method-notes">Returns the daily quiz</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      Object
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{ }</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK (JSON)
+        <a href="#Object">Object</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>&quot;[{\&quot;category\&quot;:\&quot;Film &amp; TV\&quot;,\&quot;id\&quot;:\&quot;62573ff89da29df7b05f73ba\&quot;,\&quot;correctAnswer\&quot;:\&quot;Vertigo\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Apocalypse Now\&quot;,\&quot;The Sixth Sense\&quot;,\&quot;Inside Out\&quot;],\&quot;question\&quot;:\&quot;Name the movie that matches the following plot summary: &#x27;A former detective becomes obsessed with the woman he has been hired to trail.&#x27;\&quot;,\&quot;tags\&quot;:[\&quot;film\&quot;,\&quot;film_and_tv\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;medium\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Music\&quot;,\&quot;id\&quot;:\&quot;622a1c357cc59eab6f94fee8\&quot;,\&quot;correctAnswer\&quot;:\&quot;David Bowie\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Eric Clapton\&quot;,\&quot;Madonna\&quot;,\&quot;Mika\&quot;],\&quot;question\&quot;:\&quot;Which British musician performed under the alter ego &#x27;Ziggy Stardust&#x27;?\&quot;,\&quot;tags\&quot;:[\&quot;pseudonyms\&quot;,\&quot;people\&quot;,\&quot;music\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;medium\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Film &amp; TV\&quot;,\&quot;id\&quot;:\&quot;622a1c367cc59eab6f9501de\&quot;,\&quot;correctAnswer\&quot;:\&quot;Luc Besson\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Steven Spielberg\&quot;,\&quot;Woody Allen\&quot;,\&quot;Martin Scorsese\&quot;],\&quot;question\&quot;:\&quot;Which director directed Lucy?\&quot;,\&quot;tags\&quot;:[\&quot;film_and_tv\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;hard\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Society &amp; Culture\&quot;,\&quot;id\&quot;:\&quot;637162841bf863c45ca6c381\&quot;,\&quot;correctAnswer\&quot;:\&quot;Barba non facit philosophum\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Ad victoriam philos\&quot;,\&quot;Una philos non facit ver\&quot;,\&quot;Philosophum ad meliora\&quot;],\&quot;question\&quot;:\&quot;Which of these Latin phrases means &#x27;A beard doesn&#x27;t make one a philosopher&#x27;?\&quot;,\&quot;tags\&quot;:[\&quot;society_and_culture\&quot;,\&quot;language\&quot;,\&quot;the_romans\&quot;,\&quot;classics\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;medium\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Science\&quot;,\&quot;id\&quot;:\&quot;624333a2cfaae40c129613f4\&quot;,\&quot;correctAnswer\&quot;:\&quot;A Doe\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;A Pen\&quot;,\&quot;A Mare\&quot;,\&quot;A Nanny\&quot;],\&quot;question\&quot;:\&quot;A female deer is known as what?\&quot;,\&quot;tags\&quot;:[\&quot;science\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;easy\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Music\&quot;,\&quot;id\&quot;:\&quot;622a1c357cc59eab6f94fdb2\&quot;,\&quot;correctAnswer\&quot;:\&quot;Pallbearer\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Eulogist\&quot;,\&quot;Composer\&quot;,\&quot;Bellringer\&quot;],\&quot;question\&quot;:\&quot;What function did the composer Franz Schubert perform at Beethoven&#x27;s funeral?\&quot;,\&quot;tags\&quot;:[\&quot;classical_music\&quot;,\&quot;people\&quot;,\&quot;music\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;hard\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;History\&quot;,\&quot;id\&quot;:\&quot;622a1c3b7cc59eab6f95175b\&quot;,\&quot;correctAnswer\&quot;:\&quot;Delaware\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Wilmington\&quot;,\&quot;Maryland\&quot;,\&quot;Pennsylvania\&quot;],\&quot;question\&quot;:\&quot;Which river did George Washington famously cross in the American Revolutionary War?\&quot;,\&quot;tags\&quot;:[\&quot;history\&quot;,\&quot;usa\&quot;,\&quot;revolutions\&quot;,\&quot;rivers\&quot;,\&quot;presidents\&quot;,\&quot;wars\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;medium\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Geography\&quot;,\&quot;id\&quot;:\&quot;623740b3cb85f7ce9e949d19\&quot;,\&quot;correctAnswer\&quot;:\&quot;Hungary\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Slovenia\&quot;,\&quot;Israel\&quot;,\&quot;Moldova\&quot;],\&quot;question\&quot;:\&quot;Budapest is the capital city of which country?\&quot;,\&quot;tags\&quot;:[\&quot;geography\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;medium\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Arts &amp; Literature\&quot;,\&quot;id\&quot;:\&quot;622a1c397cc59eab6f950f84\&quot;,\&quot;correctAnswer\&quot;:\&quot;Agatha Christie\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Robert Louis Stevenson\&quot;,\&quot;Charles Dickens\&quot;,\&quot;Lewis Carroll\&quot;],\&quot;question\&quot;:\&quot;Which author wrote &#x27;Death on the Nile&#x27;?\&quot;,\&quot;tags\&quot;:[\&quot;arts_and_literature\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;hard\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false},{\&quot;category\&quot;:\&quot;Geography\&quot;,\&quot;id\&quot;:\&quot;623735bacfe13103f55eb561\&quot;,\&quot;correctAnswer\&quot;:\&quot;Romania\&quot;,\&quot;incorrectAnswers\&quot;:[\&quot;Cameroon\&quot;,\&quot;Croatia\&quot;,\&quot;Morocco\&quot;],\&quot;question\&quot;:\&quot;Which region of the world uses &#x27;.ro&#x27; at the end of its web addresses?\&quot;,\&quot;tags\&quot;:[\&quot;geography\&quot;],\&quot;type\&quot;:\&quot;Multiple Choice\&quot;,\&quot;difficulty\&quot;:\&quot;hard\&quot;,\&quot;regions\&quot;:[],\&quot;isNiche\&quot;:false}]&quot;</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDailyRankingsGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-dailyRankings</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDailyRankingsGet</span>)</div>
+    <div class="method-notes">Returns the daily ranking</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      Object
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{ }</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#Object">Object</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>[{&quot;score&quot;:1234,&quot;idUser&quot;:5,&quot;userName&quot;:&quot;sergicantero99&quot;}]</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDemoGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-demo</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetDemoGet</span>)</div>
+    <div class="method-notes">Gives the Demo Quiz in JSON format</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetGamesGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-games</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetGamesGet</span>)</div>
+    <div class="method-notes">Get all the games entries</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    JSON
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetRankingsGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-rankings</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetRankingsGet</span>)</div>
+    <div class="method-notes">Returns all the ranking table entries</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      Object
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{ }</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#Object">Object</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>[{&quot;score&quot;:&quot;900&quot;,&quot;idUser&quot;:4,&quot;userName&quot;:&quot;veyeta&quot;},{&quot;score&quot;:&quot;900&quot;,&quot;idUser&quot;:6,&quot;userName&quot;:&quot;yolimoreno98&quot;},{&quot;score&quot;:&quot;500&quot;,&quot;idUser&quot;:5,&quot;userName&quot;:&quot;sergicantero99&quot;},{&quot;score&quot;:&quot;400&quot;,&quot;idUser&quot;:1,&quot;userName&quot;:&quot;ausias&quot;}]</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUserChallengesPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-userChallenges</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUserChallengesPost</span>)</div>
+    <div class="method-notes">Returns all the challenges sent and faced of the user</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#inline_response_200_3">inline_response_200_3</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "challengesFaced" : [ "challengesFaced", "challengesFaced" ],
+  "challengesMade" : [ "challengesMade", "challengesMade" ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    JSON
+        <a href="#inline_response_200_3">inline_response_200_3</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>{&quot;challengesMade&quot;:[],&quot;challengesFaced&quot;:[]}</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUserRankingPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-userRanking</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUserRankingPost</span>)</div>
+    <div class="method-notes">Returns extended info about the user (personal info, historial, which categories he/she played...)</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#inline_response_200_2">inline_response_200_2</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "historic" : [ "historic", "historic" ],
+  "quantCateg" : [ "quantCateg", "quantCateg" ],
+  "info" : [ {
+    "imageUrl" : "imageUrl",
+    "name" : "name",
+    "rupees" : 0,
+    "userName" : "userName",
+    "email" : "email",
+    "status" : ""
+  }, {
+    "imageUrl" : "imageUrl",
+    "name" : "name",
+    "rupees" : 0,
+    "userName" : "userName",
+    "email" : "email",
+    "status" : ""
+  } ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#inline_response_200_2">inline_response_200_2</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>{&quot;info&quot;:[{&quot;name&quot;:&quot;yoli&quot;,&quot;userName&quot;:&quot;yoli&quot;,&quot;imageUrl&quot;:&quot;https:\/\/avatars.dicebear.com\/api\/bottts\/715352.svg?&quot;,&quot;email&quot;:&quot;yoli@gmail.com&quot;,&quot;status&quot;:null,&quot;rupees&quot;:0}],&quot;historic&quot;:[],&quot;quantCateg&quot;:[]}</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUsersGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/get-users</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiGetUsersGet</span>)</div>
+    <div class="method-notes">Returns all the users registered</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      Object
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{ }</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    JSON
+        <a href="#Object">Object</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>&quot;[{\&quot;id\&quot;:1,\&quot;name\&quot;:\&quot;ausias\&quot;,\&quot;userName\&quot;:\&quot;ausias\&quot;,\&quot;email\&quot;:\&quot;ausias@ausias.com\&quot;,\&quot;status\&quot;:null,\&quot;rupees\&quot;:400,\&quot;dailyPlayed\&quot;:0,\&quot;imageUrl\&quot;:\&quot;https:\\\/\\\/avatars.dicebear.com\\\/api\\\/croodles\\\/611347.svg?\&quot;,\&quot;email_verified_at\&quot;:null,\&quot;created_at\&quot;:\&quot;2022-12-14T07:15:46.000000Z\&quot;,\&quot;updated_at\&quot;:\&quot;2022-12-14T20:41:02.000000Z\&quot;},{\&quot;id\&quot;:3,\&quot;name\&quot;:\&quot;yoli\&quot;,\&quot;userName\&quot;:\&quot;yoli\&quot;,\&quot;email\&quot;:\&quot;yoli@gmail.com\&quot;,\&quot;status\&quot;:null,\&quot;rupees\&quot;:0,\&quot;dailyPlayed\&quot;:0,\&quot;imageUrl\&quot;:\&quot;https:\\\/\\\/avatars.dicebear.com\\\/api\\\/bottts\\\/715352.svg?\&quot;,\&quot;email_verified_at\&quot;:null,\&quot;created_at\&quot;:\&quot;2022-12-14T10:41:33.000000Z\&quot;,\&quot;updated_at\&quot;:\&quot;2022-12-14T10:41:33.000000Z\&quot;},{\&quot;id\&quot;:4,\&quot;name\&quot;:\&quot;veyeta\&quot;,\&quot;userName\&quot;:\&quot;veyeta\&quot;,\&quot;email\&quot;:\&quot;veyeta@gmail.com\&quot;,\&quot;status\&quot;:null,\&quot;rupees\&quot;:900,\&quot;dailyPlayed\&quot;:0,\&quot;imageUrl\&quot;:\&quot;https:\\\/\\\/avatars.dicebear.com\\\/api\\\/croodles\\\/761774.svg?\&quot;,\&quot;email_verified_at\&quot;:null,\&quot;created_at\&quot;:\&quot;2022-12-14T10:52:08.000000Z\&quot;,\&quot;updated_at\&quot;:\&quot;2022-12-14T10:52:08.000000Z\&quot;},{\&quot;id\&quot;:5,\&quot;name\&quot;:\&quot;Sergi Cantero\&quot;,\&quot;userName\&quot;:\&quot;sergicantero99\&quot;,\&quot;email\&quot;:\&quot;a21sercandia@inspedralbes.cat\&quot;,\&quot;status\&quot;:null,\&quot;rupees\&quot;:500,\&quot;dailyPlayed\&quot;:0,\&quot;imageUrl\&quot;:\&quot;https:\\\/\\\/avatars.dicebear.com\\\/api\\\/micah\\\/703999.svg?\&quot;,\&quot;email_verified_at\&quot;:null,\&quot;created_at\&quot;:\&quot;2022-12-15T08:46:31.000000Z\&quot;,\&quot;updated_at\&quot;:\&quot;2022-12-15T08:46:31.000000Z\&quot;},{\&quot;id\&quot;:6,\&quot;name\&quot;:\&quot;Yolanda Moreno\&quot;,\&quot;userName\&quot;:\&quot;yolimoreno98\&quot;,\&quot;email\&quot;:\&quot;a21yolmorarr@inspedralbes.cat\&quot;,\&quot;status\&quot;:null,\&quot;rupees\&quot;:900,\&quot;dailyPlayed\&quot;:0,\&quot;imageUrl\&quot;:\&quot;https:\\\/\\\/avatars.dicebear.com\\\/api\\\/micah\\\/499109.svg?\&quot;,\&quot;email_verified_at\&quot;:null,\&quot;created_at\&quot;:\&quot;2022-12-15T08:49:17.000000Z\&quot;,\&quot;updated_at\&quot;:\&quot;2022-12-15T08:49:17.000000Z\&quot;},{\&quot;id\&quot;:7,\&quot;name\&quot;:\&quot;paco\&quot;,\&quot;userName\&quot;:\&quot;paco\&quot;,\&quot;email\&quot;:\&quot;paco@paco.com\&quot;,\&quot;status\&quot;:null,\&quot;rupees\&quot;:0,\&quot;dailyPlayed\&quot;:0,\&quot;imageUrl\&quot;:\&quot;https:\\\/\\\/avatars.dicebear.com\\\/api\\\/bottts\\\/320860.svg?\&quot;,\&quot;email_verified_at\&quot;:null,\&quot;created_at\&quot;:\&quot;2022-12-16T07:22:42.000000Z\&quot;,\&quot;updated_at\&quot;:\&quot;2022-12-16T07:22:42.000000Z\&quot;}]&quot;</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiLoginPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/login</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiLoginPost</span>)</div>
+    <div class="method-notes">Check if login parameters match in DB</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">password (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">email (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#inline_response_200">inline_response_200</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "dailyPlayed" : 0,
+  "updated_at" : "updated_at",
+  "imageUrl" : "imageUrl",
+  "name" : "name",
+  "created_at" : "created_at",
+  "email_verified_at" : "",
+  "id" : 6,
+  "rupees" : 1,
+  "userName" : "userName",
+  "email" : "email",
+  "status" : ""
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#inline_response_200">inline_response_200</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>{&quot;id&quot;:1,&quot;name&quot;:&quot;ausias&quot;,&quot;userName&quot;:&quot;ausias&quot;,&quot;email&quot;:&quot;ausias@ausias.com&quot;,&quot;status&quot;:null,&quot;rupees&quot;:400,&quot;dailyPlayed&quot;:1,&quot;imageUrl&quot;:&quot;https:\/\/avatars.dicebear.com\/api\/croodles\/611347.svg?&quot;,&quot;email_verified_at&quot;:null,&quot;created_at&quot;:&quot;2022-12-14T07:15:46.000000Z&quot;,&quot;updated_at&quot;:&quot;2022-12-16T09:18:29.000000Z&quot;}</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiLogoutPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/logout</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiLogoutPost</span>)</div>
+    <div class="method-notes">Logouts the user logged</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreChallengePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-challenge</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreChallengePost</span>)</div>
+    <div class="method-notes">Stores the result and who did the challenge</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idGame (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">idChallenger (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">winner (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">idChallenged (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">500</h4>
+    OK but needs to run in server because the mail function dont work on local
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreDailyScorePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-dailyScore</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreDailyScorePost</span>)</div>
+    <div class="method-notes">Stores de daily Game of the user.</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">score (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreDataPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-data</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreDataPost</span>)</div>
+    <div class="method-notes">Stores user's game</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">difficulty (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">quiz (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">category (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreScorePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-score</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreScorePost</span>)</div>
+    <div class="method-notes">Stores the Score of the user in that game</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">score (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreUserPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/store-user</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiStoreUserPost</span>)</div>
+    <div class="method-notes">Registers a user in database.</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">password (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">name (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">email (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">username (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#inline_response_201">inline_response_201</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "updated_at" : "updated_at",
+  "imageUrl" : "",
+  "name" : "name",
+  "created_at" : "created_at",
+  "id" : 0,
+  "userName" : "userName",
+  "email" : "email"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    OK
+        <a href="#inline_response_201">inline_response_201</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>{&quot;name&quot;:&quot;pepito&quot;,&quot;email&quot;:&quot;pepito@gmail.com&quot;,&quot;imageUrl&quot;:null,&quot;userName&quot;:&quot;pepito22&quot;,&quot;updated_at&quot;:&quot;2022-12-16T09:09:31.000000Z&quot;,&quot;created_at&quot;:&quot;2022-12-16T09:09:31.000000Z&quot;,&quot;id&quot;:8}</code></pre>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="transversal2LotTr2WebLeagueOfTrivialG2PublicApiUpdatePicturePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transversal-2-lot-tr2/web/leagueOfTrivialG2/public/api/update-picture</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">transversal2LotTr2WebLeagueOfTrivialG2PublicApiUpdatePicturePost</span>)</div>
+    <div class="method-notes">Update de Avatar Picture in DB</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">idUser (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">imageUrl (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#inline_response_200_1">inline_response_200_1</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "OK" : "OK"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#inline_response_200_1">inline_response_200_1</a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: 0</div>
+    <pre class="example"><code>{&quot;OK&quot;:&quot;Your profile picture has been successfully updated&quot;}</code></pre>
+  </div> <!-- method -->
+  <hr/>
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#inline_response_200"><code>inline_response_200</code></a></li>
+    <li><a href="#inline_response_200_1"><code>inline_response_200_1</code></a></li>
+    <li><a href="#inline_response_200_2"><code>inline_response_200_2</code></a></li>
+    <li><a href="#inline_response_200_3"><code>inline_response_200_3</code></a></li>
+    <li><a href="#inline_response_201"><code>inline_response_201</code></a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="inline_response_200"><code>inline_response_200</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">dailyPlayed (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">updated_at (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">imageUrl (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">created_at (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email_verified_at (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">rupees (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">userName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">status (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="inline_response_200_1"><code>inline_response_200_1</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">OK (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="inline_response_200_2"><code>inline_response_200_2</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">historic (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">quantCateg (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">info (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">array[Object]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="inline_response_200_3"><code>inline_response_200_3</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">challengesFaced (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">challengesMade (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="inline_response_201"><code>inline_response_201</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">updated_at (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">imageUrl (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">created_at (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">userName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>
