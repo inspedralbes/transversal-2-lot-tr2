@@ -638,6 +638,7 @@ body {
     text-align: center;
     padding-bottom: 4%;
     max-width: 569px;
+    display: none;
 }
 
 .nivelActual {
@@ -659,6 +660,7 @@ body {
     text-align: center;
     z-index: -2;
     max-width: 443px;
+    display: none;
 }
 
 #barra .progreso {
@@ -1653,6 +1655,9 @@ ul .correctAnswer {
 }
 
 .centerChallenge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: auto;
     width: 60%;
     text-align: center;
@@ -1666,8 +1671,10 @@ ul .correctAnswer {
 }
 
 .challenge__title {
-    font-size: 28px;
-    margin-bottom: 1em;
+    font-size: x-large;
+    font-family: MikadoBoldDemo;
+    margin: 1em 0;
+    text-align: center;
 }
 
 .challenge_icon {
