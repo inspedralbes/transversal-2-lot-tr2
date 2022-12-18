@@ -258,11 +258,6 @@ const challenge = Vue.component('challenge', {
                 </div>`
 });
 const home = Vue.component('portada', {
-    data: function () {
-        return {
-            dailyPlayed: false
-        }
-    },
     template: `<div>
                 <barra-nav></barra-nav>
                 <div class="textoCentrado">
@@ -272,7 +267,10 @@ const home = Vue.component('portada', {
                     <div class="centerItems_portada">
                         <router-link class="linkButton_normal linkButton" to="/game/0">Random Quiz</router-link>
                         <br>
-                        <router-link v-show="!dailyIsPlayed" class="linkButton_daily linkButton"to="/game/1">Daily Quiz</router-link>
+                        <router-link v-if="!dailyIsPlayed" class="linkButton_daily linkButton" to="/game/1">Daily Quiz</router-link>
+                        <div v-if="dailyIsPlayed" class="linkButton_daily--disabled linkButton">Daily Quiz</div>
+                        <p v-if="dailyIsPlayed" class="alert-message-daily">Only once per day!</p>
+
                     </div>
                 </div>
                 <div class="portada-demo" v-show="!isLogged">
@@ -282,7 +280,6 @@ const home = Vue.component('portada', {
                 </div>
                 <foter></foter>
             </div>`,
-
     computed: {
         isLogged() {
             return userStore().logged;
@@ -291,34 +288,24 @@ const home = Vue.component('portada', {
             return userStore().loginInfo.dailyPlayed;
         }
     },
-    methods: {
-        checkDaily() {
-            //CHECKS IF USER HAS PLAYED DAILY QUIZ TODAY
-            dades = {
-                idUser: userStore().loginInfo.id
-            }
-
-            fetch("../leagueOfTrivialG2/public/api/checkDaily", {
-                method: 'POST',
-                body: JSON.stringify(dades),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+    mounted() {
+        setTimeout(() => {
+            if (userStore().loginInfo.inGame != 0) {
+                const params = {
+                    idUser: userStore().loginInfo.id
                 }
-            }).then(response => response.json())
-                .then(data => {
-                    console.log(data[0].timesPlayed);
-                    if (data[0].timesPlayed == 1) {
-                        this.dailyPlayed = true;
-                        console.log("YA HAS JUGADO LA DIARIA");
-                    } else {
-                        this.dailyPlayed = false;
-                        console.log("AUN NO HAS JUGADO LA DIARIA");
+                console.log(params.idUser);
+                console.log("PENALIZADO!!!");
+                fetch("../leagueOfTrivialG2/public/api/penalize", {
+                    method: 'POST',
+                    body: JSON.stringify(params),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
                     }
-
                 })
-        }
+            }
+        }, 1000);
     }
-
 });
 const lobby = Vue.component('quiz-lobby', {
     mounted() {
@@ -421,7 +408,11 @@ const lobby = Vue.component('quiz-lobby', {
             const datos = {
                 difficulty: null,
                 category: null,
-                quiz: null
+                quiz: null,
+            }
+            const inGameData = {
+                idGame: null,
+                idUser: userStore().loginInfo.id
             }
             if (this.mode == 0) {
                 datos.difficulty = this.gameType.difficulty;
@@ -434,13 +425,32 @@ const lobby = Vue.component('quiz-lobby', {
                     headers: {
                         "Content-type": "application/json; charset=UTF-8"
                     }
-                })
+                }).then(response => {
+                    return response.json()
+                }).then(data => {
+                    console.log("EL ID DE TU JUEGO ES " + data);
+                    inGameData.idGame = data;
+                    fetch("../leagueOfTrivialG2/public/api/set-ingame", {
+                        method: 'POST',
+                        body: JSON.stringify(inGameData),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    })
+                });
 
             } if (this.mode == 1) {
                 datos.difficulty = null;
                 datos.category = null;
                 datos.quiz = this.questions;
                 this.gameType.type = "daily";
+                fetch("../leagueOfTrivialG2/public/api/set-ingame", {
+                    method: 'POST',
+                    body: JSON.stringify(inGameData),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
             }
             if (this.mode == 2) {
                 datos.difficulty = null;
@@ -452,7 +462,6 @@ const lobby = Vue.component('quiz-lobby', {
             // fetch("../leagueOfTrivialG2/public/api/store-data", {
             this.checked = true;
         }
-
     },
     template: `<div>
                 <barra-nav></barra-nav>
@@ -690,6 +699,13 @@ const quiz = Vue.component('quiz', {
             console.log(params);
             if (this.gameConfig.type == "normal") {
                 fetch("../leagueOfTrivialG2/public/api/store-score", {
+                    method: 'POST',
+                    body: JSON.stringify(params),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                fetch("../leagueOfTrivialG2/public/api/set-finishedGame", {
                     method: 'POST',
                     body: JSON.stringify(params),
                     headers: {
