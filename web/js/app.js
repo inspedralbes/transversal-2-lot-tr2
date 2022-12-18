@@ -258,8 +258,17 @@ const challenge = Vue.component('challenge', {
                 </div>`
 });
 const home = Vue.component('portada', {
+    data: function () {
+        return {
+            penalized: false
+        }
+    },
     template: `<div>
                 <barra-nav></barra-nav>
+                <b-alert v-model="penalized" variant="danger" show dismissible fade>
+                    You have been penalized for leaving a game. <br> You have lost 250 <span><img src="../img/rupia.png" width="10px"></span>...<br>
+                    Think twice next time.
+                </b-alert>
                 <div class="textoCentrado">
                     <img class="titulo" src="../img/fina.gif">
                 </div>
@@ -270,7 +279,6 @@ const home = Vue.component('portada', {
                         <router-link v-if="!dailyIsPlayed" class="linkButton_daily linkButton" to="/game/1">Daily Quiz</router-link>
                         <div v-if="dailyIsPlayed" class="linkButton_daily--disabled linkButton">Daily Quiz</div>
                         <p v-if="dailyIsPlayed" class="alert-message-daily">Only once per day!</p>
-
                     </div>
                 </div>
                 <div class="portada-demo" v-show="!isLogged">
@@ -278,6 +286,7 @@ const home = Vue.component('portada', {
                         <router-link class="linkButton_demo linkButton" to="/game/2">Play Demo</router-link>
                     </div>
                 </div>
+                
                 <foter></foter>
             </div>`,
     computed: {
@@ -303,6 +312,7 @@ const home = Vue.component('portada', {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
+                this.penalized = true;
             } else {
                 console.log("ALL OK");
             }
@@ -475,24 +485,24 @@ const lobby = Vue.component('quiz-lobby', {
                                 <input type="radio" id="easy" value="easy" v-model="gameType.difficulty">
                                 <label class="easy-difficulty" for="easy">Easy</label>
                             </div>
-                            <div v-if="getRupees>300">
+                            <div v-if="getRupees>1000">
                                 <input type="radio" id="medium" value="medium" v-model="gameType.difficulty">
                                 <label class="medium-difficulty" for="medium">Medium</label>
 
                             </div>
-                            <div v-if="getRupees<=300">
+                            <div v-if="getRupees<=1000">
                                 <input type="radio" id="medium" value="medium">
                                 <label class="medium-difficulty disabled">Medium</label>
-                                <p class="alert-message">You need minimum 300 <span><img src="../img/rupia.png" width="10px"></span></p>
+                                <p class="alert-message">You need minimum 1000 <span><img src="../img/rupia.png" width="10px"></span></p>
                             </div>
-                            <div v-if="getRupees>600">
+                            <div v-if="getRupees>2500">
                                 <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
                                 <label class="hard-difficulty" for="hard">Hard</label>
                             </div>
-                            <div v-if="getRupees<=600">
+                            <div v-if="getRupees<=2500">
                                 <input type="radio" id="hard" value="hard" v-model="gameType.difficulty">
                                 <label class="hard-difficulty disabled" for="hard">Hard</label>
-                                <p class="alert-message">You need minimum 600 <span><img src="../img/rupia.png" width="10px"></span></p>
+                                <p class="alert-message">You need minimum 2500 <span><img src="../img/rupia.png" width="10px"></span></p>
                             </div>
                         </div>
                         <div class="quiz-lobby__titulo">Choose category</div>
@@ -542,14 +552,15 @@ const quiz = Vue.component('quiz', {
     created() {
         this.countdown = setInterval(this.decrementSeconds, 1000)
 
-        // window.onbeforeunload = function () {
-        //     return "Don't leave!";
-        // }
+        window.onbeforeunload = function () {
+            return "If you leave now you will be penalized with a deduction of 250 rupees. Are you sure?";
+        }
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
-                        <p v-show="this.gameConfig.type!='demo'">Your score: {{this.score}}</p>
-                        {{timeLeft}}<br>
+                        <p v-show="this.gameConfig.type!='demo'" class="game_info">Total: {{this.score}} <span><img src="../img/rupia.png" width="10px"></span></p>
+                        <p v-show="this.gameConfig.type=='demo'" class="game_info">You are playing a demo</p>
+                        <p class="timer">{{timeLeft}}</p><br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
                             <p v-if="pointsUp" class="tips plustip">{{tip}}&nbsp<span><img src="../img/rupia.png" width="10px"></span></p>
                             <card :question="dades" :number="index" @changeQuestion="changeCard" @gameStatus="saveAnswer"></card>    
@@ -558,17 +569,18 @@ const quiz = Vue.component('quiz', {
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='normal' || this.finished && this.gameConfig.type=='daily'" >
                         <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds<br><br><br>+ {{score}} points</h2>
+                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds<br><br>+ {{score}} <span><img src="../img/rupia.png" width="10px"></span></h2>
                         </div>
-                        <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button>
-                        <button @click="finishGame" class="button-home">Home</button>
+                            <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
+                            <button @click="finishGame" class="button-home">Home</button>
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='demo'">
-                        <div class="textoCentrado">
-                            <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds</h2>
+                        <div class="textoFinQuiz">
+                            Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds <br>
+                            Would you like to see more?<br>
+                            <router-link to="/register" class="link-register">JOIN THE LEAGUE NOW!</router-link><br>
                         </div>
-                        <div class="centerItems">
-                            <h4>Would you like to see more? <router-link to="/register" style="text-decoration: none;">JOIN THE LEAGUE NOW!</router-link></h4>
+                        <div class="textoCentrado">
                             <button @click="finishGame" class="button-home">Home</button>
                         </div>
                     </div>
@@ -602,9 +614,10 @@ const quiz = Vue.component('quiz', {
                                         <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
                                     </div>
                                 </div>
-                            <button><router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link></button> 
-                            <button @click="finishGame" class="button-home">Home</button>
+                                <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }">See answers</router-link>
+                                <button @click="finishGame" class="button-home">Home</button>
                         </div>
+                        
                 </div>`,
     methods: {
         decrementSeconds: function () {
@@ -626,20 +639,20 @@ const quiz = Vue.component('quiz', {
                 if (this.gameConfig.type == "normal" || this.gameConfig.type == "challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
-                        case "easy": this.score += 100;
+                        case "easy": this.score += 25;
                             this.pointsUp = true;
-                            this.tip = "+100";
+                            this.tip = "+25";
                             console.log("easy score: " + this.score)
                             break;
-                        case "medium": this.score += 200;
+                        case "medium": this.score += 50;
                             this.pointsUp = true;
-                            this.tip = "+200";
+                            this.tip = "+50";
 
                             console.log("medium score: " + this.score)
                             break;
-                        case "hard": this.score += 300;
+                        case "hard": this.score += 75;
                             this.pointsUp = true;
-                            this.tip = "+300";
+                            this.tip = "+75";
                             console.log("hard score: " + this.score)
                             break;
                     }
@@ -663,6 +676,8 @@ const quiz = Vue.component('quiz', {
             this.pointsUp = false;
             console.log(this.selectedAnswers);
             if (this.selectedAnswers.length == this.quiz.length) {
+                this.score *= this.timeLeft / 100
+                this.score = Math.round(this.score);
                 if (this.gameConfig.type == "challenge") {
                     if (this.score > this.challengeInfo.challengedsScore) {
                         this.winner = this.challengeInfo.idChallenger;
@@ -760,9 +775,10 @@ const card = Vue.component('card', {
             activeButton: ''
         }
     },
-    template: `<div id="gamecard-juego">
+    template: `<div>
+    <div id="num_pregunta">{{number+1}} / 10</div>
+    <div id="gamecard-juego">
     <div class="pregunta">
-        <div id="num_pregunta">{{number+1}} / 10</div>
         <div>{{question.question}}</div>
     </div>
     <div id="gamecard-respuestas">
@@ -775,6 +791,7 @@ const card = Vue.component('card', {
             <b-button class="next" @click="$emit('changeQuestion')">NEXT<span class="arrow"></span></b-button>
         </div>
     </div>
+</div>
 </div>`,
     methods: {
         checkAnswer: function (respuesta, index, numResposta) {
@@ -869,7 +886,7 @@ const profile = Vue.component("profile", {
                                 <table>
                                     <tr v-for="(game,index) in user.historic">
                                         <td>{{game.date}}</td>
-                                        <td>{{categoriesTag[index]}}</td>
+                                        <td>{{game.category}}</td>
                                         <td>{{game.difficulty}}</td>
                                         <td>{{game.puntuacio}}</td>
                                         <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" class="challenge_icon" @click="startChallenge(index)"></td>
@@ -945,6 +962,31 @@ const profile = Vue.component("profile", {
                     case "society_and_culture": this.categoriesTag[i] = "Culture"
                         break
                     case "sport_and_leisure": this.categoriesTag[i] = "Sport & Leisure"
+                        break
+                }
+            }
+            for (let i = 0; i < this.user.historic.length; i++) {
+                switch (this.user.historic[i].category) {
+                    case "arts_and_literature": this.user.historic[i].category = "Arts & Literature"
+                        break;
+                    case "film_and_tv": this.user.historic[i].category = "Film & TV"
+                        break;
+                    case "food_and_drink": this.user.historic[i].category = "Food & Drink"
+                        break
+                    case "general_knowledge": this.user.historic[i].category = "General Knowledge"
+                        break
+                    case "geography": this.user.historic[i].category = "Geography"
+                        break
+                    case "history": this.user.historic[i].category = "History"
+                        break
+                    case "music": this.user.historic[i].category = "Music"
+                        break
+                    case "science": this.user.historic[i].category = "Science"
+                        break
+                    case "society_and_culture": this.user.historic[i].category = "Culture"
+                        break
+                    case "sport_and_leisure": this.user.historic[i].category = "Sport & Leisure"
+                        break
                 }
             }
 
@@ -1440,12 +1482,5 @@ var app = new Vue({
             }
         }
     },
-    created() {
-        window.onbeforeunload = function () {
-
-            return "Don't leave!";
-        }
-
-    }
 
 })

@@ -414,6 +414,14 @@ body {
     margin-bottom: 12%;
 }
 
+.alert {
+    width: 30%;
+    position: absolute;
+    bottom: 9em;
+    right: 20px;
+    z-index: 5;
+}
+
 .header1 {
     background-color: #272d46;
     display: grid;
@@ -602,7 +610,9 @@ body {
 
 .textoFinQuiz {
     font-size: x-large;
-    padding-top: 9%;
+    padding-top: 10%;
+    text-align: center;
+    line-height: 2em;
 }
 
 #divXP {
@@ -817,7 +827,7 @@ td a {
 }
 
 .lastChallenges div {
-    line-height: 2.5vw;
+    line-height: 5vh;
 }
 
 .profile-table {
@@ -913,20 +923,41 @@ td a {
 /*TARJETA DE PREGUNTA*/
 #num_pregunta {
     background: linear-gradient(90deg, rgba(110, 189, 241, 1) 0%, rgba(90, 141, 230, 1) 63%);
-    /* background: linear-gradient(90deg, rgba(99,178,254,1) 0%, rgba(90,141,230,1) 63%); */
     border-radius: 0.5em;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 17px;
+    position: relative;
+    top: -2.8em;
+    z-index: 2;
+    margin: auto;
     width: 15%;
-    max-width: 65px;
-    height: 50px;
-    font-size: smaller;
+    max-width: 64px;
+    height: 40px;
     text-align: center;
-    font-weight: bolder;
     color: white;
+
+}
+
+.timer {
+    background-color: white;
+    border-radius: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: -8.2em;
+    z-index: 2;
+    margin: auto;
+    width: 15%;
+    max-width: 40px;
+    height: 40px;
+    text-align: center;
+    color: #242742;
+}
+
+.game_info {
+    margin-top: 33px;
 }
 
 .pregunta {
@@ -941,10 +972,12 @@ td a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 48px;
-    width: 303px;
-    max-width: 360px;
-
+    margin-top: 85px;
+    max-width: 400px;
+    width: 100%;
+    /* max-width: 360px;
+    width: 284px; */
+    /* MAS ANCHO PARA ESCRITORIO */
 }
 
 #gamecard-juego {
@@ -958,10 +991,11 @@ td a {
     width: 77%;
     max-width: 500px;
     height: 100%;
-    max-height: 880px;
+    max-height: 631px;
     place-items: center;
     padding-top: 23px;
-    padding-bottom: 7px;
+    margin-top: -7vh;
+    /* padding-bottom: 7px; */
     animation-duration: 0.5s;
     animation-delay: 0.1s;
     animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
@@ -981,7 +1015,10 @@ td a {
     background-color: #434874;
     color: white;
     padding: 7% 10%;
-    width: 240px;
+    /*~~~~~~~~~~~~ ASI PARA ESCRITORIO ~~~~~~~~~~~~~~ 
+                    width: 40vw; */
+    /*~~~~~~~~~~~~ ASI PARA MOBIL ~~~~~~~~~~~~~~ */
+    width: 289px;
     border: 0;
     border-radius: 0.5em;
     border-bottom: 0.25em solid #242742;
@@ -1045,8 +1082,8 @@ td a {
     letter-spacing: 0.3em;
     color: white;
     padding: 7% 10%;
-    width: 83%;
-    max-width: 200px;
+    width: 200px;
+    max-width: 307px;
     transition: all 0.7s ease-out;
     background: linear-gradient(270deg, rgba(188, 107, 234, 1) 0%, rgba(165, 70, 118, 1) 28%, rgba(76, 82, 134, 1) 62%, rgba(76, 82, 134, 1) 92%);
     background-position: 1% 50%;
@@ -1062,7 +1099,7 @@ td a {
     transition: 0.5s;
     text-align: center;
     position: relative;
-    top: 82px;
+    top: 40px;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
     animation-fill-mode: backwards;
@@ -1202,6 +1239,7 @@ td a {
 
 .link-register {
     display: inline;
+    text-decoration: none;
     color: #b967dd;
 }
 
@@ -1533,10 +1571,24 @@ ul .correctAnswer {
     cursor: pointer;
     border-radius: 0.8em;
     padding: 10px;
+
 }
 
-.category input[type="radio"]:checked+label {
+.category input:checked+label {
     border: 1px solid white;
+}
+
+.category:hover input:checked+label {
+    transform: scale(1);
+}
+
+
+.category label {
+    transition: 0.2s all ease-in-out;
+}
+
+.category:hover label {
+    transform: scale(1.1);
 }
 
 .modal-content {
@@ -1725,6 +1777,26 @@ ul .correctAnswer {
 
 .button-home:hover {
     background-color: #4c5286;
+    border-bottom-width: 0;
+    top: 0.2em
+}
+
+.seeAnswers {
+    background: radial-gradient(circle at 10% 20%, rgb(236, 158, 248) 0%, rgb(131, 83, 241) 90.1%);
+    color: white;
+    width: 100px;
+    padding: 10px;
+    height: 50px;
+    border: 0;
+    border-radius: 0.5em;
+    border-bottom: 0.25em solid #242742;
+    position: relative;
+    top: 0;
+    text-decoration: none;
+    transition: all 0.1s ease;
+}
+
+.seeAnswers:hover {
     border-bottom-width: 0;
     top: 0.2em
 }
