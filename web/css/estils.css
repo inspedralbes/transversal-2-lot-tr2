@@ -836,6 +836,12 @@ td a {
 .lastPlayed {
     text-align: center;
     padding-top: 70px;
+    width: 75%;
+}
+
+.lastPlayed_table {
+    margin: auto;
+    width: 100%;
 }
 
 .lastChallenges {
