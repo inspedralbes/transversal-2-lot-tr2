@@ -422,6 +422,18 @@ body {
     z-index: 5;
 }
 
+@media only screen and (max-width: 450px) {
+    .alert {
+        width: 62%;
+        position: fixed;
+        bottom: 226px;
+        right: 20px;
+        z-index: 5;
+        text-align: center;
+    }
+}
+
+
 .header1 {
     background-color: #272d46;
     display: grid;
@@ -968,10 +980,10 @@ td a {
 }
 
 .pregunta {
-    padding: 11%;
-    padding-top: 2%;
-    padding-bottom: 28px;
-    height: 155px;
+    padding: 3%;
+    padding-top: 1%;
+    padding-bottom: 15px;
+    height: 166px;
     background-color: #434874;
     text-align: center;
     margin: 2%;
@@ -979,7 +991,7 @@ td a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 85px;
+    margin-top: 61px;
     max-width: 400px;
     width: 100%;
     /* max-width: 360px;
@@ -989,18 +1001,18 @@ td a {
 
 #gamecard-juego {
     display: grid;
-    grid-template-rows: 18% 82%;
+    grid-template-rows: 22% auto;
     grid-row-gap: 11px;
     text-align: center;
     border: 1px solid gray;
     margin: auto;
-    padding: 0 15px;
+    padding: 0px 15px;
     width: 77%;
     max-width: 500px;
     height: 100%;
     max-height: 631px;
     place-items: center;
-    padding-top: 23px;
+    padding-top: 6px;
     margin-top: -7vh;
     /* padding-bottom: 7px; */
     animation-duration: 0.5s;
@@ -1016,12 +1028,13 @@ td a {
     display: grid;
     gap: 13px;
     place-items: center;
+    margin-top: 53px;
 }
 
 .respuesta {
     background-color: #434874;
     color: white;
-    padding: 7% 10%;
+    padding: 7% 3%;
     /*~~~~~~~~~~~~ ASI PARA ESCRITORIO ~~~~~~~~~~~~~~ 
                     width: 40vw; */
     /*~~~~~~~~~~~~ ASI PARA MOBIL ~~~~~~~~~~~~~~ */
@@ -1105,8 +1118,7 @@ td a {
     position: relative;
     transition: 0.5s;
     text-align: center;
-    position: relative;
-    top: 40px;
+    top: 22px;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
     animation-fill-mode: backwards;
@@ -1654,13 +1666,16 @@ ul .correctAnswer {
 }
 
 .centerChallenge {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 360px;
+    grid-template-rows: repeat(4, 123px);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
     justify-content: center;
-    margin: auto;
-    width: 60%;
+    place-items: center;
+    align-items: center;
     text-align: center;
-    margin-top: 10%;
+    margin-top: 7%;
 }
 
 .centerChallengeResult {
@@ -1671,9 +1686,11 @@ ul .correctAnswer {
 
 .challenge__title {
     font-size: x-large;
-    font-family: MikadoBoldDemo;
     margin: 1em 0;
     text-align: center;
+    max-width: 360px;
+    font-weight: bolder;
+    padding-top: 11%;
 }
 
 .challenge_icon {
