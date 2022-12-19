@@ -1939,3 +1939,12 @@ ul .correctAnswer {
     }
 
 }
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 13px;
+    padding-right: 13px;
+}
+
