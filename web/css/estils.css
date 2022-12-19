@@ -1658,10 +1658,9 @@ ul .correctAnswer {
 
 .challenge {
     display: grid;
-    grid-template-columns: 100px 150px 100px;
+    grid-template-columns: repeat(3, 105px);
     place-items: center;
     margin: auto;
-    width: 31%;
     margin-bottom: 5%;
 }
 
