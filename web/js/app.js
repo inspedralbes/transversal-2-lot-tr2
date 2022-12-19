@@ -943,13 +943,13 @@ const profile = Vue.component("profile", {
                             </div>
                             <div class="lastPlayed">
                                 <p class="profile_title">Last Played</p>
-                                <table>
+                                <table class="lastPlayed_table">
                                     <tr v-for="(game,index) in user.historic">
                                         <td>{{game.date}}</td>
                                         <td>{{game.category}}</td>
                                         <td>{{game.difficulty}}</td>
                                         <td>{{game.puntuacio}}</td>
-                                        <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" class="challenge_icon" @click="startChallenge(index)"></td>
+                                        <td v-if="idUser!=getUser && isLogged"><img src="../img/challenge.png" class="challenge_icon" @click="startChallenge(index)" title="Start a challenge!"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -1047,6 +1047,29 @@ const profile = Vue.component("profile", {
                         break
                     case "sport_and_leisure": this.user.historic[i].category = "Sport & Leisure"
                         break
+                }
+                switch (this.user.historic[i].difficulty) {
+                    case "easy": this.user.historic[i].difficulty = "Easy"
+                        break;
+                    case "medium": this.user.historic[i].difficulty = "Medium"
+                        break;
+                    case "hard": this.user.historic[i].difficulty = "Hard"
+                }
+            }
+
+            //HOW MANY DAYS AGO WAS EACH GAME
+            for (let index = 0; index < this.user.historic.length; index++) {
+                var historial = new Date(this.user.historic[index].date);
+                var todayDate = new Date();
+                let difference = todayDate - historial;
+                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24)) - 1;
+
+                if (TotalDays == 0) {
+                    this.user.historic[index].date = "Today";
+                    console.log("Today");
+                } else {
+                    this.user.historic[index].date = TotalDays + " days ago";
+                    console.log(TotalDays + " days ago");
                 }
             }
 
