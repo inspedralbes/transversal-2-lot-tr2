@@ -218,10 +218,17 @@ const challenge = Vue.component('challenge', {
                     this.questions[index].answers.push({ "text": this.questions[index].incorrectAnswers[2], "estat": false });
                     this.questions[index].answers = this.questions[index].answers.sort((a, b) => 0.5 - Math.random());
                 }
+                switch (this.infoChallenge.difficulty) {
+                    case "Easy": this.infoChallenge.difficulty = "easy"
+                        break;
+                    case "Medium": this.infoChallenge.difficulty = "medium"
+                        break;
+                    case "Hard": this.infoChallenge.difficulty = "hard"
+                        break;
+                }
                 this.gameType.difficulty = this.infoChallenge.difficulty;
                 this.gameType.category = this.infoChallenge.category;
                 this.gameType.type = "challenge";
-                console.log(this.gameType);
             })
     },
     template: `<div>
@@ -254,7 +261,7 @@ const challenge = Vue.component('challenge', {
                         </div>
                     </div>
                     <div v-show="ready">
-                        <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="infoChallenge"></quiz>
+                        <quiz :quiz="questions" :gameConfig="this.gameType" :challengeInfo="this.infoChallenge"></quiz>
                     </div>
                 </div>`
 });
@@ -654,7 +661,6 @@ const quiz = Vue.component('quiz', {
             let x = 0;
             let interval = setInterval(() => {
                 this.score = randomNumbers.shift();
-                console.log(number.innerHTML);
                 if (++x === ticks) {
                     window.clearInterval(interval);
                 }
@@ -957,7 +963,7 @@ const profile = Vue.component("profile", {
 
                             <div class="lastChallenges">
                                 <p class="profile_title">Last Challenges</p>
-                                <p v-show="this.userChallenges.challengesMade.length < 1 || this.userChallenges.challengesFaced.length < 1">No challenges played yet.</p>
+                                <p v-show="this.userChallenges.challengesMade.length < 1 && this.userChallenges.challengesFaced.length < 1">No challenges played yet.</p>
                                 <div v-for="(challenge,index) in userChallenges.challengesMade">
                                     <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
                                     <span style="font-size:20px">VS</span>
@@ -977,7 +983,7 @@ const profile = Vue.component("profile", {
                             </div>
                             <div class="chart">
                                 <p class="profile_title">Your Statistics</p>
-                                <p v-if="this.quant.length<1">No games played yet</p>
+                                <p v-if="this.quant.length<1">No games played yet.</p>
                                 <canvas v-show="this.quant.length>=1" id="myChart"></canvas>
                             </div>
                         </div>
@@ -1118,10 +1124,6 @@ const profile = Vue.component("profile", {
             }).then(data => {
                 console.log(data)
                 this.userChallenges = data;
-
-                console.log(this.userChallenges.challengesMade.length)
-                console.log(this.userChallenges.challengesFaced.length)
-                console.log("YO SOY " + this.idUser);
                 this.loadedData = true;
             });
         }, 10);
