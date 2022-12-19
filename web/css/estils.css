@@ -936,6 +936,24 @@ td a {
     font-size: 25px;
 }
 
+@media only screen and (max-width: 450px) {
+    .centerItems_portada {
+        display: grid;
+        place-items: center;
+        position: relative;
+        top: 1vh;
+    }
+
+    .portada-demo {
+        margin-bottom: 12%;
+        position: relative;
+        top: 4vh;
+    }
+
+    .footer-copyright {
+        font-size: small;
+    }
+}
 
 /*TARJETA DE PREGUNTA*/
 #num_pregunta {
