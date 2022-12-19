@@ -628,8 +628,6 @@ body {
 }
 
 .textoFinChallenge {
-    padding-top: 5%;
-    text-align: center;
     line-height: 2em;
 }
 
@@ -1662,6 +1660,8 @@ ul .correctAnswer {
     place-items: center;
     margin: auto;
     margin-bottom: 5%;
+    position: relative;
+    top: -21px;
 }
 
 .centerChallenge {
@@ -1678,9 +1678,16 @@ ul .correctAnswer {
 }
 
 .centerChallengeResult {
-    margin: auto;
-    width: 60%;
+    display: grid;
+    grid-template-columns: 360px;
+    grid-template-rows: 20% 15% 20% auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-content: center;
+    place-items: center;
+    align-items: center;
     text-align: center;
+    margin-top: 3%;
 }
 
 .challenge__title {
@@ -1689,7 +1696,8 @@ ul .correctAnswer {
     text-align: center;
     max-width: 360px;
     font-weight: bolder;
-    padding-top: 11%;
+    padding-top: 7%;
+    padding-bottom: 2%;
 }
 
 .challenge_icon {
