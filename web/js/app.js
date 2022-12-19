@@ -542,6 +542,7 @@ const quiz = Vue.component('quiz', {
             selectedAnswers: [],
             finished: false,
             score: 0,
+            increment: 0,
             currentQuestion: 0,
             winner: 0,
             nCorrect: 0,
@@ -560,7 +561,7 @@ const quiz = Vue.component('quiz', {
     },
     template: `<div>
                     <div v-show="!this.finished" style="text-align:center">
-                        <p v-show="this.gameConfig.type!='demo'" class="game_info">Total: {{this.score}} <span><img src="../img/rupia.png" width="10px"></span></p>
+                        <p v-show="this.gameConfig.type!='demo'" id="number" class="game_info">Total: {{score}} <span><img src="../img/rupia.png" width="10px"></span></p>
                         <p v-show="this.gameConfig.type=='demo'" class="game_info">You are playing a demo</p>
                         <p class="timer">{{timeLeft}}</p><br>
                         <div v-for="(dades,index) in quiz" v-show="currentQuestion==index">
@@ -636,6 +637,36 @@ const quiz = Vue.component('quiz', {
                 clearInterval(this.countdown)
             }
         },
+        increaseScore: function () {
+            console.log("PUNTOS: " + this.score);
+
+            let start = this.score;
+            this.score += this.increment;
+            console.log("PUNTOS NUEVOS " + this.score);
+            let end = this.score;
+            let ticks = 20;
+            let speed = 10;
+
+            let randomNumbers = [end]
+
+            for (let i = 0; i < ticks - 1; i++) {
+                randomNumbers.unshift(
+                    Math.floor(Math.random() * (end - start + 1) + start)
+                );
+            }
+            randomNumbers.sort((a, b) => { return a - b });
+            console.log(randomNumbers.length)
+
+            let x = 0;
+            let interval = setInterval(() => {
+                this.score = randomNumbers.shift();
+                console.log(number.innerHTML);
+                if (++x === ticks) {
+                    window.clearInterval(interval);
+                }
+            }, speed);
+
+        },
         saveAnswer: function (respuesta, index) {
             console.log(this.challengeInfo);
             this.selectedAnswers[index] = respuesta;
@@ -645,26 +676,33 @@ const quiz = Vue.component('quiz', {
                 if (this.gameConfig.type == "normal" || this.gameConfig.type == "challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
-                        case "easy": this.score += 25;
+                        case "easy":
                             this.pointsUp = true;
                             this.tip = "+25";
+                            this.increment = 25;
+                            this.increaseScore();
                             console.log("easy score: " + this.score)
                             break;
-                        case "medium": this.score += 50;
+                        case "medium":
                             this.pointsUp = true;
                             this.tip = "+50";
+                            this.increment = 50;
+                            this.increaseScore();
 
                             console.log("medium score: " + this.score)
                             break;
-                        case "hard": this.score += 75;
+                        case "hard":
                             this.pointsUp = true;
                             this.tip = "+75";
+                            this.increment = 75;
+                            this.increaseScore();
                             console.log("hard score: " + this.score)
                             break;
                     }
                 } else if (this.gameConfig.type == "daily") {
-                    this.score += 10;
                     this.tip = "+10";
+                    this.increment = 10;
+                    this.increaseScore();
                     this.pointsUp = true;
                 }
             } else {
@@ -850,7 +888,6 @@ const profile = Vue.component("profile", {
     },
     template: `<div>
                     <barra-nav></barra-nav>
-                    
                     <div v-if="loadedData" id="centrarPerfil">
                         <div class="centerItems" id="gridPerfil">
                             <div v-if="idUser==getUser" class="header2" id="profile_Header">
