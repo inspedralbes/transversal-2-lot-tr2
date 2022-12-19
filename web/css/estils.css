@@ -690,7 +690,29 @@ body {
     grid-row-gap: 0px;
 }
 
-
+#gamecard-juego {
+    display: grid;
+    grid-template-rows: 22% auto;
+    grid-row-gap: 11px;
+    text-align: center;
+    border: 1px solid gray;
+    margin: auto;
+    padding: 0px 15px;
+    width: 77%;
+    max-width: 500px;
+    min-height: 663px;
+    place-items: center;
+    padding-top: 6px;
+    margin-top: -7vh;
+    /* padding-bottom: 7px; */
+    animation-duration: 0.5s;
+    animation-delay: 0.1s;
+    animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
+    animation-fill-mode: backwards;
+    animation-name: animate-flip;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
 
 #ranking-fondo {
     background-color: #626bb6;
@@ -1005,7 +1027,7 @@ td a {
     padding: 3%;
     padding-top: 1%;
     padding-bottom: 15px;
-    height: 166px;
+    min-height: 166px;
     background-color: #434874;
     text-align: center;
     margin: 2%;
@@ -1013,7 +1035,7 @@ td a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 61px;
+    margin-top: 53px;
     max-width: 400px;
     width: 100%;
     /* max-width: 360px;
@@ -1031,8 +1053,7 @@ td a {
     padding: 0px 15px;
     width: 77%;
     max-width: 500px;
-    height: 100%;
-    max-height: 631px;
+    min-height: 665px;
     place-items: center;
     padding-top: 6px;
     margin-top: -7vh;
@@ -1123,8 +1144,8 @@ td a {
 .next {
     letter-spacing: 0.3em;
     color: white;
-    padding: 7% 10%;
-    width: 200px;
+    padding: 6% 11%;
+    width: 184px;
     max-width: 307px;
     transition: all 0.7s ease-out;
     background: linear-gradient(270deg, rgba(188, 107, 234, 1) 0%, rgba(165, 70, 118, 1) 28%, rgba(76, 82, 134, 1) 62%, rgba(76, 82, 134, 1) 92%);
@@ -1137,10 +1158,11 @@ td a {
     border-bottom: 0.25em solid #242742;
     cursor: pointer;
     display: inline-block;
-    position: relative;
     transition: 0.5s;
     text-align: center;
-    top: 22px;
+    position: relative;
+    /* left: 49px; */
+    top: 66px;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
     animation-fill-mode: backwards;
