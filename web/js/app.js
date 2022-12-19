@@ -589,41 +589,36 @@ const quiz = Vue.component('quiz', {
                         </div>
                     </div>
                     <div v-if="this.finished && this.gameConfig.type=='challenge'">
-                        <div class="textoCentrado">
-                            <h2 class="textoFinChallenge">You've finished the challenge!</h2>
-                        </div>
-                        <div class="centerItems">
-                            <h4>The results are ...</h4>
-                                <div class="centerChallengeResult">
-                                        <div class="challenge">
-                                            <div class="challenge__challenger">
-                                                <i v-if="winner==this.challengeInfo.idChallenger" class="bi bi-trophy-fill trophy"></i>
-                                                <div v-else class="challenge__challenger__loser"></div>
-                                                <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.challengeInfo.challengersImage+')'}"></div>
-                                                {{this.challengeInfo.challengersName}} <br>
-                                                {{score}} points
-                                            </div>
-                                            <div style="font-size: 30px">VS</div>
-                                            <div class="challenge__challenged">
-                                                <i v-if="winner==this.challengeInfo.idChallenged" class="bi bi-trophy-fill trophy"></i> 
-                                                <div v-else class="challenge__challenger__loser"></div>
-                                                <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.challengeInfo.challengedsImage+')'}"></div>
-                                                {{this.challengeInfo.challengedsName}} <br>
-                                                {{this.challengeInfo.challengedsScore}} points
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div v-show="winner==this.challengeInfo.idChallenger" class="challenge__title">Congrats, you've won <i class="bi bi-emoji-sunglasses-fill" style="color:white"></i></div>
-                                        <div v-show="winner==this.challengeInfo.idChallenged" class="challenge__title">Oh, no... You've lost <i class="bi bi-emoji-frown-fill" style="color:white"></i></div>
-                                        <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
-                                        <div class="buttons-container">
-                                            <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
-                                            <button @click="finishGame" class="button-home">Home</button>
-                                        </div>
+                        <div class="centerChallengeResult">
+                        <h2 class="textoFinChallenge">You've finished the challenge!</h2>
+                        <h4>The results are ...</h4>
+                                <div class="challenge">
+                                    <div class="challenge__challenger">
+                                        <i v-if="winner==this.challengeInfo.idChallenger" class="bi bi-trophy-fill trophy"></i>
+                                        <div v-else class="challenge__challenger__loser"></div>
+                                        <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.challengeInfo.challengersImage+')'}"></div>
+                                        {{this.challengeInfo.challengersName}} <br>
+                                        {{score}} points
+                                    </div>
+                                    <div style="font-size: 30px">VS</div>
+                                    <div class="challenge__challenged">
+                                        <i v-if="winner==this.challengeInfo.idChallenged" class="bi bi-trophy-fill trophy"></i> 
+                                        <div v-else class="challenge__challenger__loser"></div>
+                                        <div class="perfilAvatar" :style="{backgroundImage: 'url('+this.challengeInfo.challengedsImage+')'}"></div>
+                                        {{this.challengeInfo.challengedsName}} <br>
+                                        {{this.challengeInfo.challengedsScore}} points
                                     </div>
                                 </div>
-                        </div>
-                        
+                                <br>
+                                <div v-show="winner==this.challengeInfo.idChallenger" class="challenge__title">Congrats, you've won <i class="bi bi-emoji-sunglasses-fill" style="color:white"></i></div>
+                                <div v-show="winner==this.challengeInfo.idChallenged" class="challenge__title">Oh, no... You've lost <i class="bi bi-emoji-frown-fill" style="color:white"></i></div>
+                                <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
+                                <div class="buttons-container">
+                                    <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
+                                    <button @click="finishGame" class="button-home">Home</button>
+                                </div>
+                            </div>
+                        </div>                        
                 </div>`,
     methods: {
         decrementSeconds: function () {
