@@ -662,6 +662,35 @@ const quiz = Vue.component('quiz', {
             }, speed);
 
         },
+        increaseScoreFinal: function () {
+            console.log("PUNTOS: " + this.score);
+
+            let start = 0;
+            console.log("PUNTOS NUEVOS " + this.score);
+            let end = this.score;
+            let ticks = 40;
+            let speed = 20;
+
+            let randomNumbers = [end]
+
+            for (let i = 0; i < ticks - 1; i++) {
+                randomNumbers.unshift(
+                    Math.floor(Math.random() * (end - start + 1) + start)
+                );
+            }
+            randomNumbers.sort((a, b) => { return a - b });
+            console.log(randomNumbers.length)
+
+            let x = 0;
+            let interval = setInterval(() => {
+                this.score = randomNumbers.shift();
+                console.log(number.innerHTML);
+                if (++x === ticks) {
+                    window.clearInterval(interval);
+                }
+            }, speed);
+
+        },
         saveAnswer: function (respuesta, index) {
             console.log(this.challengeInfo);
             this.selectedAnswers[index] = respuesta;
@@ -725,6 +754,7 @@ const quiz = Vue.component('quiz', {
             }
             console.log(this.finished);
             if (this.finished) {
+                this.increaseScoreFinal();
                 this.saveGame();
             }
         },
