@@ -256,7 +256,6 @@ const challenge = Vue.component('challenge', {
                     <div v-show="ready">
                         <quiz :quiz="questions" :gameConfig="gameType" :challengeInfo="infoChallenge"></quiz>
                     </div>
-                    <foter></foter>
                 </div>`
 });
 const home = Vue.component('portada', {
@@ -696,7 +695,6 @@ const quiz = Vue.component('quiz', {
             this.selectedAnswers[index] = respuesta;
             if (respuesta == this.quiz[index].correctAnswer) {
                 this.nCorrect++;
-
                 if (this.gameConfig.type == "normal" || this.gameConfig.type == "challenge") {
                     console.log("CORRECTA");
                     switch (this.gameConfig.difficulty) {
