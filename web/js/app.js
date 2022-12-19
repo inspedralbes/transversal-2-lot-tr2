@@ -943,6 +943,7 @@ const profile = Vue.component("profile", {
                             </div>
                             <div class="lastPlayed">
                                 <p class="profile_title">Last Played</p>
+                                <p v-if="user.historic.length < 1">No games played yet.</p>
                                 <table class="lastPlayed_table">
                                     <tr v-for="(game,index) in user.historic">
                                         <td>{{game.date}}</td>
@@ -956,6 +957,7 @@ const profile = Vue.component("profile", {
 
                             <div class="lastChallenges">
                                 <p class="profile_title">Last Challenges</p>
+                                <p v-show="this.userChallenges.challengesMade.length < 1 || this.userChallenges.challengesFaced.length < 1">No challenges played yet.</p>
                                 <div v-for="(challenge,index) in userChallenges.challengesMade">
                                     <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
                                     <span style="font-size:20px">VS</span>
@@ -975,7 +977,8 @@ const profile = Vue.component("profile", {
                             </div>
                             <div class="chart">
                                 <p class="profile_title">Your Statistics</p>
-                                <canvas id="myChart"></canvas>
+                                <p v-if="this.quant.length<1">No games played yet</p>
+                                <canvas v-show="this.quant.length>=1" id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
