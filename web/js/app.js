@@ -647,7 +647,6 @@ const quiz = Vue.component('quiz', {
             let end = this.score;
             let ticks = 20;
             let speed = 10;
-
             let randomNumbers = [end]
 
             for (let i = 0; i < ticks - 1; i++) {

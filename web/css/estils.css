@@ -1492,7 +1492,7 @@ td a {
     margin-top: 130px;
     position: absolute;
     text-align: center;
-    margin-left: 48.5vw;
+    margin-left: 47vw;
     font-size: 20px;
     z-index: 4;
 }
@@ -1951,4 +1951,3 @@ ul .correctAnswer {
     padding-top: 19px;
     padding-right: 13px;
 }
-
