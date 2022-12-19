@@ -245,10 +245,12 @@ const challenge = Vue.component('challenge', {
                                 </div>
                             </div>
                             <div class="challenge__title">Are you sure about that?</div>
-                            <button class="linkButton--small linkButton_goBack">
-                                <router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">Nevermind</router-link>
-                            </button>
-                            <button @click="ready=true" class="linkButton--small linkButton_startChallenge">Let's go</button>
+                            <div class="buttons-container">
+                                <button class="linkButton--small linkButton_goBack">
+                                    <router-link :to="{path: '/profile/' + this.infoChallenge.idChallenged}">Nevermind</router-link>
+                                </button>
+                                <button @click="ready=true" class="linkButton--small linkButton_startChallenge">Let's go</button>
+                            </div>
                         </div>
                     </div>
                     <div v-show="ready">
@@ -571,8 +573,10 @@ const quiz = Vue.component('quiz', {
                         <div class="textoCentrado">
                             <h2 class="textoFinQuiz">Your score was:<br>{{nCorrect}}/10 in {{timeLeft}} seconds<br><br>+ {{score}} <span><img src="../img/rupia.png" width="10px"></span></h2>
                         </div>
+                        <div class="buttons-container">
                             <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
                             <button @click="finishGame" class="button-home">Home</button>
+                        </div>
                     </div>
                     <div v-show="this.finished && this.gameConfig.type=='demo'">
                         <div class="textoFinQuiz">
@@ -612,8 +616,10 @@ const quiz = Vue.component('quiz', {
                                         <div v-show="winner==this.challengeInfo.idChallenger" class="challenge__title">Congrats, you've won <i class="bi bi-emoji-sunglasses-fill" style="color:white"></i></div>
                                         <div v-show="winner==this.challengeInfo.idChallenged" class="challenge__title">Oh, no... You've lost <i class="bi bi-emoji-frown-fill" style="color:white"></i></div>
                                         <div v-show="winner==0" class="challenge__title">IT'S A TIE <i class="bi bi-emoji-dizzy-fill" style="color:white"></i></div>
-                                        <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
-                                        <button @click="finishGame" class="button-home">Home</button>
+                                        <div class="buttons-container">
+                                            <router-link :to="{ name: 'answers', params: { quizQuestions: this.quiz } }" class="seeAnswers">See answers</router-link>
+                                            <button @click="finishGame" class="button-home">Home</button>
+                                        </div>
                                     </div>
                                 </div>
                         </div>
@@ -661,12 +667,6 @@ const quiz = Vue.component('quiz', {
                     this.tip = "+10";
                     this.pointsUp = true;
                 }
-                // else if (this.gameConfig.type == "demo") {
-                //     this.pointsUp = true;
-                //     this.tip = "+10";
-                //     console.log("demo score: " + this.score)
-
-                // }
             } else {
                 console.log("MAL");
             }
@@ -1103,11 +1103,9 @@ const profile = Vue.component("profile", {
     }
 })
 const login = Vue.component("login", {
-    // alvaro.alumnes.inspedralbes.cat&username=user&pwd=1234
     props: [],
     data: function () {
         return {
-            //Creamos objeto para tener la informacion del usuario junta.
             processing: false,
             form: {
                 email: '',
@@ -1223,7 +1221,6 @@ const login = Vue.component("login", {
 const register = Vue.component("register", {
     data: function () {
         return {
-            //Creamos objeto para tener la informacion del usuario junta.
             processing: false,
             form: {
                 name: '',
@@ -1231,7 +1228,6 @@ const register = Vue.component("register", {
                 email: '',
                 password: '',
                 avatar: ''
-                // password_confirmation: ''
             },
             numRandom: 0,
             userAvatarType: '',
@@ -1353,8 +1349,6 @@ const register = Vue.component("register", {
             this.userAvatarType = this.type[Math.floor(Math.random() * 3)];
             console.log("el usuario és: " + this.userAvatarType)
             this.form.avatar = "https://avatars.dicebear.com/api/" + this.userAvatarType + "/" + this.numRandom + ".svg?"
-            // event.preventDefault()
-            // alert(JSON.stringify(this.form))
             fetch("../leagueOfTrivialG2/public/api/store-user", {
                 method: 'POST',
                 body: JSON.stringify(this.form),
@@ -1366,7 +1360,6 @@ const register = Vue.component("register", {
 
                     this.result = data;
 
-                    // this.errors = Object.values(this.errors)
                     console.log(this.errors)
                     if (this.result['name']) {
                         this.$router.push({ path: '/' });

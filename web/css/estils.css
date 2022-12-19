@@ -1834,6 +1834,8 @@ ul .correctAnswer {
 }
 
 .seeAnswers:hover {
+    text-decoration: none;
+    color: white;
     border-bottom-width: 0;
     top: 0.2em
 }
