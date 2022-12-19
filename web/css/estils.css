@@ -543,7 +543,7 @@ body {
 
 .linkButton_demo {
     color: white;
-    background: linear-gradient(90deg, rgba(210, 39, 206, 1) 0%, rgba(25, 246, 236, 1) 100%);
+    background: linear-gradient(90deg, rgba(198, 131, 236) 0%, rgba(232, 57, 254, 1) 100%);
     transition: all 0.4s ease;
 }
 
@@ -698,7 +698,7 @@ body {
     border: 1px solid gray;
     margin: auto;
     padding: 0px 15px;
-    width: 77%;
+    width: 90%;
     max-width: 500px;
     min-height: 663px;
     place-items: center;
@@ -1035,7 +1035,7 @@ td a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 53px;
+    margin-top: 83px;
     max-width: 400px;
     width: 100%;
     /* max-width: 360px;
@@ -1051,7 +1051,7 @@ td a {
     border: 1px solid gray;
     margin: auto;
     padding: 0px 15px;
-    width: 77%;
+    width: 95%;
     max-width: 500px;
     min-height: 665px;
     place-items: center;
@@ -1071,7 +1071,7 @@ td a {
     display: grid;
     gap: 13px;
     place-items: center;
-    margin-top: 53px;
+    margin-top: -5px;
 }
 
 .respuesta {
@@ -1162,7 +1162,7 @@ td a {
     text-align: center;
     position: relative;
     /* left: 49px; */
-    top: 66px;
+    top: 23px;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
     animation-fill-mode: backwards;
