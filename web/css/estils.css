@@ -627,8 +627,7 @@ body {
     padding-bottom: 4%;
 }
 
-
-/* .gridDeNiveles {
+.gridDeNiveles {
     display: grid;
     grid-template-columns: repeat(11, 1fr);
     grid-template-rows: 1fr;
@@ -671,7 +670,7 @@ body {
     border-radius: 6px;
     z-index: -1;
     position: absolute;
-} */
+}
 
 #ranking-marco {
     display: grid;
