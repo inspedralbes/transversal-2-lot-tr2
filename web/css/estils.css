@@ -433,6 +433,11 @@ body {
     }
 }
 
+@media only screen and (min-width: 1109px) {
+    #ranking-diffSelect {
+        left: 21%;
+    }
+}
 
 .header1 {
     background-color: #272d46;
