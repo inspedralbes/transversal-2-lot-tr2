@@ -702,7 +702,7 @@ body {
     justify-content: center;
     padding: 5px 1%;
     position: absolute;
-    top: 107px;
+    top: 149px;
 
 }
 
@@ -754,14 +754,14 @@ td a {
     grid-area: 1 / 1 / 2 / 2;
     display: grid;
     place-items: center;
-    grid-template-columns: repeat(4, 17%);
-    grid-template-rows: 27px;
-    grid-column-gap: 37px;
+    grid-template-columns: repeat(2, 17%);
+    grid-template-rows: 28px;
+    grid-column-gap: 51px;
     font-size: smaller;
     position: relative;
     text-align: center;
-    top: -5px;
-    left: 27.5%;
+    top: 37px;
+    left: 19.5%;
 }
 
 .diff1 {
