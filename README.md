@@ -21,5 +21,14 @@ Link al penpot: https://design.penpot.app/#/view/60409f81-bb57-80cc-8001-aabfd69
 Link a producció: http://trivial2.alumnes.inspedralbes.cat/
 
 La resta de documentació es troba a la carpeta docs (diagrama d'usos, E/R...)
+# User's info for login:
 
+**Login in the app requires email and password**
 
+**User 1:**
+email: ausias@ausias.com
+password: Ausias01
+
+**User2:**
+pedra@pedra.com
+password:Pedra002
