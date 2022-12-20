@@ -33,6 +33,6 @@ password: Ausias01
 
 **User2:**
 
-pedra@pedra.com
+email: pedra@pedra.com
 
-password:Pedra002
+password: Pedra002
