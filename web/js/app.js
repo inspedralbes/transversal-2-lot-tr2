@@ -279,6 +279,17 @@ const challenge = Vue.component('challenge', {
                 this.gameType.difficulty = this.infoChallenge.difficulty;
                 this.gameType.category = this.infoChallenge.category;
                 this.gameType.type = "challenge";
+                switch (this.gameType.difficulty) {
+                    case "Easy":
+                        this.gameType.difficulty = "easy";
+                        break;
+                    case "Medium":
+                        this.gameType.difficulty = "medium";
+                        break;
+                    case "Hard":
+                        this.gameType.difficulty = "hard";
+                        break;
+                }
             })
     },
     template: `<div>
@@ -722,7 +733,7 @@ const quiz = Vue.component('quiz', {
             this.currentQuestion++;
             this.pointsUp = false;
             if (this.selectedAnswers.length == this.quiz.length) {
-                this.score *= this.timeLeft / 100
+                this.score = ((this.score * this.timeLeft) / 100) + this.score
                 this.score = Math.round(this.score);
                 if (this.gameConfig.type == "challenge") {
                     if (this.score > this.challengeInfo.challengedsScore) {
