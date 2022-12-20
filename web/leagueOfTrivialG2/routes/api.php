@@ -53,6 +53,3 @@ Route::get('/check-user', [UsersController::class, 'checkLogin']);
 // Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);
 Route::post('/login', [UsersController::class, 'login']);
 Route::post('/logout', [UsersController::class, 'logout']);
-
-
-//REGISTER

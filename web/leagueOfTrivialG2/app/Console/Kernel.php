@@ -31,6 +31,7 @@ class Kernel extends ConsoleKernel
             $response = Http::get('http://the-trivia-api.com/api/questions?limit=10');
             DB::table('games')->where('type', 'daily')->update(['quiz' => $response]);
 
+            /*** TABLE TO TEST CRON***/
             // $test = Test::find(1);
             // $cont = $test->cont;
             // DB::table('tests')->where('id', 1)->update(['cont' => $cont + 1]);
