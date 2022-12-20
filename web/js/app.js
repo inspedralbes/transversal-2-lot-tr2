@@ -649,7 +649,6 @@ const quiz = Vue.component('quiz', {
             let end = this.score;
             let ticks = 20;
             let speed = 10;
-
             let randomNumbers = [end]
 
             for (let i = 0; i < ticks - 1; i++) {
@@ -663,7 +662,6 @@ const quiz = Vue.component('quiz', {
             let x = 0;
             let interval = setInterval(() => {
                 this.score = randomNumbers.shift();
-                console.log(number.innerHTML);
                 if (++x === ticks) {
                     window.clearInterval(interval);
                 }
@@ -964,7 +962,7 @@ const profile = Vue.component("profile", {
 
                             <div class="lastChallenges">
                                 <p class="profile_title">Last Challenges</p>
-                                <p v-show="this.userChallenges.challengesMade.length < 1 || this.userChallenges.challengesFaced.length < 1">No challenges played yet.</p>
+                                <p v-show="this.userChallenges.challengesMade.length < 1 && this.userChallenges.challengesFaced.length < 1">No challenges played yet.</p>
                                 <div v-for="(challenge,index) in userChallenges.challengesMade">
                                     <b-avatar variant="info" class="avatar" :src="user.info[0].imageUrl" :title="user.info[0].userName"></b-avatar>
                                     <span style="font-size:20px">VS</span>
@@ -984,7 +982,7 @@ const profile = Vue.component("profile", {
                             </div>
                             <div class="chart">
                                 <p class="profile_title">Your Statistics</p>
-                                <p v-if="this.quant.length<1">No games played yet</p>
+                                <p v-if="this.quant.length<1">No games played yet.</p>
                                 <canvas v-show="this.quant.length>=1" id="myChart"></canvas>
                             </div>
                         </div>

@@ -434,6 +434,9 @@ body {
 }
 
 
+
+
+
 .header1 {
     background-color: #272d46;
     display: grid;
@@ -543,7 +546,7 @@ body {
 
 .linkButton_demo {
     color: white;
-    background: linear-gradient(90deg, rgba(210, 39, 206, 1) 0%, rgba(25, 246, 236, 1) 100%);
+    background: linear-gradient(90deg, rgba(198, 131, 236) 0%, rgba(232, 57, 254, 1) 100%);
     transition: all 0.4s ease;
 }
 
@@ -698,7 +701,7 @@ body {
     border: 1px solid gray;
     margin: auto;
     padding: 0px 15px;
-    width: 77%;
+    width: 90%;
     max-width: 500px;
     min-height: 663px;
     place-items: center;
@@ -718,14 +721,12 @@ body {
     background-color: #626bb6;
     grid-area: 2 / 1 / 3 / 2;
     width: 74%;
-    max-width: 74%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 5px 1%;
     position: absolute;
     top: 149px;
-
 }
 
 .ranking-cell a:hover {
@@ -741,7 +742,7 @@ body {
 th,
 td {
     text-align: center;
-    padding: 6px 0;
+    padding: 6px 3px;
     border: 3px solid #626bb6;
 }
 
@@ -783,7 +784,28 @@ td a {
     position: relative;
     text-align: center;
     top: 37px;
-    left: 19.5%;
+    left: 25%;
+}
+@media only screen and (max-width: 300px) {
+    #ranking-diffSelect {
+        left: 15%;
+    }
+}
+
+@media only screen and (min-width: 658px) {
+    #ranking-diffSelect {
+        left: 30%;
+    }
+}
+@media only screen and (min-width: 1109px) {
+    #ranking-diffSelect {
+        left: 32%;
+    }
+}
+@media only screen and (min-width: 1503px) {
+    #ranking-diffSelect {
+        left: 34%;
+    }
 }
 
 .diff1 {
@@ -805,11 +827,13 @@ td a {
 /***********************PERFIL**************************/
 #gridPerfil {
     padding-top: 30px;
-    border: 1px solid;
+    border: 1px solid gray;
+    border-radius: 0.5em;
     width: 92%;
     max-width: 569PX;
     padding-bottom: 6px;
     margin-top: 20px;
+    background-color: #272d46;
 }
 
 @media only screen and (max-width: 400px) {
@@ -857,11 +881,12 @@ td a {
 
 .lastPlayed {
     text-align: center;
-    padding-top: 70px;
+    /* padding-top: 70px; */
     width: 75%;
 }
 
 .lastPlayed_table {
+    background-color: #303660;
     margin: auto;
     width: 100%;
 }
@@ -880,7 +905,7 @@ td a {
 }
 
 .profile-td {
-    padding: 5px 3px;
+    padding: 6px 3px;
 }
 
 .perfilCard {
@@ -1035,7 +1060,7 @@ td a {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 53px;
+    margin-top: 83px;
     max-width: 400px;
     width: 100%;
     /* max-width: 360px;
@@ -1044,14 +1069,16 @@ td a {
 }
 
 #gamecard-juego {
+    background-color: #272d46;
     display: grid;
     grid-template-rows: 22% auto;
     grid-row-gap: 11px;
     text-align: center;
     border: 1px solid gray;
+    border-radius: 0.5em;
     margin: auto;
     padding: 0px 15px;
-    width: 77%;
+    width: 95%;
     max-width: 500px;
     min-height: 665px;
     place-items: center;
@@ -1071,7 +1098,7 @@ td a {
     display: grid;
     gap: 13px;
     place-items: center;
-    margin-top: 53px;
+    margin-top: -5px;
 }
 
 .respuesta {
@@ -1162,7 +1189,7 @@ td a {
     text-align: center;
     position: relative;
     /* left: 49px; */
-    top: 66px;
+    top: 23px;
     animation-duration: 0.2s;
     animation-timing-function: cubic-bezier(.26, .53, .74, 1.48);
     animation-fill-mode: backwards;
@@ -1488,7 +1515,7 @@ td a {
     margin-top: 130px;
     position: absolute;
     text-align: center;
-    margin-left: 48.5vw;
+    margin-left: 47vw;
     font-size: 20px;
     z-index: 4;
 }
@@ -1592,13 +1619,14 @@ ul .correctAnswer {
     display: grid;
     grid-template-columns: repeat(3, 3fr);
     gap: 10px;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
     margin-top: 1em;
 }
 
 .categories-container {
     height: 103px;
     width: 100px;
+    margin-bottom: 43px;
 }
 
 .categories-container p {
@@ -1938,4 +1966,12 @@ ul .correctAnswer {
         padding-right: 14px;
     }
 
+}
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 19px;
+    padding-right: 13px;
 }
