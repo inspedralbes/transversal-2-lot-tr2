@@ -742,7 +742,7 @@ body {
 th,
 td {
     text-align: center;
-    padding: 6px 0;
+    padding: 6px 3px;
     border: 3px solid #626bb6;
 }
 
@@ -905,7 +905,7 @@ td a {
 }
 
 .profile-td {
-    padding: 5px 3px;
+    padding: 6px 3px;
 }
 
 .perfilCard {
