@@ -71,7 +71,7 @@ class UsersController extends Controller
             // ]
         );
         if ($validator->fails()) {
-            return response(["error" => "Campo/s vacío/s o formato incorrecto", "code" => Response::HTTP_BAD_REQUEST], Response::HTTP_BAD_REQUEST);
+            return response(["error" => "Empty field/s or incorrect format", "code" => Response::HTTP_BAD_REQUEST], Response::HTTP_BAD_REQUEST);
         }
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
@@ -79,7 +79,7 @@ class UsersController extends Controller
             $cookie = cookie('cookie_token', $token, 60 * 24);
             return response()->json(Auth::user(), Response::HTTP_OK);
         } else {
-            return response(["error" => "Credenciales incorrectas", "code" => Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
+            return response(["error" => "The credentials do not match", "code" => Response::HTTP_UNAUTHORIZED], Response::HTTP_UNAUTHORIZED);
         }
     }
     public function checkLogin()

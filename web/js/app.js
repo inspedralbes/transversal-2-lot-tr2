@@ -134,12 +134,11 @@ const home = Vue.component('portada', {
     },
     mounted() {
         setTimeout(() => {
+            // If you are logged in and have a pending game, you will be penalized (-250 points)
             if (userStore().logged && userStore().loginInfo.inGame != 0) {
                 const params = {
                     idUser: userStore().loginInfo.id
                 }
-                console.log(params.idUser);
-                console.log("PENALIZADO!!!");
                 fetch("../leagueOfTrivialG2/public/api/penalize", {
                     method: 'POST',
                     body: JSON.stringify(params),
@@ -148,8 +147,6 @@ const home = Vue.component('portada', {
                     }
                 })
                 this.penalized = true;
-            } else {
-                console.log("ALL OK");
             }
         }, 1000);
     }
@@ -169,9 +166,7 @@ const ranking = Vue.component('ranking', {
         fetch(`../leagueOfTrivialG2/public/api/get-rankings`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 this.ranking = data;
-                console.log("El usuario es " + this.ranking[0].idUser);
             });
     },
     methods: {
@@ -180,7 +175,6 @@ const ranking = Vue.component('ranking', {
             fetch(`../leagueOfTrivialG2/public/api/get-dailyRankings`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     this.ranking = data;
                     this.daily = true;
                     this.global = false
@@ -191,7 +185,6 @@ const ranking = Vue.component('ranking', {
             fetch(`../leagueOfTrivialG2/public/api/get-rankings`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     this.ranking = data;
                     this.global = true;
                     this.daily = false;
@@ -200,7 +193,6 @@ const ranking = Vue.component('ranking', {
         userProfile: function (id) {
             //Gets the user information and redirects to its profile page
             this.idUser = this.ranking[id].idUser;
-            console.log(this.idUser);
             this.$router.push({ name: 'profile', params: { idUser: this.idUser } })
         }
     },
@@ -275,7 +267,6 @@ const challenge = Vue.component('challenge', {
         }).then(response => response.json())
             .then(data => {
                 this.questions = JSON.parse(data);
-                console.log(this.questions);
                 for (let index = 0; index < this.questions.length; index++) {
                     this.questions[index].done = false;
                     this.questions[index].answers = [];
@@ -288,7 +279,6 @@ const challenge = Vue.component('challenge', {
                 this.gameType.difficulty = this.infoChallenge.difficulty;
                 this.gameType.category = this.infoChallenge.category;
                 this.gameType.type = "challenge";
-                console.log(this.gameType);
             })
     },
     template: `<div>
@@ -338,7 +328,6 @@ const lobby = Vue.component('quiz-lobby', {
                 this.categories.value[2].splice(this.categories.value[2].length - 2, 2);
                 this.categories.value[8].splice(this.categories.value[8].length - 2, 2);
                 this.categories.value[9].splice(this.categories.value[9].length - 2, 2);
-                console.log(this.categories.value);
             });
         if (this.mode == 1) {
             // If the game mode is 1 it gets the DAILY quiz (unifies all 4 answers and shuffles them)
@@ -346,7 +335,6 @@ const lobby = Vue.component('quiz-lobby', {
                 .then((response) => response.json())
                 .then((data) => {
                     this.questions = JSON.parse(data);
-                    console.log(this.questions);
                     for (let index = 0; index < this.questions.length; index++) {
                         this.questions[index].done = false;
                         this.questions[index].answers = [];
@@ -365,7 +353,6 @@ const lobby = Vue.component('quiz-lobby', {
                 .then((response) => response.json())
                 .then((data) => {
                     this.questions = JSON.parse(data);
-                    console.log(this.questions);
                     for (let index = 0; index < this.questions.length; index++) {
                         this.questions[index].done = false;
                         this.questions[index].answers = [];
@@ -450,7 +437,6 @@ const lobby = Vue.component('quiz-lobby', {
                 }).then(response => {
                     return response.json()
                 }).then(data => {
-                    console.log("EL ID DE TU JUEGO ES " + data);
                     inGameData.idGame = data;
                     // Once the game is saved, it assigns the current game to the user, so that (if user leaves the game) it can be penalized
                     // Once the game is finished, it will return to 0, so that it means that the user is no longer playing (or did not leave the game)
@@ -657,7 +643,6 @@ const quiz = Vue.component('quiz', {
                 );
             }
             randomNumbers.sort((a, b) => { return a - b });
-            console.log(randomNumbers.length)
 
             let x = 0;
             let interval = setInterval(() => {
@@ -683,12 +668,10 @@ const quiz = Vue.component('quiz', {
                 );
             }
             randomNumbers.sort((a, b) => { return a - b });
-            console.log(randomNumbers.length)
 
             let x = 0;
             let interval = setInterval(() => {
                 this.score = randomNumbers.shift();
-                console.log(number.innerHTML);
                 if (++x === ticks) {
                     window.clearInterval(interval);
                 }
@@ -810,7 +793,6 @@ const quiz = Vue.component('quiz', {
                     winner: this.winner,
                     idGame: this.challengeInfo.idGame,
                 }
-                console.log(challengeParams);
                 fetch("../leagueOfTrivialG2/public/api/store-challenge", {
                     method: 'POST',
                     body: JSON.stringify(challengeParams),
@@ -1073,17 +1055,14 @@ const profile = Vue.component("profile", {
 
                 if (TotalDays == 0) {
                     this.user.historic[index].date = "Today";
-                    console.log("Today");
                 } else {
                     this.user.historic[index].date = TotalDays + " days ago";
-                    console.log(TotalDays + " days ago");
                 }
             }
 
             setTimeout(() => {
                 // Chart of the categories the user has played
                 ctx = document.getElementById('myChart');
-                console.log("CHART IS: " + ctx)
                 tmp_chart = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -1150,9 +1129,7 @@ const profile = Vue.component("profile", {
             this.changeImg = true;
             type = ["bottts", "croodles", "micah"];
             num = Math.floor(Math.random() * 1000000);
-            console.log("el numero random es " + num)
             userAvatar = type[Math.floor(Math.random() * 3)];
-            console.log("el usuario és: " + userAvatar)
             this.user.info[0].imageUrl = "https://avatars.dicebear.com/api/" + userAvatar + "/" + num + ".svg?"
         },
         editProfile: function () {
@@ -1175,7 +1152,6 @@ const profile = Vue.component("profile", {
                 }
             }).then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     this.message = "Your changes have been successfuly updated";
                     this.saved = true;
                     this.edit = false;
@@ -1264,7 +1240,6 @@ const login = Vue.component("login", {
                     return response.json()
                 })
                     .then(data => {
-                        console.log(data)
                         this.processing = false;
                         this.errors = data;
                         if (this.errors['code'] != 401 && this.errors['code'] != 400) {
@@ -1284,7 +1259,6 @@ const login = Vue.component("login", {
         },
         hide: function () {
             // Shows and/or hides the password
-            console.log("click");
             if (!this.visibility) {
                 this.inputType = "text";
                 this.visibility = true;
@@ -1445,7 +1419,6 @@ const register = Vue.component("register", {
             }).then(response => response.json())
                 .then(data => {
                     this.result = data;
-                    console.log(this.errors)
                     if (this.result['name']) {
                         this.$router.push({ path: '/' });
                     } else {
@@ -1455,7 +1428,6 @@ const register = Vue.component("register", {
         },
         hide: function () {
             // Shows and/or hides the password
-            console.log("click");
             if (!this.visibility) {
                 this.inputType = "text";
                 this.visibility = true;
