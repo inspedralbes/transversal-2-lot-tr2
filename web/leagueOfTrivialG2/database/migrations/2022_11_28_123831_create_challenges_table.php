@@ -17,8 +17,6 @@ return new class extends Migration
             $table->bigInteger('idGame')->unsigned();
             $table->bigInteger('idChallenger')->unsigned();
             $table->bigInteger('idChallenged')->unsigned();
-
-            $table->boolean('seen');
             $table->integer('winner');
             $table->timestamps();
             $table->primary(['idGame', 'idChallenger', 'idChallenged']);
