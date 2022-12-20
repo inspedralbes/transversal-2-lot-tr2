@@ -818,6 +818,8 @@ const quiz = Vue.component('quiz', {
         finishGame() {
             // When the game is finished, it redirects to the landing page
             this.finished = false;
+            // onbeforeunload is nulled, so that it ONLY affects during the game
+            window.onbeforeunload = null
             this.$router.push({ path: '/' })
         }
     },
