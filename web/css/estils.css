@@ -381,12 +381,6 @@ template {
     display: none;
 }
 
-/*ESTILOS*/
-@font-face {
-    font-family: MikadoBoldDemo;
-    src: url(MikadoBold_DEMO.otf);
-}
-
 html {
     height: 100%;
 }
