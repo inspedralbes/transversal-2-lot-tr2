@@ -1363,10 +1363,14 @@ td a {
     display: flex;
     justify-content: center;
     color: rgb(235, 26, 26);
+    font-size: 14px;
+    margin-bottom: 0;
 }
 
 .success_message {
-    color: rgb(7, 175, 7)
+    color: rgb(7, 175, 7);
+    font-size: 14px;
+    margin-bottom: 0;
 }
 
 .login__submit:active,
