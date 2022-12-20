@@ -433,11 +433,9 @@ body {
     }
 }
 
-@media only screen and (min-width: 1109px) {
-    #ranking-diffSelect {
-        left: 21%;
-    }
-}
+
+
+
 
 .header1 {
     background-color: #272d46;
@@ -723,7 +721,6 @@ body {
     background-color: #626bb6;
     grid-area: 2 / 1 / 3 / 2;
     width: 74%;
-    max-width: 686px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -787,7 +784,28 @@ td a {
     position: relative;
     text-align: center;
     top: 37px;
-    left: 27%;
+    left: 25%;
+}
+@media only screen and (max-width: 300px) {
+    #ranking-diffSelect {
+        left: 15%;
+    }
+}
+
+@media only screen and (min-width: 658px) {
+    #ranking-diffSelect {
+        left: 30%;
+    }
+}
+@media only screen and (min-width: 1109px) {
+    #ranking-diffSelect {
+        left: 32%;
+    }
+}
+@media only screen and (min-width: 1503px) {
+    #ranking-diffSelect {
+        left: 34%;
+    }
 }
 
 .diff1 {
