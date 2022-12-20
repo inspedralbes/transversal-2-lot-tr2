@@ -39,9 +39,7 @@ Vue.component('barra-nav', {
                                     <span style="font-size:20px;">{{userName}}&nbsp;</span>
                                     <b-avatar variant="info" :src="avatar"></b-avatar>
                                 </template>
-                                <b-dropdown-item href="#">
-                                    <router-link :to="{path: '/profile/' + idUser}" class="dropdown-item_routerLink">Profile</router-link> 
-                                </b-dropdown-item>
+                                <b-dropdown-item href="#" @click="goToProfile" class="dropdown-item_routerLink">Profile</b-dropdown-item>
                                 <b-dropdown-item href="#" @click="logOut" style="text-decoration: none;">Logout</b-dropdown-item>
                             </b-dropdown>
                         </div> 
@@ -74,6 +72,10 @@ Vue.component('barra-nav', {
             if (this.$router.history.current.path != '/') {
                 this.$router.push({ path: '/' })
             }
+        },
+        goToProfile: function () {
+            // It reloads the page so that when you are in seeing a user profile and want to see yours (by clicking in the navbar shortcut), data can be updated
+            this.$router.push({ path: '/profile/' + userStore().loginInfo.id }).then(window.location.reload());
         },
         goHome: function () {
             // Goes back home
