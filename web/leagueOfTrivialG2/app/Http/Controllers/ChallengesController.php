@@ -11,7 +11,6 @@ class ChallengesController extends Controller
     public function store(Request $request)
     {
         $challenge = new Challenge();
-        $challenge->seen = false;
         $challenge->winner = $request->winner;
         $challenge->idChallenger = $request->idChallenger;
         $challenge->idChallenged = $request->idChallenged;
