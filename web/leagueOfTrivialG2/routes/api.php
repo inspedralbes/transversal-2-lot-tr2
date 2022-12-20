@@ -22,7 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//RUTES PER A GUARDAR
 Route::post('/store-user', [UsersController::class, 'store']);
 Route::post('/dailyPlayed', [UsersController::class, 'dailyPlayed']);
 Route::post('/store-data', [GamesController::class, 'store']);
@@ -34,7 +33,6 @@ Route::post('/set-ingame', [UsersController::class, 'inGame']);
 Route::post('/set-finishedGame', [UsersController::class, 'gameFinished']);
 Route::post('/penalize', [UsersController::class, 'penalize']);
 
-//RUTES PER A MOSTRAR
 Route::get('/get-users', [UsersController::class, 'index']);
 Route::get('/get-games', [GamesController::class, 'index']);
 Route::get('/get-daily', [GamesController::class, 'getDaily']);
@@ -46,10 +44,7 @@ Route::post('/get-userChallenges', [ChallengesController::class, 'userChallenges
 
 Route::post('/get-userRanking', [UsersController::class, 'userInfo']);
 Route::post('/update-profile', [UsersController::class, 'updateProfile']);
-
 Route::get('/check-user', [UsersController::class, 'checkLogin']);
 
-//LOGIN
-// Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);
 Route::post('/login', [UsersController::class, 'login']);
 Route::post('/logout', [UsersController::class, 'logout']);
