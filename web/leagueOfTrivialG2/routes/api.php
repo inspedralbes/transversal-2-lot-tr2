@@ -34,8 +34,6 @@ Route::post('/set-ingame', [UsersController::class, 'inGame']);
 Route::post('/set-finishedGame', [UsersController::class, 'gameFinished']);
 Route::post('/penalize', [UsersController::class, 'penalize']);
 
-
-
 //RUTES PER A MOSTRAR
 Route::get('/get-users', [UsersController::class, 'index']);
 Route::get('/get-games', [GamesController::class, 'index']);
@@ -50,7 +48,6 @@ Route::post('/get-userRanking', [UsersController::class, 'userInfo']);
 Route::post('/update-profile', [UsersController::class, 'updateProfile']);
 
 Route::get('/check-user', [UsersController::class, 'checkLogin']);
-
 
 //LOGIN
 // Route::get('/login-get/{username}', [UsersController::class, 'getUserInfo']);

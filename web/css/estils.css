@@ -809,11 +809,13 @@ td a {
 /***********************PERFIL**************************/
 #gridPerfil {
     padding-top: 30px;
-    border: 1px solid;
+    border: 1px solid gray;
+    border-radius: 0.5em;
     width: 92%;
     max-width: 569PX;
     padding-bottom: 6px;
     margin-top: 20px;
+    background-color: #272d46;
 }
 
 @media only screen and (max-width: 400px) {
@@ -861,11 +863,12 @@ td a {
 
 .lastPlayed {
     text-align: center;
-    padding-top: 70px;
+    /* padding-top: 70px; */
     width: 75%;
 }
 
 .lastPlayed_table {
+    background-color: #303660;
     margin: auto;
     width: 100%;
 }
@@ -1048,11 +1051,13 @@ td a {
 }
 
 #gamecard-juego {
+    background-color: #272d46;
     display: grid;
     grid-template-rows: 22% auto;
     grid-row-gap: 11px;
     text-align: center;
     border: 1px solid gray;
+    border-radius: 0.5em;
     margin: auto;
     padding: 0px 15px;
     width: 95%;
@@ -1596,13 +1601,14 @@ ul .correctAnswer {
     display: grid;
     grid-template-columns: repeat(3, 3fr);
     gap: 10px;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
     margin-top: 1em;
 }
 
 .categories-container {
     height: 103px;
     width: 100px;
+    margin-bottom: 43px;
 }
 
 .categories-container p {
