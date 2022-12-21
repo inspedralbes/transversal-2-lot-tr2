@@ -1,16 +1,38 @@
-# transversals
-Esquema mínim de carpetes pels projectes transversals
+# Grup 2
 
-És obligatori seguir aquesta estructura tot i que la podeu ampliar.
+## Integrants:
 
-## Atenció
-Un cop comenceu heu de canviar aquesta explicació amb la corresponent al vostre projecte (utilitzant markdown)
+- Mario Benavente
+- Sergi Cantero
+- Yolanda Moreno
+
+## Objectiu
+
+Creació d'un Quiz multiplataforma on la gent pot jugar i desafiar-se mutuament.
+
+## Estat del projecte
 
 
-# Aquest fitxer ha de contenir com a mínim:
- * Nom dels integrants
- * Nom del projecte
- * Petita descripció
- * Adreça del prototip del Penpot
- * URL de producció (quan la tingueu)
- * Estat: (explicació de en quin punt està)
+
+## Links
+
+Link al penpot: https://design.penpot.app/#/view/60409f81-bb57-80cc-8001-aabfd6938fd2?page-id=60409f81-bb57-80cc-8001-aabfd6938fd3&section=interactions&index=0&share-id=39eb6d3d-9932-80bd-8001-ab304f776a7e
+
+Link a producció: http://trivial2.alumnes.inspedralbes.cat/
+
+La resta de documentació es troba a la carpeta docs (diagrama d'usos, E/R...)
+# User's info for login:
+
+**Login in the app requires email and password**
+
+**User 1:**
+
+email: ausias@ausias.com
+
+password: Ausias01
+
+**User2:**
+
+email: pedra@pedra.com
+
+password: Pedra002
