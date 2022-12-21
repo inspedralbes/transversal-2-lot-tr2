@@ -639,6 +639,8 @@ const quiz = Vue.component('quiz', {
             if (this.counter === 0) {
                 this.finished = true;
                 clearInterval(this.countdown)
+                this.increaseScoreFinal();
+                this.saveGame();
             }
         },
         increaseScore: function () {
