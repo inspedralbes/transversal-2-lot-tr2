@@ -22,7 +22,7 @@ class RankingsController extends Controller
     }
     public function index()
     {
-        $rankings = DB::select('SELECT SUM(rankings.puntuacio) AS score,rankings.idUser, users.userName FROM rankings JOIN users ON users.id=rankings.idUser JOIN games ON games.id=rankings.idGame WHERE games.type="normal" GROUP BY rankings.idUser, users.userName ORDER BY score DESC;');
+        $rankings = DB::select('SELECT users.rupees AS score, rankings.idUser, users.userName FROM rankings JOIN users ON users.id=rankings.idUser JOIN games ON games.id=rankings.idGame WHERE games.type="normal" GROUP BY rankings.idUser, users.userName ORDER BY score DESC;');
 
         return response()->json($rankings);
     }
